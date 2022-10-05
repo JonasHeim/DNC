@@ -46,7 +46,33 @@ The NCorg DNC consists of 4 parts, that are located in 4 different repositories:
 * the test files in `src/functional_tests` are in [DNC\_func\_tests](https://github.com/NetCal/DNC_func_tests) and 
 * the experiment in `src/experiments` are in [DNC\_experiments](https://github.com/NetCal/DNC_experiments). 
 
-In order to get all submodules, use the command `git submodule update --init --recursive`.
+In order to get all submodules, you can use the command `git submodule update --init --recursive`.
+
+# Development with IntelliJ IDEA
+This guide assumes you have installed IntelliJ IDEA 2022.1.2
+
+## Setting up the Project in IntelliJ IDEA
+* In IntelliJ, navigate to `File > New > Project from Version Control` or press the `Get from VCS` button on the welcome screen.
+
+* Clone the repository by using git
+
+## Get the rtc.jar to run the MPA RTC Curve Backend and the Tests
+* Using IntelliJ's Maven integration
+
+	* Go to `View > Tool Windows > Maven` and mark all checkboxes under `Profiles (eclipse, exp, model_converter, mpa, tests)`
+
+	* Open `DNC - The Deterministic Network Calculator > Lifecycle` and run `validate`
+
+* Manual install: Download the file from http://www.mpa.ethz.ch/downloads/RTCToolbox_bin.zip and unpack it in the `DNC` project's /lib folder.
+
+## Functional Tests
+You can run the functional tests to check if you installation succeeded. We use IntelliJ's Maven integration to run the JUnit tests.
+
+* In Maven, run `DNC - The Deterministic Network Calculator > Lifecycle > test`
+
+The IntelliJ console will show outputs like this:
+
+> [INFO] Tests run: 2720, Failures: 0, Errors: 0, Skipped: 0
 
 # Development with Eclipse
 
