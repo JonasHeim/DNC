@@ -64,8 +64,11 @@ public class Demo_Tree {
         /* AC Flow 1 with rate of 30MBit/s and burst of 10kBit */
         ArrivalCurve ac_flow1 = Curve.getFactory().createTokenBucket(30.0e6, 10.0e3);
 
-        /* AC Flow 2 with rate of 40MBit/s and burst of 5kBit */
-        ArrivalCurve ac_flow2 = Curve.getFactory().createTokenBucket(40.0e6, 5.0e3);
+        /* AC Flow 2 with rate of 15MBit/s and burst of 5kBit */
+        ArrivalCurve ac_flow2 = Curve.getFactory().createTokenBucket(15.0e6, 5.0e3);
+
+        /* AC Flow 3 with rate of 30MBit/s and burst of 10kBit */
+        ArrivalCurve ac_flow3 = Curve.getFactory().createTokenBucket(30.0e6, 10.0e3);
 
         /* Create a network of 4 systems in tree topology */
         int numServers = 4;
@@ -94,6 +97,9 @@ public class Demo_Tree {
         path1.add(t_2_3);
         path1.add(t_3_4);
         sg.addFlow("Flow 2", ac_flow2, path1);
+
+        /* Define path for flow 3 - same as flow 2 */
+        sg.addFlow("Flow 3", ac_flow3, path1);
 
         /* Create analysis */
         CompFFApresets compffa_analyses = new CompFFApresets( sg );
