@@ -9,8 +9,8 @@
  *
  *
  * The Deterministic Network Calculator (DNC) is free software;
- * you can redistribute it and/or modify it under the terms of the 
- * GNU Lesser General Public License as published by the Free Software Foundation; 
+ * you can redistribute it and/or modify it under the terms of the
+ * GNU Lesser General Public License as published by the Free Software Foundation;
  * either version 2.1 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
@@ -26,20 +26,14 @@
 
 package org.networkcalculus.dnc.demos;
 
-import org.networkcalculus.dnc.AnalysisConfig;
-import org.networkcalculus.dnc.CompFFApresets;
 import org.networkcalculus.dnc.curves.ArrivalCurve;
 import org.networkcalculus.dnc.curves.Curve;
-import org.networkcalculus.dnc.network.server_graph.Flow;
-import org.networkcalculus.dnc.network.server_graph.Server;
-import org.networkcalculus.dnc.network.server_graph.ServerGraph;
-import org.networkcalculus.dnc.network.server_graph.Turn;
-import org.networkcalculus.dnc.tandem.analyses.PmooAnalysis;
-import org.networkcalculus.dnc.tandem.analyses.SeparateFlowAnalysis;
-import org.networkcalculus.dnc.tandem.analyses.TandemMatchingAnalysis;
-import org.networkcalculus.dnc.tandem.analyses.TotalFlowAnalysis;
+import org.networkcalculus.dnc.tsn_cbs.CBS_Link;
+import org.networkcalculus.dnc.tsn_cbs.CBS_RateLatency_Server;
+import org.networkcalculus.dnc.tsn_cbs.CBS_ServerGraph;
+import org.networkcalculus.dnc.tsn_cbs.CBS_TokenBucket_Flow;
 
-import java.util.LinkedList;
+import java.util.*;
 
 public class Demo_CBSLine {
 
@@ -52,67 +46,79 @@ public class Demo_CBSLine {
         try {
             demo.run();
         } catch (Exception e) {
-        		e.printStackTrace();
+            e.printStackTrace();
         }
     }
 
     public void run() throws Exception {
 
         /* First step always */
-        ServerGraph sg = new ServerGraph();
+        CBS_ServerGraph sg = new CBS_ServerGraph("CBS shapes line network");
 
-        /* Set up CBS TSpec */
+        CBS_TokenBucket_Flow flow1 = new CBS_TokenBucket_Flow("flow1", 1.0e-3, 512, 1, 0, 100.0e6, CBS_TokenBucket_Flow.Periodicity.PERIODIC);
+        System.out.println(flow1);
 
+        CBS_TokenBucket_Flow flow2 = new CBS_TokenBucket_Flow("flow2", 10.0e-3, 12000, 2, 1, 100.0e6, CBS_TokenBucket_Flow.Periodicity.PERIODIC);
+        System.out.println(flow2);
 
-        /* AC Flow 1 with rate of 8MBit/s and burst of 1.5kBit */
-        ArrivalCurve ac_flow1 = Curve.getFactory().createTokenBucket(8.0e6, 1.5e3);
+        CBS_TokenBucket_Flow flow3 = new CBS_TokenBucket_Flow("flow3", 20.0e-3, 12000, 5, 2, 100.0e6, CBS_TokenBucket_Flow.Periodicity.PERIODIC);
+        System.out.println(flow3);
 
-        /* AC Flow 2 with rate of 8MBit/s and burst of 1.5kBit */
-        ArrivalCurve ac_flow2 = Curve.getFactory().createTokenBucket(8.0e6, 1.5e3);
+        CBS_RateLatency_Server CbsRlServer1 = sg.addServer("s1", 100e6); // 100MBit/s link capacity
+        CbsRlServer1.addQueue(0, 2.0e6, 512);
+        CbsRlServer1.addQueue(2, 5.0e6, 12e3);
+        /* Credits of prio 2 should change after adding higher prio 1 */
+        CbsRlServer1.addQueue(1, 2.0e6, 512000);
+        //System.out.println(CbsRlServer1);
 
-        /* AC Flow 3 with rate of 20MBit/s and burst of 3kBit */
-        ArrivalCurve ac_flow3 = Curve.getFactory().createTokenBucket(20.0e6, 3.0e3);
+        CBS_RateLatency_Server CbsRlServer2 = sg.addServer("s2", 100e6); // 100MBit/s link capacity
+        CbsRlServer2.addQueue(0, 2.0e6, 512);
+        CbsRlServer2.addQueue(1, 2.0e6, 512000);
+        CbsRlServer2.addQueue(2, 5.0e6, 12e3);
+        // System.out.println(CbsRlServer1);
 
-        /* Create a network of 5 systems in line topology */
-        int numServers = 4;
-        Server[] servers = new Server[numServers];
+        CBS_RateLatency_Server CbsRlServer3 = sg.addServer("s3", 100e6); // 100MBit/s link capacity
+        CBS_RateLatency_Server CbsRlServer4 = sg.addServer("s4", 100e6); // 100MBit/s link capacity
 
-        /* FIFO Server 1 and 2 with rate of 50MBit/s and Latency of 20us */
-        servers[0] = sg.addServer("S1", Curve.getFactory().createRateLatency(50.0e6, 20.0e-6), AnalysisConfig.Multiplexing.FIFO);
-        servers[1] = sg.addServer("S2", Curve.getFactory().createRateLatency(50.0e6, 20.0e-6), AnalysisConfig.Multiplexing.FIFO);
+        CBS_Link t_1_2 = sg.addLink("s1 --> s2", CbsRlServer1, CbsRlServer2, 100e6); // 100MBit/s link capacity
+        CBS_Link t_2_3 = sg.addLink("s2 --> s3", CbsRlServer2, CbsRlServer3, 100e6); // 100MBit/s link capacity
+        CBS_Link t_3_4 = sg.addLink("s3 --> s4", CbsRlServer3, CbsRlServer4, 100e6); // 100MBit/s link capacity
 
-        /* FIFO Server 3 and 4 with rate of 80MBit/s and Latency of 50us */
-        servers[2] = sg.addServer("S3", Curve.getFactory().createRateLatency(80.0e6, 50.0e-6), AnalysisConfig.Multiplexing.FIFO);
-        servers[3] = sg.addServer("S4", Curve.getFactory().createRateLatency(80.0e6, 50.0e-6), AnalysisConfig.Multiplexing.FIFO);
-
-        /* Define links between server */
-        Turn t_1_2 = sg.addTurn("S1 --> S2", servers[0], servers[1]);
-        Turn t_2_3 = sg.addTurn("S2 --> S3",servers[1], servers[2]);
-        Turn t_3_4 = sg.addTurn("S3 --> S4",servers[2], servers[3]);
-
-        /* Define path for flow 1 */
-        LinkedList<Turn> path0 = new LinkedList<Turn>();
+        LinkedList<CBS_Link> path0 = new LinkedList<CBS_Link>();
         path0.add(t_1_2);
         path0.add(t_2_3);
         path0.add(t_3_4);
-        sg.addFlow("Flow 1", ac_flow1, path0);
+        sg.addFlow(path0, flow1);
 
-        /* Define path for flow 2 */
-        LinkedList<Turn> path1 = new LinkedList<Turn>();
+        LinkedList<CBS_Link> path1 = new LinkedList<CBS_Link>();
         path1.add(t_2_3);
         path1.add(t_3_4);
-        sg.addFlow("Flow 2", ac_flow2, path1);
+        sg.addFlow(path1, flow2);
 
-        /* Define path for flow 3 */
-        LinkedList<Turn> path2 = new LinkedList<Turn>();
+        LinkedList<CBS_Link> path2 = new LinkedList<CBS_Link>();
         path2.add(t_3_4);
-        sg.addFlow("Flow 3", ac_flow3, path2);
+        sg.addFlow(path2, flow3);
+
+        System.out.println(sg);
 
         /* Do CBS TFA analysis */
+        //ToDo: design and implement
+        /*
+            Für jeden Server eines Pfads eines Flows sukzessive:
+                1. Für jeden eingehenden Link in diesen Server
+                    1.1. Hole alle ACs von Flows gleicher Priorität
+                    1.2. Bilde aggr. AC dieser Flows
+                    1.3. Bilde minimum
 
+         */
 
-
+        /* ToDo: Remove
+           Test to determine minimum of two Token-Bucket ArrivalCurves
+        */
+        ArrivalCurve ac_flow1 = Curve.getFactory().createTokenBucket(8.0e6, 1.5e3);
+        ArrivalCurve ac_flow2 = Curve.getFactory().createTokenBucket(20.0e6, 3.0e3);
+        System.out.println("\r\n----- Test of DNC minimum of two ArrivalCurves -----");
+        ArrivalCurve minAC = Curve.getUtils().min(ac_flow1, ac_flow2);
+        System.out.println("Minimum AC of Flows 1 and 2 is " + minAC); // should be flow 1
     }
-
-
 }
