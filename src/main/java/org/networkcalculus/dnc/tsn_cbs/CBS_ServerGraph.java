@@ -42,8 +42,12 @@ public class CBS_ServerGraph {
     }
 
 
-    public void addFlow(LinkedList<CBS_Link> path, CBS_TokenBucket_Flow flow) {
+    public void addFlow(LinkedList<CBS_Link> path, CBS_TokenBucket_Flow flow, double idleSlope) {
         //ToDo: implement
+        for(CBS_Link link: path) {
+            link.getSource().addQueue(flow.getPriority(), idleSlope, flow.getMfs());
+            link.getDestination().addQueue(flow.getPriority(), idleSlope, flow.getMfs());
+        }
     }
 
     public String getAlias() { return this.alias; }
@@ -51,7 +55,7 @@ public class CBS_ServerGraph {
     public String toString() {
         StringBuffer cbs_servergraph_str = new StringBuffer();
 
-        cbs_servergraph_str.append("-------------------------------------------");
+        cbs_servergraph_str.append("\r\n----------------------------------------------------------\r\n");
         cbs_servergraph_str.append("CBS ServerGraph \"" + this.alias + "\"");
         for(CBS_RateLatency_Server server: this.servers) {
             cbs_servergraph_str.append(server.toString());
@@ -64,8 +68,7 @@ public class CBS_ServerGraph {
         for(CBS_TokenBucket_Flow flow: this.flows) {
             cbs_servergraph_str.append(flow.toString());
         }
-        cbs_servergraph_str.append("\r\n");
-        cbs_servergraph_str.append("-------------------------------------------\r\n");
+        cbs_servergraph_str.append("\r\n----------------------------------------------------------\r\n");
 
         return cbs_servergraph_str.toString();
     }

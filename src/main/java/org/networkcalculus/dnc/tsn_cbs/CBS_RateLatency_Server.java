@@ -67,23 +67,33 @@ public class CBS_RateLatency_Server {
         if ( (idSlp <= this.linkCapacity) && (maxPacketSize >= 0) ) {
             /* Is the priority new? */
             if (this.priorities.add(priority)) {
+                System.out.println("Inserting new priority queue " + priority + " on server " + this.getAlias());
                 //ToDo: check retVal for put()?
                 this.idleSlopes.put(priority, idSlp);
                 this.sendSlopes.put(priority, idSlp - this.linkCapacity);
                 this.maxPacketSize.put(priority, maxPacketSize);
-
-                /* Recalculation required because the max credits changes for lower priorities after adding */
-                this.calculateAllLowerCBSCredits(priority);
-                this.calculateAllCBSShapingCurves();
-                this.calculateLinkShapingCurve();
-
-                this.serviceCurves.put(priority, Curve.getFactory().createRateLatency(this.maxCredit.get(priority) / this.idleSlopes.get(priority), idSlp));
             } else {
                 System.out.println("Could not add priority " + priority + " to server.");
             }
         } else {
-            System.out.println("Could not add priority. Check parameter");
+            /* Priority queue already exists. Update values and calculate credits and shaping curves */
+            System.out.println("Updating existing priority queue " + priority + " on server " + this.getAlias());
+            double new_idleSlope = this.idleSlopes.get(priority) + idSlp;
+            this.idleSlopes.put(priority, new_idleSlope);
+            this.sendSlopes.put(priority, this.sendSlopes.get(priority) + idSlp);
+
+            /* Is new max. packet size the maximum for this priority? */
+            if(maxPacketSize > this.maxPacketSize.get(priority)) {
+                this.maxPacketSize.put(priority, maxPacketSize);
+            }
         }
+
+        /* Recalculation required because the max credits changes for lower priorities after adding */
+        this.calculateAllLowerCBSCredits(priority);
+        this.calculateAllCBSShapingCurves();
+        this.calculateLinkShapingCurve();
+
+        this.serviceCurves.put(priority, Curve.getFactory().createRateLatency(this.maxCredit.get(priority) / this.idleSlopes.get(priority), idSlp));
 
         return retVal;
     }

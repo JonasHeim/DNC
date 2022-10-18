@@ -28,10 +28,7 @@ package org.networkcalculus.dnc.demos;
 
 import org.networkcalculus.dnc.curves.ArrivalCurve;
 import org.networkcalculus.dnc.curves.Curve;
-import org.networkcalculus.dnc.tsn_cbs.CBS_Link;
-import org.networkcalculus.dnc.tsn_cbs.CBS_RateLatency_Server;
-import org.networkcalculus.dnc.tsn_cbs.CBS_ServerGraph;
-import org.networkcalculus.dnc.tsn_cbs.CBS_TokenBucket_Flow;
+import org.networkcalculus.dnc.tsn_cbs.*;
 
 import java.util.*;
 
@@ -56,27 +53,12 @@ public class Demo_CBSLine {
         CBS_ServerGraph sg = new CBS_ServerGraph("CBS shapes line network");
 
         CBS_TokenBucket_Flow flow1 = new CBS_TokenBucket_Flow("flow1", 1.0e-3, 512, 1, 0, 100.0e6, CBS_TokenBucket_Flow.Periodicity.PERIODIC);
-        System.out.println(flow1);
-
         CBS_TokenBucket_Flow flow2 = new CBS_TokenBucket_Flow("flow2", 10.0e-3, 12000, 2, 1, 100.0e6, CBS_TokenBucket_Flow.Periodicity.PERIODIC);
-        System.out.println(flow2);
-
         CBS_TokenBucket_Flow flow3 = new CBS_TokenBucket_Flow("flow3", 20.0e-3, 12000, 5, 2, 100.0e6, CBS_TokenBucket_Flow.Periodicity.PERIODIC);
-        System.out.println(flow3);
+        CBS_TokenBucket_Flow flow4 = new CBS_TokenBucket_Flow("flow4", 1.0e-3, 512, 1, 0, 100.0e6, CBS_TokenBucket_Flow.Periodicity.PERIODIC);
 
         CBS_RateLatency_Server CbsRlServer1 = sg.addServer("s1", 100e6); // 100MBit/s link capacity
-        CbsRlServer1.addQueue(0, 2.0e6, 512);
-        CbsRlServer1.addQueue(2, 5.0e6, 12e3);
-        /* Credits of prio 2 should change after adding higher prio 1 */
-        CbsRlServer1.addQueue(1, 2.0e6, 512000);
-        //System.out.println(CbsRlServer1);
-
         CBS_RateLatency_Server CbsRlServer2 = sg.addServer("s2", 100e6); // 100MBit/s link capacity
-        CbsRlServer2.addQueue(0, 2.0e6, 512);
-        CbsRlServer2.addQueue(1, 2.0e6, 512000);
-        CbsRlServer2.addQueue(2, 5.0e6, 12e3);
-        // System.out.println(CbsRlServer1);
-
         CBS_RateLatency_Server CbsRlServer3 = sg.addServer("s3", 100e6); // 100MBit/s link capacity
         CBS_RateLatency_Server CbsRlServer4 = sg.addServer("s4", 100e6); // 100MBit/s link capacity
 
@@ -88,18 +70,23 @@ public class Demo_CBSLine {
         path0.add(t_1_2);
         path0.add(t_2_3);
         path0.add(t_3_4);
-        sg.addFlow(path0, flow1);
+        sg.addFlow(path0, flow1, 512.0e3);    //Add Flow with 2MBit/s bandwidth reservation
 
         LinkedList<CBS_Link> path1 = new LinkedList<CBS_Link>();
         path1.add(t_2_3);
         path1.add(t_3_4);
-        sg.addFlow(path1, flow2);
+        sg.addFlow(path1, flow2, 2.4e6);    //Add Flow with 5MBit/s bandwidth reservation
 
         LinkedList<CBS_Link> path2 = new LinkedList<CBS_Link>();
         path2.add(t_3_4);
-        sg.addFlow(path2, flow3);
-
+        sg.addFlow(path2, flow3, 3.0e6);    //Add Flow with 5MBit/s bandwidth reservation
         System.out.println(sg);
+
+        /* Now add another flow with the highest priority to all servers */
+        sg.addFlow(path0, flow4, 512.0e3);
+        System.out.println(sg);
+
+        //ToDo: what happens when a second flor with the same priority is added? What happens at the servers queues? Only IdleSlope increases?
 
         /* Do CBS TFA analysis */
         //ToDo: design and implement
@@ -111,6 +98,12 @@ public class Demo_CBSLine {
                     1.3. Bilde minimum
 
          */
+
+        CBS_TotalFlowAnalysis tfa = new CBS_TotalFlowAnalysis(sg);
+        tfa.performAnalysis(flow1);
+        tfa.performAnalysis(flow2);
+        tfa.performAnalysis(flow3);
+        tfa.performAnalysis(flow4);
 
         /* ToDo: Remove
            Test to determine minimum of two Token-Bucket ArrivalCurves
