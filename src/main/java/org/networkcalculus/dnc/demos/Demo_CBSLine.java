@@ -52,34 +52,51 @@ public class Demo_CBSLine {
         /* First step always */
         CBS_ServerGraph sg = new CBS_ServerGraph("CBS shapes line network");
 
-        CBS_TokenBucket_Flow flow1 = new CBS_TokenBucket_Flow("flow1", 1.0e-3, 512, 1, 0, 100.0e6, CBS_TokenBucket_Flow.Periodicity.PERIODIC);
-        CBS_TokenBucket_Flow flow2 = new CBS_TokenBucket_Flow("flow2", 10.0e-3, 12000, 2, 1, 100.0e6, CBS_TokenBucket_Flow.Periodicity.PERIODIC);
-        CBS_TokenBucket_Flow flow3 = new CBS_TokenBucket_Flow("flow3", 20.0e-3, 12000, 5, 2, 100.0e6, CBS_TokenBucket_Flow.Periodicity.PERIODIC);
-        CBS_TokenBucket_Flow flow4 = new CBS_TokenBucket_Flow("flow4", 1.0e-3, 512, 1, 0, 100.0e6, CBS_TokenBucket_Flow.Periodicity.PERIODIC);
+        CBS_TokenBucket_Flow flow1 = new CBS_TokenBucket_Flow("flow1", 1.0e-3, 512, 1, 0, CBS_TokenBucket_Flow.Periodicity.PERIODIC);
+        CBS_TokenBucket_Flow flow2 = new CBS_TokenBucket_Flow("flow2", 10.0e-3, 12000, 2, 1, CBS_TokenBucket_Flow.Periodicity.PERIODIC);
+        CBS_TokenBucket_Flow flow3 = new CBS_TokenBucket_Flow("flow3", 20.0e-3, 12000, 5, 2, CBS_TokenBucket_Flow.Periodicity.PERIODIC);
+        CBS_TokenBucket_Flow flow4 = new CBS_TokenBucket_Flow("flow4", 1.0e-3, 512, 1, 0, CBS_TokenBucket_Flow.Periodicity.PERIODIC);
 
-        CBS_RateLatency_Server CbsRlServer1 = sg.addServer("s1", 100e6); // 100MBit/s link capacity
-        CBS_RateLatency_Server CbsRlServer2 = sg.addServer("s2", 100e6); // 100MBit/s link capacity
-        CBS_RateLatency_Server CbsRlServer3 = sg.addServer("s3", 100e6); // 100MBit/s link capacity
-        CBS_RateLatency_Server CbsRlServer4 = sg.addServer("s4", 100e6); // 100MBit/s link capacity
+        /* Talker */
+        CBS_RateLatency_Server CbsTalker1 = sg.addServer("Talker1", CBS_RateLatency_Server.SRV_TYPE.TALKER);
+        CBS_RateLatency_Server CbsTalker2 = sg.addServer("Talker2", CBS_RateLatency_Server.SRV_TYPE.TALKER);
+        CBS_RateLatency_Server CbsTalker3 = sg.addServer("Talker3", CBS_RateLatency_Server.SRV_TYPE.TALKER);
+        CBS_RateLatency_Server CbsListener1 = sg.addServer("Listener1", CBS_RateLatency_Server.SRV_TYPE.LISTENER);
 
-        CBS_Link t_1_2 = sg.addLink("s1 --> s2", CbsRlServer1, CbsRlServer2, 100e6); // 100MBit/s link capacity
-        CBS_Link t_2_3 = sg.addLink("s2 --> s3", CbsRlServer2, CbsRlServer3, 100e6); // 100MBit/s link capacity
-        CBS_Link t_3_4 = sg.addLink("s3 --> s4", CbsRlServer3, CbsRlServer4, 100e6); // 100MBit/s link capacity
+        CBS_RateLatency_Server CbsRlServer1 = sg.addServer("s1", CBS_RateLatency_Server.SRV_TYPE.SWITCH);
+        CBS_RateLatency_Server CbsRlServer2 = sg.addServer("s2", CBS_RateLatency_Server.SRV_TYPE.SWITCH);
+        CBS_RateLatency_Server CbsRlServer3 = sg.addServer("s3", CBS_RateLatency_Server.SRV_TYPE.SWITCH);
+        CBS_RateLatency_Server CbsRlServer4 = sg.addServer("s4", CBS_RateLatency_Server.SRV_TYPE.SWITCH);
+
+        CBS_Link t_T1_1 = sg.addLink("Talker1 --> s1", CbsTalker1, CbsRlServer1, 100.0e6);      // 100MBit/s link capacity
+        CBS_Link t_1_2 = sg.addLink("s1 --> s2", CbsRlServer1, CbsRlServer2, 100.0e6);          // 100MBit/s link capacity
+        CBS_Link t_T2_2 = sg.addLink("Talker2 --> s2", CbsTalker2, CbsRlServer2, 100.0e6);      // 100MBit/s link capacity
+        CBS_Link t_2_3 = sg.addLink("s2 --> s3", CbsRlServer2, CbsRlServer3, 100.0e6);          // 100MBit/s link capacity
+        CBS_Link t_T3_3 = sg.addLink("Talker3 --> s1", CbsTalker3, CbsRlServer3, 100.0e6);      // 100MBit/s link capacity
+        CBS_Link t_3_4 = sg.addLink("s3 --> s4", CbsRlServer3, CbsRlServer4, 100.0e6);          // 100MBit/s link capacity
+        CBS_Link t_4_L1 = sg.addLink("s4 --> Listener1", CbsRlServer4, CbsListener1, 100.0e6);  // 100MBit/s link capacity
 
         LinkedList<CBS_Link> path0 = new LinkedList<CBS_Link>();
+        path0.add(t_T1_1);
         path0.add(t_1_2);
         path0.add(t_2_3);
         path0.add(t_3_4);
+        path0.add(t_4_L1);
         sg.addFlow(path0, flow1, 512.0e3);    //Add Flow with 2MBit/s bandwidth reservation
 
         LinkedList<CBS_Link> path1 = new LinkedList<CBS_Link>();
+        path1.add(t_T2_2);
         path1.add(t_2_3);
         path1.add(t_3_4);
+        path1.add(t_4_L1);
         sg.addFlow(path1, flow2, 2.4e6);    //Add Flow with 5MBit/s bandwidth reservation
 
         LinkedList<CBS_Link> path2 = new LinkedList<CBS_Link>();
+        path2.add(t_T3_3);
         path2.add(t_3_4);
+        path2.add(t_4_L1);
         sg.addFlow(path2, flow3, 3.0e6);    //Add Flow with 5MBit/s bandwidth reservation
+
         System.out.println(sg);
 
         /* Now add another flow with the highest priority to all servers */
@@ -109,9 +126,15 @@ public class Demo_CBSLine {
            Test to determine minimum of two Token-Bucket ArrivalCurves
         */
         ArrivalCurve ac_flow1 = Curve.getFactory().createTokenBucket(8.0e6, 1.5e3);
+        System.out.println("AC Flow 1: " + ac_flow1);
         ArrivalCurve ac_flow2 = Curve.getFactory().createTokenBucket(20.0e6, 3.0e3);
+        System.out.println("AC Flow 2: " + ac_flow2);
+
         System.out.println("\r\n----- Test of DNC minimum of two ArrivalCurves -----");
         ArrivalCurve minAC = Curve.getUtils().min(ac_flow1, ac_flow2);
         System.out.println("Minimum AC of Flows 1 and 2 is " + minAC); // should be flow 1
+
+        ArrivalCurve aggrAC = Curve.getUtils().add(ac_flow1, ac_flow2);
+        System.out.println("Aggregation AC of Flows 1 and 2 is " + aggrAC); // should be flow 1
     }
 }
