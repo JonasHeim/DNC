@@ -50,23 +50,26 @@ public class Demo_CBSLine {
     public void run() throws Exception {
 
         /* First step always */
-        CBS_ServerGraph sg = new CBS_ServerGraph("CBS shapes line network");
+        CBS_ServerGraph sg = new CBS_ServerGraph("CBS shaped line network");
 
-        CBS_TokenBucket_Flow flow1 = new CBS_TokenBucket_Flow("flow1", 1.0e-3, 512, 1, 0, CBS_TokenBucket_Flow.Periodicity.PERIODIC);
-        CBS_TokenBucket_Flow flow2 = new CBS_TokenBucket_Flow("flow2", 10.0e-3, 12000, 2, 1, CBS_TokenBucket_Flow.Periodicity.PERIODIC);
-        CBS_TokenBucket_Flow flow3 = new CBS_TokenBucket_Flow("flow3", 20.0e-3, 12000, 5, 2, CBS_TokenBucket_Flow.Periodicity.PERIODIC);
-        CBS_TokenBucket_Flow flow4 = new CBS_TokenBucket_Flow("flow4", 1.0e-3, 512, 1, 0, CBS_TokenBucket_Flow.Periodicity.PERIODIC);
+        CBS_Flow flow1 = new CBS_Flow("flow1", 1.0e-3, 512, 1, 0, CBS_Flow.Periodicity.PERIODIC);
+        CBS_Flow flow2 = new CBS_Flow("flow2", 10.0e-3, 12000, 2, 1, CBS_Flow.Periodicity.PERIODIC);
+        CBS_Flow flow3 = new CBS_Flow("flow3", 20.0e-3, 12000, 5, 2, CBS_Flow.Periodicity.PERIODIC);
+        CBS_Flow flow4 = new CBS_Flow("flow4", 1.0e-3, 512, 1, 0, CBS_Flow.Periodicity.PERIODIC);
 
         /* Talker */
-        CBS_RateLatency_Server CbsTalker1 = sg.addServer("Talker1", CBS_RateLatency_Server.SRV_TYPE.TALKER);
-        CBS_RateLatency_Server CbsTalker2 = sg.addServer("Talker2", CBS_RateLatency_Server.SRV_TYPE.TALKER);
-        CBS_RateLatency_Server CbsTalker3 = sg.addServer("Talker3", CBS_RateLatency_Server.SRV_TYPE.TALKER);
-        CBS_RateLatency_Server CbsListener1 = sg.addServer("Listener1", CBS_RateLatency_Server.SRV_TYPE.LISTENER);
+        CBS_Server CbsTalker1 = sg.addServer("Talker1", CBS_Server.SRV_TYPE.TALKER);
+        CBS_Server CbsTalker2 = sg.addServer("Talker2", CBS_Server.SRV_TYPE.TALKER);
+        CBS_Server CbsTalker3 = sg.addServer("Talker3", CBS_Server.SRV_TYPE.TALKER);
 
-        CBS_RateLatency_Server CbsRlServer1 = sg.addServer("s1", CBS_RateLatency_Server.SRV_TYPE.SWITCH);
-        CBS_RateLatency_Server CbsRlServer2 = sg.addServer("s2", CBS_RateLatency_Server.SRV_TYPE.SWITCH);
-        CBS_RateLatency_Server CbsRlServer3 = sg.addServer("s3", CBS_RateLatency_Server.SRV_TYPE.SWITCH);
-        CBS_RateLatency_Server CbsRlServer4 = sg.addServer("s4", CBS_RateLatency_Server.SRV_TYPE.SWITCH);
+        /* Listener */
+        CBS_Server CbsListener1 = sg.addServer("Listener1", CBS_Server.SRV_TYPE.LISTENER);
+
+        /* Switches */
+        CBS_Server CbsRlServer1 = sg.addServer("s1", CBS_Server.SRV_TYPE.SWITCH);
+        CBS_Server CbsRlServer2 = sg.addServer("s2", CBS_Server.SRV_TYPE.SWITCH);
+        CBS_Server CbsRlServer3 = sg.addServer("s3", CBS_Server.SRV_TYPE.SWITCH);
+        CBS_Server CbsRlServer4 = sg.addServer("s4", CBS_Server.SRV_TYPE.SWITCH);
 
         CBS_Link t_T1_1 = sg.addLink("Talker1 --> s1", CbsTalker1, CbsRlServer1, 100.0e6);      // 100MBit/s link capacity
         CBS_Link t_1_2 = sg.addLink("s1 --> s2", CbsRlServer1, CbsRlServer2, 100.0e6);          // 100MBit/s link capacity
@@ -100,27 +103,21 @@ public class Demo_CBSLine {
         System.out.println(sg);
 
         /* Now add another flow with the highest priority to all servers */
+        //ToDo: what happens when a second flor with the same priority is added? What happens at the servers queues? Only IdleSlope increases?
         sg.addFlow(path0, flow4, 512.0e3);
         System.out.println(sg);
 
-        //ToDo: what happens when a second flor with the same priority is added? What happens at the servers queues? Only IdleSlope increases?
-
-        /* Do CBS TFA analysis */
-        //ToDo: design and implement
-        /*
-            Für jeden Server eines Pfads eines Flows sukzessive:
-                1. Für jeden eingehenden Link in diesen Server
-                    1.1. Hole alle ACs von Flows gleicher Priorität
-                    1.2. Bilde aggr. AC dieser Flows
-                    1.3. Bilde minimum
-
-         */
-
         CBS_TotalFlowAnalysis tfa = new CBS_TotalFlowAnalysis(sg);
         tfa.performAnalysis(flow1);
+        System.out.println("Total delay flow1: " + tfa.getTotalDelay() + "s");
         tfa.performAnalysis(flow2);
+        System.out.println("Total delay flow2: " + tfa.getTotalDelay() + "s");
         tfa.performAnalysis(flow3);
+        System.out.println("Total delay flow3: " + tfa.getTotalDelay() + "s");
         tfa.performAnalysis(flow4);
+        System.out.println("Total delay flow4: " + tfa.getTotalDelay() + "s");
+
+        //ToDo: if the aggrgated ArrivalCurve is used in min(aggrAC, CBS_Shaper) flow 1 & flow 4 have the same total delay. Does this make sense?
 
         /* ToDo: Remove
            Test to determine minimum of two Token-Bucket ArrivalCurves

@@ -12,12 +12,12 @@ public class CBS_Link {
     /**
      * Source CBS server of the link.
      */
-    private final CBS_RateLatency_Server source;
+    private final CBS_Server source;
 
     /**
      * Destination CBS server of the link.
      */
-    private final CBS_RateLatency_Server destination;
+    private final CBS_Server destination;
 
     /**
      * Capacity of the link in Bit/s
@@ -30,7 +30,7 @@ public class CBS_Link {
      * @param destination   The links destination server
      * @param capacity      The link capacity in Bit/s
      */
-    protected CBS_Link(String alias, CBS_RateLatency_Server source, CBS_RateLatency_Server destination, double capacity) {
+    protected CBS_Link(String alias, CBS_Server source, CBS_Server destination, double capacity) {
         this.alias = alias;
         this.source = source;
         this.destination = destination;
@@ -47,14 +47,14 @@ public class CBS_Link {
     /**
      * @return The source server of the link
      */
-    public CBS_RateLatency_Server getSource() {
+    public CBS_Server getSource() {
         return source;
     }
 
     /**
      * @return The destination server of the link
      */
-    public CBS_RateLatency_Server getDestination() {
+    public CBS_Server getDestination() {
         return destination;
     }
 

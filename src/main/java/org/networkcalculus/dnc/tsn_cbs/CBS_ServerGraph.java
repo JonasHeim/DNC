@@ -2,30 +2,30 @@ package org.networkcalculus.dnc.tsn_cbs;
 
 import org.networkcalculus.dnc.curves.ArrivalCurve;
 import org.networkcalculus.dnc.curves.Curve;
+import org.networkcalculus.dnc.curves.ServiceCurve;
 
 import java.util.*;
 
 public class CBS_ServerGraph {
     private final String alias;
 
+    private Set<CBS_Server> servers;
 
-    private Set<CBS_RateLatency_Server> servers;
-
-    private Map<CBS_RateLatency_Server, CBS_Link> mapping_server_to_link;
-    private Map<CBS_TokenBucket_Flow, LinkedList<CBS_Link>> mapping_flow_to_path;
+    private Map<CBS_Server, CBS_Link> mapping_server_to_link;
+    private Map<CBS_Flow, LinkedList<CBS_Link>> mapping_flow_to_path;
     private Set<CBS_Link> links;
 
-    private Set<CBS_TokenBucket_Flow> flows;
+    private Set<CBS_Flow> flows;
     public CBS_ServerGraph(String alias) {
         this.alias = alias;
-        this.servers = new HashSet<CBS_RateLatency_Server>();
+        this.servers = new HashSet<CBS_Server>();
         this.links = new HashSet<CBS_Link>();
-        this.flows = new HashSet<CBS_TokenBucket_Flow>();
-        this.mapping_server_to_link = new HashMap<CBS_RateLatency_Server, CBS_Link>();
-        this.mapping_flow_to_path = new HashMap<CBS_TokenBucket_Flow, LinkedList<CBS_Link>>();
+        this.flows = new HashSet<CBS_Flow>();
+        this.mapping_server_to_link = new HashMap<CBS_Server, CBS_Link>();
+        this.mapping_flow_to_path = new HashMap<CBS_Flow, LinkedList<CBS_Link>>();
     }
 
-    public CBS_ServerGraph(String alias, HashSet<CBS_RateLatency_Server> servers, HashSet<CBS_Link> links) {
+    public CBS_ServerGraph(String alias, HashSet<CBS_Server> servers, HashSet<CBS_Link> links) {
         this.alias = alias;
         /* ToDO: No verification happening yet.
            Make sure links and flows paths must only contain  servers that are path of the graph.
@@ -34,14 +34,20 @@ public class CBS_ServerGraph {
         this.links = links;
     }
 
-    public CBS_RateLatency_Server addServer(String alias, CBS_RateLatency_Server.SRV_TYPE serverType) {
-        CBS_RateLatency_Server new_server = new CBS_RateLatency_Server(alias, serverType);
+    public LinkedList<CBS_Link> getPath(CBS_Flow flow) {
+        return this.mapping_flow_to_path.get(flow);
+    }
+
+    public String getAlias() { return this.alias; }
+
+    public CBS_Server addServer(String alias, CBS_Server.SRV_TYPE serverType) {
+        CBS_Server new_server = new CBS_Server(alias, serverType);
 
         this.servers.add(new_server);
         return new_server;
     }
 
-    public CBS_Link addLink(String alias, CBS_RateLatency_Server source, CBS_RateLatency_Server destination, double linkCapacity) {
+    public CBS_Link addLink(String alias, CBS_Server source, CBS_Server destination, double linkCapacity) {
         CBS_Link new_link = new CBS_Link(alias, source, destination, linkCapacity);
 
         this.links.add(new_link);
@@ -49,7 +55,7 @@ public class CBS_ServerGraph {
     }
 
 
-    public void addFlow(LinkedList<CBS_Link> path, CBS_TokenBucket_Flow flow, double idleSlope) {
+    public void addFlow(LinkedList<CBS_Link> path, CBS_Flow flow, double idleSlope) {
         /*
          ToDo: check arguments
             - Are all servers of the path part of the server graph?
@@ -79,29 +85,31 @@ public class CBS_ServerGraph {
             System.out.println("SG addFlow @ link " + link + " with dst. server " + link.getDestination());
 
             /* Only update CBS Queues for forwarding devices */
-            if(CBS_RateLatency_Server.SRV_TYPE.SWITCH == link.getSource().getServerType()) {
+            if(CBS_Server.SRV_TYPE.SWITCH == link.getSource().getServerType()) {
 
                 /* Update the queue at the server with flows properties.
                  * Calculates aggregated ArrivalCurve, min./max. Credits, ServiceCurve, etc. at the Queue */
                 link.getSource().addFlow(flow, ac, idleSlope, link);
 
                 /* Calculate ArrivalCurve for the next hop */
+                ServiceCurve sc = link.getSource().getQueue(flow.getPriority(), link).getServiceCurve();
+
                 /* Get CBS Shaper arrival curve */
+                //ToDo: verify if we use the AggregatedAC or simple AC here
+                ac = Curve.getUtils().min(link.getSource().getQueue(flow.getPriority(), link).getAggregateArrivalCurve(), link.getSource().getQueue(flow.getPriority(), link).getCbsShapingCurve());
                 /* Get Link Shaper arrival curve */
-                /* Build minimum and set ac */
+                ac = Curve.getUtils().min(ac, link.getSource().getQueue(flow.getPriority(), link).getLinkShapingCurve());
             }
         }
 
     }
-
-    public String getAlias() { return this.alias; }
 
     public String toString() {
         StringBuffer cbs_servergraph_str = new StringBuffer();
 
         cbs_servergraph_str.append("\r\n----------------------------------------------------------\r\n");
         cbs_servergraph_str.append("CBS ServerGraph \"" + this.alias + "\"");
-        for(CBS_RateLatency_Server server: this.servers) {
+        for(CBS_Server server: this.servers) {
             cbs_servergraph_str.append(server.toString());
         }
         cbs_servergraph_str.append("\r\n");
@@ -109,7 +117,7 @@ public class CBS_ServerGraph {
             cbs_servergraph_str.append(link.toString());
         }
         cbs_servergraph_str.append("\r\n");
-        for(CBS_TokenBucket_Flow flow: this.flows) {
+        for(CBS_Flow flow: this.flows) {
             cbs_servergraph_str.append(flow.toString());
         }
         cbs_servergraph_str.append("\r\n----------------------------------------------------------\r\n");

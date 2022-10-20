@@ -4,9 +4,9 @@ import org.networkcalculus.dnc.curves.ArrivalCurve;
 import org.networkcalculus.dnc.curves.Curve;
 
 /**
- * Class representation of the Credit-Based-Shaper flow with Token-Bucket property
+ * Class representation of the Credit-Based shaped flow with Token-Bucket ArrivalCurve
  */
-public class CBS_TokenBucket_Flow {
+public class CBS_Flow {
     /**
      * Periodicity type of the flow
      */
@@ -63,7 +63,7 @@ public class CBS_TokenBucket_Flow {
      * @param priority      Flow priority
      * @param periodicity   Periodicity of the flow
      */
-    public CBS_TokenBucket_Flow(String alias, double cmi, int mfs, int mif, int priority, Periodicity periodicity) {
+    public CBS_Flow(String alias, double cmi, int mfs, int mif, int priority, Periodicity periodicity) {
         this.alias = alias;
 
         this.cmi = cmi;
@@ -71,8 +71,6 @@ public class CBS_TokenBucket_Flow {
         this.mif = mif;
         this.priority = priority;
         this.is_periodic = periodicity == Periodicity.PERIODIC;
-
-        /* ToDo: The calculation needs to be done in ServerGraph, not here... */
 
         /* Calculate m */
         this.max_data_per_CMI = this.mfs * this.mif;
