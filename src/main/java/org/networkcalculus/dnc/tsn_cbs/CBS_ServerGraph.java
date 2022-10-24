@@ -1,5 +1,6 @@
 package org.networkcalculus.dnc.tsn_cbs;
 
+import org.networkcalculus.dnc.algebra.disco.affine.Deconvolution_Disco_Affine;
 import org.networkcalculus.dnc.curves.ArrivalCurve;
 import org.networkcalculus.dnc.curves.Curve;
 import org.networkcalculus.dnc.curves.ServiceCurve;
@@ -90,16 +91,21 @@ public class CBS_ServerGraph {
                 /* Update the queue at the server with flows properties.
                  * Calculates aggregated ArrivalCurve, min./max. Credits, ServiceCurve, etc. at the Queue */
                 link.getSource().addFlow(flow, ac, idleSlope, link);
+                ac = link.getSource().getQueue(flow.getPriority(), link).getAggregateArrivalCurve();
 
-                /* Calculate ArrivalCurve for the next hop */
+                /* Calculate output flow bound */
+                //ToDo: do we need to use the simple ArrivalCurve or the aggregated ArrivalCurve?
                 ServiceCurve sc = link.getSource().getQueue(flow.getPriority(), link).getServiceCurve();
+                ac = Deconvolution_Disco_Affine.deconvolve(ac, sc);
+                System.out.println("Output flow bound AC for flow " + flow.getAlias() + " at server " + link.getSource().getAlias() + " : " + ac);
 
-                /* Get CBS Shaper arrival curve */
-                //ToDo: verify if we use the AggregatedAC or simple AC here
-                ac = Curve.getUtils().min(link.getSource().getQueue(flow.getPriority(), link).getAggregateArrivalCurve(), link.getSource().getQueue(flow.getPriority(), link).getCbsShapingCurve());
-                /* Get Link Shaper arrival curve */
+                /* Apply CBS shaping */
+                ac = Curve.getUtils().min(ac, link.getSource().getQueue(flow.getPriority(), link).getCbsShapingCurve());
+
+                /* Apply link shaping */
                 ac = Curve.getUtils().min(ac, link.getSource().getQueue(flow.getPriority(), link).getLinkShapingCurve());
             }
+            // ToDo: else SRV_TYPE.LISTENER ends the path. Shall we remember the total output flow bound?
         }
 
     }
