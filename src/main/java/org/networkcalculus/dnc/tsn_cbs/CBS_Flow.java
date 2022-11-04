@@ -3,10 +3,16 @@ package org.networkcalculus.dnc.tsn_cbs;
 import org.networkcalculus.dnc.curves.ArrivalCurve;
 import org.networkcalculus.dnc.curves.Curve;
 
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  * Class representation of the Credit-Based shaped flow with Token-Bucket ArrivalCurve
  */
 public class CBS_Flow {
+
+    private LinkedList<CBS_Link> path;
+
     /**
      * Periodicity type of the flow
      */
@@ -85,6 +91,8 @@ public class CBS_Flow {
     public CBS_Flow(String alias, double cmi, int mfs, int mif, int priority, Periodicity periodicity) {
         this.alias = alias;
 
+        this.path = new LinkedList<CBS_Link>();
+
         this.cmi = cmi;
         this.mfs = mfs + ethFrameOverhead;
         this.mif = mif;
@@ -108,6 +116,26 @@ public class CBS_Flow {
      */
     public double getCmi() {
         return cmi;
+    }
+
+    /**
+     * Set path for this flow
+     * @param path New path
+     */
+    public void setPath(LinkedList<CBS_Link> path) {
+        this.path = path;
+
+        /* Traverse path once and update max. packet size */
+        for(CBS_Link link: this.path) {
+            link.setMaxPacketSize(this.getMfs());
+        }
+    }
+
+    /**
+     * @return Path of the flow
+     */
+    public LinkedList<CBS_Link> getPath() {
+        return this.path;
     }
 
     /**

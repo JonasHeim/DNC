@@ -28,7 +28,6 @@ package org.networkcalculus.dnc.demos;
 
 import org.networkcalculus.dnc.tsn_cbs.*;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 
@@ -127,18 +126,18 @@ public class Demo_CBSTree {
 
         /* Add flows with decreasing priority */
         //Prio 0
-        sg.addFlow(path0, flow1);
-        sg.addFlow(path1, flow2);
-        sg.addFlow(path2, flow3);
-        sg.addFlow(path3, flow4);
+        sg.addFlow(flow1);
+        sg.addFlow(flow2);
+        sg.addFlow(flow3);
+        sg.addFlow(flow4);
 
         //Prio 1
-        sg.addFlow(path0, flow5);
-        sg.addFlow(path2, flow6);
+        sg.addFlow(flow5);
+        sg.addFlow(flow6);
 
         //Prio 2
-        sg.addFlow(path1, flow7);
-        sg.addFlow(path3, flow8);
+        sg.addFlow(flow7);
+        sg.addFlow(flow8);
 
         System.out.println(sg);
 

@@ -243,7 +243,7 @@ public class CBS_Queue {
      */
     private void calculateLinkShapingCurve() {
         this.linkShapingCurve = Curve.getFactory().createTokenBucket(this.outputLink.getCapacity(),
-                this.maxPacketSize);
+                this.outputLink.getMaxPacketSize());
     }
 
     /**

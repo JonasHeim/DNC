@@ -68,7 +68,7 @@ public class Demo_CBSLine {
                 CBS_Flow.Periodicity.PERIODIC);
 
         //Prio 2
-        CBS_Flow flow3 = new CBS_Flow("flow3", 20.0e-3, 12000, 5, 2,
+        CBS_Flow flow3 = new CBS_Flow("flow3", 20.0e-3, 12000, 2, 2,
                 CBS_Flow.Periodicity.PERIODIC);
         CBS_Flow flow5 = new CBS_Flow("flow5", 20.0e-3, 12000, 5, 2,
                 CBS_Flow.Periodicity.PERIODIC);
@@ -114,16 +114,26 @@ public class Demo_CBSLine {
         path2.add(t_3_4);
         path2.add(t_4_L1);
 
+        /* Map paths to flows */
+        flow1.setPath(path0);
+        flow4.setPath(path0);
+
+        flow2.setPath(path1);
+        flow3.setPath(path1);
+
+        flow5.setPath(path2);
+
+
         // Prio 0
-        sg.addFlow(path0, flow1);
-        sg.addFlow(path0, flow4);
+        sg.addFlow(flow1);
+        sg.addFlow(flow4);
 
         //Prio 1
-        sg.addFlow(path1, flow2);
+        sg.addFlow(flow2);
 
         //Prio 2
-        sg.addFlow(path1, flow3);
-        sg.addFlow(path2, flow5);
+        sg.addFlow(flow3);
+        sg.addFlow(flow5);
 
 
         System.out.println(sg);

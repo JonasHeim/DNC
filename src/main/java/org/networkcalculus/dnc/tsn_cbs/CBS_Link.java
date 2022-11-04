@@ -25,6 +25,11 @@ public class CBS_Link {
     private final double capacity;
 
     /**
+     * Max. packet size that goes over this link (without BE)
+     */
+    private double maxPacketSize;
+
+    /**
      * @param alias         The link alias (not necessarily unique).
      * @param source        The links source server
      * @param destination   The links destination server
@@ -35,6 +40,7 @@ public class CBS_Link {
         this.source = source;
         this.destination = destination;
         this.capacity = capacity;
+        this.maxPacketSize = 0.0;
     }
 
     /**
@@ -74,5 +80,20 @@ public class CBS_Link {
         cbs_link_str.append("CBS Link \"" + this.alias + "\" connecting " + this.source.getAlias() + " to " + this.destination.getAlias() + " with a capacity of " + this.getCapacity() + " Bit/s\r\n");
 
         return cbs_link_str.toString();
+    }
+
+    /**
+     * @return Maximum packet size in bits of all flows (without BE) that go over this link
+     */
+    public double getMaxPacketSize() {
+        return maxPacketSize;
+    }
+
+    /**
+     * Set max. packet size for this link if value is larger than current value.
+     * @param maxPacketSize Max. packet size in bit
+     */
+    public void setMaxPacketSize(double maxPacketSize) {
+        this.maxPacketSize = Math.max(this.maxPacketSize, maxPacketSize);
     }
 }

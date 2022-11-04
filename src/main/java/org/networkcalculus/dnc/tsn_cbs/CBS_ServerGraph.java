@@ -94,41 +94,48 @@ public class CBS_ServerGraph {
 
     /**
      * Rerserve a flow in the server graph
-     * @param path          Path of server that the flow traverses
-     * @param flow          Flow to reserve
+     *
+     * @param flow Flow to reserve
      */
-    public void addFlow(LinkedList<CBS_Link> path, CBS_Flow flow) {
+    public void addFlow(CBS_Flow flow) throws Exception {
         /*le
          ToDo: check arguments
             - Are all servers of the path part of the server graph?
+            - First server Talker, last server Listener?
          */
-        this.flows.add(flow);
-        this.mapping_flow_to_path.put(flow, path);
-
-        //ToDo: implement algorithm that updates all servers on flows path and adds/updated the queues at the servers
-        /*
-            Add the flow to each server on its path.
-            For each server a CBS-Queue with the same priority as the flow must be reserved.
-            For each CBS-Queue the
-         */
+        LinkedList<CBS_Link> path = flow.getPath();
+        if(path.isEmpty()) {
+            throw new Exception("Empty path");
+        }
+        else if(CBS_Server.SRV_TYPE.TALKER != path.getFirst().getSource().getServerType()) {
+            throw new Exception("First server of the path must be a TSN talker device.");
+        }
+        else if (CBS_Server.SRV_TYPE.LISTENER != path.getLast().getDestination().getServerType()) {
+            throw new Exception("Last server of the path must be a TSN listener device.");
+        }
+        else if (path.size() <= 2) {
+            throw new Exception("Path must contain at least one TSN forwarding/switching device");
+        }
 
         /* For the first link from Talker to the first hop only Link-Shaping is applied to the AC */
         double linkCapacity = path.getFirst().getCapacity();
-        double maxPacketSize = flow.getMfs();
 
-        ArrivalCurve ac = flow.calculateAndSetAC(linkCapacity);
-        ArrivalCurve shaperLink = Curve.getFactory().createTokenBucket(linkCapacity, maxPacketSize);
-
-        /* Apply link shaping to get the ArrivalCurve for the first hop */
-        ac = Curve.getUtils().min(ac, shaperLink);
-        System.out.println("SG initial AC " + ac);
+        ArrivalCurve ac = Curve.getFactory().createZeroArrivals();
 
         for(CBS_Link link: path) {
             System.out.println("SG addFlow @ link " + link + " with dst. server " + link.getDestination());
 
-            /* Only update CBS Queues for forwarding devices */
-            if(CBS_Server.SRV_TYPE.SWITCH == link.getSource().getServerType()) {
+            if(CBS_Server.SRV_TYPE.TALKER == link.getSource().getServerType()) {
+                /* Initial link */
+                ac = flow.calculateAndSetAC(linkCapacity);
+                ArrivalCurve shaperLink = Curve.getFactory().createTokenBucket(linkCapacity, link.getMaxPacketSize());
 
+                /* Apply link shaping to get the ArrivalCurve for the first hop */
+                ac = Curve.getUtils().min(ac, shaperLink);
+                System.out.println("SG initial AC " + ac);
+            }
+            else if(CBS_Server.SRV_TYPE.SWITCH == link.getSource().getServerType()) {
+                /* Only update CBS Queues for forwarding devices */
                 CBS_Server serverSource = link.getSource();
 
                 /* Update the queue at the server with flows properties.
@@ -151,6 +158,9 @@ public class CBS_ServerGraph {
             }
             // ToDo: else SRV_TYPE.LISTENER ends the path. Shall we remember the total output flow bound?
         }
+
+        this.flows.add(flow);
+        this.mapping_flow_to_path.put(flow, path);
 
     }
 
