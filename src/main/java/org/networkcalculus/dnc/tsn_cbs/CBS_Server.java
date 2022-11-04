@@ -30,25 +30,28 @@ public class CBS_Server {
     /**
      * Set of priorities that this server supports. Each priority has at least one output queue.
      */
-    private Set<Integer> priorities;
+    private final Set<Integer> priorities;
 
     /**
      * Mapping of priorities to a mapping of output links to output queues
      */
-    private Map<Integer, Map<CBS_Link, CBS_Queue>> mapping_priorities_to_queues;
+    private final Map<Integer, Map<CBS_Link, CBS_Queue>> mapping_priorities_to_queues;
+
+    private final Map<Integer, Double> idleSlopeMapping;
 
     /**
      * Create a new, empty server
      * @param alias         String identification
      * @param serverType    TSN server type
      */
-    public CBS_Server(String alias, SRV_TYPE serverType) {
+    public CBS_Server(String alias, SRV_TYPE serverType, Map<Integer, Double> idleSlopes) {
         this.alias = alias;
         this.serverType = serverType;
 
         /* Initialize server with empty CBS queues */
         this.priorities = new TreeSet<Integer>();
-        this.mapping_priorities_to_queues = new HashMap<Integer, Map<CBS_Link, CBS_Queue>>();
+        this.mapping_priorities_to_queues = new LinkedHashMap <Integer, Map<CBS_Link, CBS_Queue>>();
+        this.idleSlopeMapping = idleSlopes;
     }
 
     /**
@@ -75,12 +78,13 @@ public class CBS_Server {
      * output link will recalculate their values (credits, ServiceCurve, ...).
      * @param flow      Flow to be added to server
      * @param ac        Shaped ArrivalCurve of the flow from previous server
-     * @param idleSlp   IdleSlope of the flow in bit/s
      * @param link      Output link to next hop
      */
-    public void addFlow(CBS_Flow flow, ArrivalCurve ac, double idleSlp, CBS_Link link) {
+    public void addFlow(CBS_Flow flow, ArrivalCurve ac, CBS_Link link) {
         //ToDo: Arguments OK?
         int priority = flow.getPriority();
+        this.priorities.add(priority);
+        double idleSlp = this.idleSlopeMapping.get(priority);
 
         /* We must distinguish between the following cases:
             1. No output queue for given priority available yet
@@ -91,21 +95,21 @@ public class CBS_Server {
         if(this.mapping_priorities_to_queues.containsKey(priority)) {
             if(this.mapping_priorities_to_queues.get(priority).containsKey(link)) {
                 /* Case 3: Update existing queue */
-                System.out.println("CBS_Server.addFlow - Update queue for priority " + priority);
-                this.mapping_priorities_to_queues.get(priority).get(link).update(flow, ac, idleSlp);
+                System.out.println("CBS_Server.addFlow - Update queue for priority " + priority + " at server " + this.getAlias());
+                this.mapping_priorities_to_queues.get(priority).get(link).update(flow, ac);
             }
             else {
                 /* Case 2: Create new CBS queue */
-                System.out.println("CBS_Server.addFlow - Creating new queue for priority " + priority);
+                System.out.println("CBS_Server.addFlow - Creating new queue for priority " + priority + " at server " + this.getAlias());
                 CBS_Queue queue = new CBS_Queue(flow, ac, idleSlp, link);
                 this.mapping_priorities_to_queues.get(priority).put(link, queue);
             }
         }
         else {
             /* Case 1: No queue for priority exists yet so we will create one */
-            System.out.println("CBS_Server.addFlow - Creating the first queue for priority " + priority);
+            System.out.println("CBS_Server.addFlow - Creating the first queue for priority " + priority + " at server " + this.getAlias());
             CBS_Queue queue = new CBS_Queue(flow, ac, idleSlp, link);
-            HashMap<CBS_Link, CBS_Queue> hashMap = new HashMap<>();
+            LinkedHashMap <CBS_Link, CBS_Queue> hashMap = new LinkedHashMap <>();
             hashMap.put(link, queue);
 
             this.mapping_priorities_to_queues.put(priority, hashMap);
@@ -157,7 +161,7 @@ public class CBS_Server {
     public String toString() {
         StringBuffer cbs_rl_server_str = new StringBuffer();
 
-        cbs_rl_server_str.append("CBS Rate-Latency server \"" + this.alias);
+        cbs_rl_server_str.append("CBS Rate-Latency server \"" + this.alias + "\r\n");
         for(int priority:this.priorities) {
             cbs_rl_server_str.append("\r\n\tCBS queues for priority " + priority);
             Map<CBS_Link, CBS_Queue> queues = this.mapping_priorities_to_queues.get(priority);

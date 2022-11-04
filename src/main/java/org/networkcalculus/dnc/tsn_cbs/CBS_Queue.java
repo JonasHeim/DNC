@@ -41,12 +41,12 @@ public class CBS_Queue {
     /**
      * Cumulated IdleSlope/Bandwith reservation of the queue in bit/s
      */
-    private double idleSlope;
+    private final double idleSlope;
 
     /**
      * Cumulated SendSlope of the queue in bit/s
      */
-    private double sendSlope;
+    private final double sendSlope;
 
     /**
      * Bandwidth/capacity of the queues output link
@@ -164,16 +164,13 @@ public class CBS_Queue {
      * Changes IdleSlope, SendSlope, max. PacketSize, Credits, ServiceCurve and shaping curves
      * @param flow          The new flow that traverses the queue
      * @param ac            The TokenBucket ArrivalCurve of the new flow
-     * @param idleSlope     The IdleSlope/Bandwidth reservation of the new flow in bit/s
      */
-    public void update(CBS_Flow flow, ArrivalCurve ac, double idleSlope) {
+    public void update(CBS_Flow flow, ArrivalCurve ac) {
         this.aggregateArrivalCurve = Curve.getUtils().add(this.aggregateArrivalCurve, ac);
 
-        /* New max. packet size? */
-        this.maxPacketSize = flow.getMfs() > this.maxPacketSize ? flow.getMfs() : this.maxPacketSize;
 
-        this.idleSlope += idleSlope;
-        this.sendSlope += idleSlope;
+        /* New max. packet size? */
+        this.maxPacketSize = Math.max(flow.getMfs(), this.maxPacketSize);
 
         this.recalculateQueue();
     }
@@ -213,8 +210,8 @@ public class CBS_Queue {
      * server, the output link rate/capacity and the IdleSlope of the queue.
      */
     private void calculateMaxCredit() {
-        double maxCreditNumerator = 0.0 - this.maxPacketSize_BestEffort;
-        double maxCreditDenominator = 0.0 - this.linkCapacity;
+        double maxCreditNumerator = 0.0;
+        double maxCreditDenominator = 0.0;
 
         /* Calculate sum of min. credit of all higher priority queues for the same output link */
         LinkedList<CBS_Queue> queues = this.getOutputLink().getSource().getQueuesOfOutputLink(this.getOutputLink());
@@ -225,6 +222,9 @@ public class CBS_Queue {
                 maxCreditDenominator += q.getIdleSlope();
             }
         }
+
+        maxCreditNumerator -= this.maxPacketSize_BestEffort;
+        maxCreditDenominator -= this.linkCapacity;
 
         this.maxCredit = this.idleSlope * (maxCreditNumerator / maxCreditDenominator );
     }

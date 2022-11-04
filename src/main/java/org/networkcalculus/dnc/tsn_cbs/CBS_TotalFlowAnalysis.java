@@ -5,7 +5,9 @@ import org.networkcalculus.dnc.curves.ArrivalCurve;
 import org.networkcalculus.dnc.curves.ServiceCurve;
 import org.networkcalculus.num.Num;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
@@ -13,10 +15,12 @@ import java.util.Map;
  * Class representation of the latency Total-Flow-Analysis of a server graph
  */
 public class CBS_TotalFlowAnalysis {
-    private class CBS_ResultsTotalFlowAnalysis {
+    private static class CBS_ResultsTotalFlowAnalysis {
         private Map<CBS_Server, Double> serverLocalDelays;
 
         private double totalDelay;
+
+        private CBS_Flow flow;
 
         public CBS_ResultsTotalFlowAnalysis() {
             this.reset();
@@ -37,7 +41,16 @@ public class CBS_TotalFlowAnalysis {
 
         public void reset() {
             this.totalDelay = 0.0;
-            this.serverLocalDelays = new HashMap<CBS_Server, Double>();
+            this.serverLocalDelays = new LinkedHashMap<CBS_Server, Double>();
+            this.flow = null;
+        }
+
+        public void setFlow(CBS_Flow flow) {
+            this.flow = flow;
+        }
+
+        public CBS_Flow getFlow() {
+            return flow;
         }
     }
 
@@ -81,6 +94,7 @@ public class CBS_TotalFlowAnalysis {
     public void performAnalysis(CBS_Flow flow) throws Exception
     {
         this.results.reset();
+        this.results.setFlow(flow);
         LinkedList<CBS_Link> path = this.server_graph.getPath(flow);
 
         for(CBS_Link link:path) {
@@ -101,6 +115,18 @@ public class CBS_TotalFlowAnalysis {
             }
             //else skip
         }
+    }
+
+    public String toString() {
+        StringBuffer cbs_tfa_str = new StringBuffer();
+
+        cbs_tfa_str.append("\r\nCBS TFA results for flow " + this.results.getFlow().getAlias() + ":\r\n");
+        Map<CBS_Server, Double> localDelay = this.results.getServerLocalDelays();
+        for(CBS_Server server:localDelay.keySet()) {
+            cbs_tfa_str.append("Delay @ " + server.getAlias() + " : " + new BigDecimal(localDelay.get(server)) + "s \r\n");
+        }
+        cbs_tfa_str.append("Total delay : " + new BigDecimal(this.getTotalDelay()) + "s \r\n");
+        return cbs_tfa_str.toString();
     }
 }
 

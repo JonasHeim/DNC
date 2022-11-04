@@ -16,6 +16,18 @@ public class CBS_Flow {
     }
 
     /**
+     * Number of bytes that are added to the number of payload bytes and make up
+     * a 802.1Q tagged ethernet frame.
+     * Includes:
+     *  Preamble (7 Byte), Start frame delimiter (1 Byte),
+     *  Dst. MAC (6 Byte), Src. MAC (6 Byte),
+     *  802.1Q tag (4 Byte), Ethertype (2 Byte),
+     *  CRC (4 Byte) and IPG (12 Byte)
+     *
+     */
+    private final int ethFrameOverhead = 42 * 8;
+
+    /**
      * String identifier of the flow
      */
     private final String alias;
@@ -57,23 +69,31 @@ public class CBS_Flow {
 
     /**
      * @param alias         String representation of the flow
-     * @param cmi           TSN Class Measurement Interval
-     * @param mfs           TSN Max Frame Size
+     * @param cmi           TSN Class Measurement Interval [s]
+     * @param mfs           TSN Max Frame Size [Byte]
+     *                      Only lenght of the payload. No support of jumbo frames.
+     *                      Min. : 46 Byte
+     *                      Max. : 1500 Byte
+     *                      Preamble (7 Byte), start frame delim. (1 Byte),
+     *                      Src. MAC (6 Byte), Dst. MAC (6 Byte),
+     *                      802.1Q tag (4 Byte), ethertype (2 Byte),
+     *                      CRC (4 Byte) and IPG (12 Byte) will be added.
      * @param mif           TSN Max Interval Frame
-     * @param priority      Flow priority
+     * @param priority      Flow priority [0 - ...]
      * @param periodicity   Periodicity of the flow
      */
     public CBS_Flow(String alias, double cmi, int mfs, int mif, int priority, Periodicity periodicity) {
         this.alias = alias;
 
         this.cmi = cmi;
-        this.mfs = mfs;
+        this.mfs = mfs + ethFrameOverhead;
         this.mif = mif;
         this.priority = priority;
         this.is_periodic = periodicity == Periodicity.PERIODIC;
 
         /* Calculate m */
-        this.max_data_per_CMI = this.mfs * this.mif;
+        double burst_factor = this.is_periodic ? 1.0 : 2.0;
+        this.max_data_per_CMI = burst_factor * this.mfs * this.mif;
     }
 
     /**
@@ -160,10 +180,11 @@ public class CBS_Flow {
      */
     public ArrivalCurve calculateAndSetAC(double linkCapacity) {
         /* Create Token Bucket arrival curve */
-        double tb_rate = this.max_data_per_CMI / this.cmi;
-        double burst_factor = this.is_periodic ? 1.0 : 2.0;
-        double tb_burst = burst_factor * this.max_data_per_CMI * (1.0 - (tb_rate / linkCapacity));
+        double tb_rate = this.getMax_data_per_CMI() / this.cmi;
+        double tb_burst = this.getMax_data_per_CMI() * (1.0 - (tb_rate / linkCapacity));
         this.arrivalCurve = Curve.getFactory().createTokenBucket(tb_rate, tb_burst);
+
+        System.out.println("\r\nAC of Flow " + this.getAlias() + " : " + this.getArrivalCurve());
 
         return this.arrivalCurve;
     }
