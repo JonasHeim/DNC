@@ -87,13 +87,11 @@ public class CBS_Queue {
         this.outputLink = link;
         this.priority = flow.getPriority();
         this.linkCapacity = link.getCapacity();
-        this.aggregateArrivalCurve = ac;
-
-        this.maxPacketSize = flow.getMfs();
-
         this.idleSlope = idleSlope;
         this.sendSlope = this.idleSlope - this.linkCapacity;
 
+        this.aggregateArrivalCurve = ac;
+        this.maxPacketSize = flow.getMfs();
         this.recalculateQueue();
     }
 
@@ -167,11 +165,8 @@ public class CBS_Queue {
      */
     public void update(CBS_Flow flow, ArrivalCurve ac) {
         this.aggregateArrivalCurve = Curve.getUtils().add(this.aggregateArrivalCurve, ac);
-
-
         /* New max. packet size? */
         this.maxPacketSize = Math.max(flow.getMfs(), this.maxPacketSize);
-
         this.recalculateQueue();
     }
 

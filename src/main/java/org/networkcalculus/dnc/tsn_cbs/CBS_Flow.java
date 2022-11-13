@@ -4,7 +4,6 @@ import org.networkcalculus.dnc.curves.ArrivalCurve;
 import org.networkcalculus.dnc.curves.Curve;
 
 import java.util.LinkedList;
-import java.util.List;
 
 /**
  * Class representation of the Credit-Based shaped flow with Token-Bucket ArrivalCurve
@@ -127,7 +126,7 @@ public class CBS_Flow {
 
         /* Traverse path once and update max. packet size */
         for(CBS_Link link: this.path) {
-            link.setMaxPacketSize(this.getMfs());
+            link.updateMaxPacketSize(this.getMfs());
         }
     }
 

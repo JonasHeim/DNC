@@ -55,6 +55,15 @@ public class CBS_Server {
     }
 
     /**
+     * Reset all CBS queues and registered priorities of this servers
+     */
+    public void resetCBSQueues() {
+
+        this.mapping_priorities_to_queues.clear();
+        this.priorities.clear();
+    }
+
+    /**
      * @return  TSN server type of this server
      */
     public SRV_TYPE getServerType() {

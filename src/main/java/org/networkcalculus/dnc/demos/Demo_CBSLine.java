@@ -26,10 +26,7 @@
 
 package org.networkcalculus.dnc.demos;
 
-import org.networkcalculus.dnc.curves.ArrivalCurve;
-import org.networkcalculus.dnc.curves.Curve;
 import org.networkcalculus.dnc.tsn_cbs.*;
-
 import java.util.*;
 
 public class Demo_CBSLine {
@@ -48,6 +45,10 @@ public class Demo_CBSLine {
     }
 
     public void run() throws Exception {
+
+        /******************************************************
+         *************** Server graph setup *******************
+         ******************************************************/
 
         LinkedHashMap <Integer, Double> idleSlopeMapping = new LinkedHashMap <Integer, Double>();
         idleSlopeMapping.put(0, 5.0e6);
@@ -127,39 +128,21 @@ public class Demo_CBSLine {
         // Prio 0
         sg.addFlow(flow1);
         sg.addFlow(flow4);
-
-        //Prio 1
+        // Prio 1
         sg.addFlow(flow2);
-
-        //Prio 2
+        // Prio 2
         sg.addFlow(flow3);
         sg.addFlow(flow5);
 
+        /* Finally compute all CBS queues within the server graph */
+        sg.computeCBSQueues(CBS_ServerGraph.SHAPING_CONF.NO_SHAPING);
 
-        System.out.println(sg);
-
-        /* Now add another flow with the highest priority to all servers */
-        //ToDo: what happens when a second flor with the same priority is added? What happens at the servers queues?
-        // Only IdleSlope increases?
-        //sg.addFlow(path0, flow4, 512.0e3);
-        System.out.println(sg);
-
-		/* ToDo: What happens if a flow is added which priority is higher than all others?
-		 * 
-		 * All ServiceCurves are recalculated but what about the arrival curves/aggregated arrival curves?
-		 * They are calculated and shaped when a flow is added but must be recalculated as well in this case.
-		 * Perhaps prevent adding higher priority flows/order of adding flows must be from high to low prioriy.
-		 *
-		 */
-		
-
+        /******************************************************
+         ******************* Apply TFA ************************
+         ******************************************************/
         CBS_TotalFlowAnalysis tfa = new CBS_TotalFlowAnalysis(sg);
         tfa.performAnalysis(flow1);
         System.out.println(tfa);
-        /* ToDo: f1 and f4 local delay at S1 is a little bit smaller than at s2, s3 and s4.
-         * I assume this is because the initial link from the Talker is only link shaped.
-         * All the other have CBS shaping applied
-         */
         tfa.performAnalysis(flow2);
         System.out.println(tfa);
         tfa.performAnalysis(flow3);
@@ -169,20 +152,7 @@ public class Demo_CBSLine {
         tfa.performAnalysis(flow5);
         System.out.println(tfa);
 
-        //ToDo: Flow 1 & flow 4 have the same total delay. Does this make sense?
+        System.out.println(sg);
 
-        /* ToDo: Remove
-           Test to determine minimum of two Token-Bucket ArrivalCurves
-        */
-        System.out.println("\r\n----- Test of DNC minimum of two ArrivalCurves -----");
-        ArrivalCurve ac_flow1 = Curve.getFactory().createTokenBucket(8.0e6, 1.5e3);
-        System.out.println("AC Flow 1: " + ac_flow1);
-        ArrivalCurve ac_flow2 = Curve.getFactory().createTokenBucket(20.0e6, 3.0e3);
-        System.out.println("AC Flow 2: " + ac_flow2);
-        ArrivalCurve minAC = Curve.getUtils().min(ac_flow1, ac_flow2);
-        System.out.println("Minimum AC of Flows 1 and 2 is " + minAC); // should be flow 1
-
-        ArrivalCurve aggrAC = Curve.getUtils().add(ac_flow1, ac_flow2);
-        System.out.println("Aggregation AC of Flows 1 and 2 is " + aggrAC); // should be flow 1
     }
 }

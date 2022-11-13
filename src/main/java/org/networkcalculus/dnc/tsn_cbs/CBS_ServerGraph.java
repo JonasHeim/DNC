@@ -11,6 +11,17 @@ import java.util.*;
  * Class representing of a server graph with CBS shaped servers
  */
 public class CBS_ServerGraph {
+
+    /**
+     * Possible shaping types of a server graph
+     */
+    public enum SHAPING_CONF {
+        NO_SHAPING,
+        LINK_SHAPING,
+        CBS_SHAPING,
+        LINK_AND_CBS_SHAPING
+    }
+
     /**
      * String identification of the server graph
      */
@@ -27,6 +38,11 @@ public class CBS_ServerGraph {
     private final Map<CBS_Flow, LinkedList<CBS_Link>> mapping_flow_to_path;
 
     /**
+     * Maps prioritiey to CBS flows
+     */
+    private Map<Integer, LinkedList<CBS_Flow>> mapping_priorityToFlow;
+
+    /**
      * All links that connect CBS server
      */
     private final Set<CBS_Link> links;
@@ -35,6 +51,7 @@ public class CBS_ServerGraph {
      * All registered CBS flows
      */
     private final Set<CBS_Flow> flows;
+    private Set<Integer> priorities;
 
     /**
      * Create a new, empty CBS server graph
@@ -45,7 +62,9 @@ public class CBS_ServerGraph {
         this.servers = new HashSet<CBS_Server>();
         this.links = new HashSet<CBS_Link>();
         this.flows = new HashSet<CBS_Flow>();
+        this.priorities = new TreeSet<Integer>();
         this.mapping_flow_to_path = new LinkedHashMap<CBS_Flow, LinkedList<CBS_Link>>();
+        this.mapping_priorityToFlow = new HashMap<Integer, LinkedList<CBS_Flow>>();
     }
 
     /**
@@ -98,11 +117,6 @@ public class CBS_ServerGraph {
      * @param flow Flow to reserve
      */
     public void addFlow(CBS_Flow flow) throws Exception {
-        /*le
-         ToDo: check arguments
-            - Are all servers of the path part of the server graph?
-            - First server Talker, last server Listener?
-         */
         LinkedList<CBS_Link> path = flow.getPath();
         if(path.isEmpty()) {
             throw new Exception("Empty path");
@@ -117,51 +131,103 @@ public class CBS_ServerGraph {
             throw new Exception("Path must contain at least one TSN forwarding/switching device");
         }
 
-        /* For the first link from Talker to the first hop only Link-Shaping is applied to the AC */
-        double linkCapacity = path.getFirst().getCapacity();
-
-        ArrivalCurve ac = Curve.getFactory().createZeroArrivals();
-
-        for(CBS_Link link: path) {
-            System.out.println("SG addFlow @ link " + link + " with dst. server " + link.getDestination());
-
-            if(CBS_Server.SRV_TYPE.TALKER == link.getSource().getServerType()) {
-                /* Initial link */
-                ac = flow.calculateAndSetAC(linkCapacity);
-                ArrivalCurve shaperLink = Curve.getFactory().createTokenBucket(linkCapacity, link.getMaxPacketSize());
-
-                /* Apply link shaping to get the ArrivalCurve for the first hop */
-                ac = Curve.getUtils().min(ac, shaperLink);
-                System.out.println("SG initial AC " + ac);
-            }
-            else if(CBS_Server.SRV_TYPE.SWITCH == link.getSource().getServerType()) {
-                /* Only update CBS Queues for forwarding devices */
-                CBS_Server serverSource = link.getSource();
-
-                /* Update the queue at the server with flows properties.
-                 * Calculates aggregated ArrivalCurve, min./max. Credits, ServiceCurve, etc. at the Queue */
-                serverSource.addFlow(flow, ac, link);
-                CBS_Queue queue = serverSource.getQueue(flow.getPriority(), link);
-                ac = queue.getAggregateArrivalCurve();
-
-                /* Calculate output flow bound */
-                //ToDo: do we need to use the simple ArrivalCurve or the aggregated ArrivalCurve?
-                ServiceCurve sc = queue.getServiceCurve();
-                ac = Deconvolution_Disco_Affine.deconvolve(ac, sc);
-                System.out.println("Output flow bound AC for flow " + flow.getAlias() + " at server " + serverSource.getAlias() + " : " + ac);
-
-                /* Apply CBS shaping */
-                ac = Curve.getUtils().min(ac, queue.getCbsShapingCurve());
-
-                /* Apply link shaping */
-                ac = Curve.getUtils().min(ac, queue.getLinkShapingCurve());
-            }
-            // ToDo: else SRV_TYPE.LISTENER ends the path. Shall we remember the total output flow bound?
-        }
-
         this.flows.add(flow);
         this.mapping_flow_to_path.put(flow, path);
+        this.priorities.add(flow.getPriority());
 
+        LinkedList<CBS_Flow> list = this.mapping_priorityToFlow.get(flow.getPriority());
+        if(null == list)
+        {
+            /* First flow of priority */
+            list = new LinkedList<CBS_Flow>();
+            this.mapping_priorityToFlow.put(flow.getPriority(), list);
+        }
+
+        list.add(flow);
+    }
+
+    /**
+     * Clear all CBS queues on all servers of the graph
+     */
+    private void resetCBSQueues() {
+        for (CBS_Server server: this.servers) {
+            server.resetCBSQueues();
+        }
+    }
+
+    /**
+     * Calculate all CBS queues for all flows of the server graph.
+     * Will delete all existing queues of the servers.
+     * @param shapingConf Enum value of shaping curves supported by sever graph.
+     */
+    public void computeCBSQueues(SHAPING_CONF shapingConf) {
+        /* Reset server graph in case the CBS queues have been calculated already and need to be updated */
+        this.resetCBSQueues();
+
+        /* Go through all priorities of the server graph, from highest (0) to lowest */
+        /* For each priority p: */
+        for (int p:this.priorities) {
+            /* Go through all flows with that priority */
+            /* For each flow f: */
+            for (CBS_Flow flow: this.mapping_priorityToFlow.get(p)) {
+                /* Traverse path of flow and update/create CBS queues, ACs, SCs on each server on the path */
+                /* For each server s: */
+                /* s.updateCBSQueue(f) */
+                /* For the first link from Talker to the first hop only Link-Shaping is applied to the AC */
+                LinkedList<CBS_Link> path = flow.getPath();
+                double linkCapacity = path.getFirst().getCapacity();
+
+                ArrivalCurve ac = Curve.getFactory().createZeroArrivals();
+
+                for(CBS_Link link: path) {
+                    System.out.println("SG addFlow @ link " + link + " with dst. server " + link.getDestination());
+
+                    if(CBS_Server.SRV_TYPE.TALKER == link.getSource().getServerType()) {
+                        /* Initial link */
+                        ac = flow.calculateAndSetAC(linkCapacity);
+
+                        /* Apply link shaping to initial link? */
+                        if( (SHAPING_CONF.LINK_SHAPING == shapingConf) || (SHAPING_CONF.LINK_AND_CBS_SHAPING == shapingConf) ) {
+                            ArrivalCurve shaperLink = Curve.getFactory().createTokenBucket(linkCapacity, link.getMaxPacketSize());
+
+                            /* Get the shaped ArrivalCurve for the first hop */
+                            ac = Curve.getUtils().min(ac, shaperLink);
+                        }
+
+                        System.out.println("SG initial AC " + ac);
+                    }
+                    else if(CBS_Server.SRV_TYPE.SWITCH == link.getSource().getServerType()) {
+                        /* Only update CBS Queues for forwarding devices */
+                        CBS_Server serverSource = link.getSource();
+
+                        /* Update the queue at the server with flows properties.
+                         * Calculates aggregated ArrivalCurve, min./max. Credits, ServiceCurve, etc. at the Queue */
+                        serverSource.addFlow(flow, ac, link);
+                        CBS_Queue queue = serverSource.getQueue(flow.getPriority(), link);
+
+                        //ToDo: is this needed?
+                        //ac = queue.getAggregateArrivalCurve();
+
+                        /* Calculate output flow bound */
+                        ServiceCurve sc = queue.getServiceCurve();
+                        ac = Deconvolution_Disco_Affine.deconvolve(ac, sc);
+                        System.out.println("Output flow bound AC for flow " + flow.getAlias() + " at server " + serverSource.getAlias() + " : " + ac);
+
+                        /* Apply CBS shaping? */
+                        if( (SHAPING_CONF.CBS_SHAPING == shapingConf) || (SHAPING_CONF.LINK_AND_CBS_SHAPING == shapingConf) ) {
+                            /* Apply CBS shaping */
+                            ac = Curve.getUtils().min(ac, queue.getCbsShapingCurve());
+                        }
+
+                        /* Apply link shaping? */
+                        if( (SHAPING_CONF.LINK_SHAPING == shapingConf) || (SHAPING_CONF.LINK_AND_CBS_SHAPING == shapingConf) ) {
+                            /* Apply link shaping */
+                            ac = Curve.getUtils().min(ac, queue.getLinkShapingCurve());
+                        }
+                    }
+                }
+            }
+        }
     }
 
     /**

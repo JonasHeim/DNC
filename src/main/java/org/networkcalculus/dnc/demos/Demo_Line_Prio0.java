@@ -30,8 +30,6 @@ import org.networkcalculus.dnc.AnalysisConfig;
 import org.networkcalculus.dnc.CompFFApresets;
 import org.networkcalculus.dnc.curves.ArrivalCurve;
 import org.networkcalculus.dnc.curves.Curve;
-import org.networkcalculus.dnc.curves.MaxServiceCurve;
-import org.networkcalculus.dnc.curves.ServiceCurve;
 import org.networkcalculus.dnc.network.server_graph.Flow;
 import org.networkcalculus.dnc.network.server_graph.Server;
 import org.networkcalculus.dnc.network.server_graph.ServerGraph;
@@ -43,13 +41,13 @@ import org.networkcalculus.dnc.tandem.analyses.TotalFlowAnalysis;
 
 import java.util.LinkedList;
 
-public class Demo_Line {
+public class Demo_Line_Prio0 {
 
-    public Demo_Line() {
+    public Demo_Line_Prio0() {
     }
 
     public static void main(String[] args) {
-        Demo_Line demo = new Demo_Line();
+        Demo_Line_Prio0 demo = new Demo_Line_Prio0();
 
         try {
             demo.run();
@@ -63,31 +61,23 @@ public class Demo_Line {
         /* First step always */
         ServerGraph sg = new ServerGraph();
 
-        /* AC Flow 1 with rate of 8MBit/s and burst of 1.5kBit */
-        ArrivalCurve ac_flow1 = Curve.getFactory().createTokenBucket(8.0e6, 1.5e3);
+        ArrivalCurve ac_flow1 = Curve.getFactory().createTokenBucket(704.0e3, 699.0438399999999);
+        ArrivalCurve ac_flow4 = Curve.getFactory().createTokenBucket(704.0e3, 699.0438399999999);
 
-        /* AC Flow 2 with rate of 8MBit/s and burst of 1.5kBit */
-        ArrivalCurve ac_flow2 = Curve.getFactory().createTokenBucket(8.0e6, 1.5e3);
-
-        /* AC Flow 3 with rate of 20MBit/s and burst of 3kBit */
-        ArrivalCurve ac_flow3 = Curve.getFactory().createTokenBucket(20.0e6, 3.0e3);
-
-        /* Create a network of 5 systems in line topology */
+        /* Create a network of 4 systems in line topology */
         int numServers = 4;
         Server[] servers = new Server[numServers];
 
         /* FIFO Server 1 and 2 with rate of 50MBit/s and Latency of 20us */
-        servers[0] = sg.addServer("S1", Curve.getFactory().createRateLatency(50.0e6, 20.0e-6), AnalysisConfig.Multiplexing.FIFO);
-        servers[1] = sg.addServer("S2", Curve.getFactory().createRateLatency(50.0e6, 20.0e-6), AnalysisConfig.Multiplexing.FIFO);
-
-        /* FIFO Server 3 and 4 with rate of 80MBit/s and Latency of 50us */
-        servers[2] = sg.addServer("S3", Curve.getFactory().createRateLatency(80.0e6, 50.0e-6), AnalysisConfig.Multiplexing.FIFO);
-        servers[3] = sg.addServer("S4", Curve.getFactory().createRateLatency(80.0e6, 50.0e-6), AnalysisConfig.Multiplexing.FIFO);
+        servers[0] = sg.addServer("S1", Curve.getFactory().createRateLatency(5.0e6, 1.2e-4), AnalysisConfig.Multiplexing.FIFO);
+        servers[1] = sg.addServer("S2", Curve.getFactory().createRateLatency(5.0e6, 1.2e-4), AnalysisConfig.Multiplexing.FIFO);
+        servers[2] = sg.addServer("S3", Curve.getFactory().createRateLatency(5.0e6, 1.2e-4), AnalysisConfig.Multiplexing.FIFO);
+        servers[3] = sg.addServer("S4", Curve.getFactory().createRateLatency(5.0e6, 1.2e-4), AnalysisConfig.Multiplexing.FIFO);
 
         /* Define links between server */
         Turn t_1_2 = sg.addTurn("S1 --> S2", servers[0], servers[1]);
-        Turn t_2_3 = sg.addTurn("S2 --> S3",servers[1], servers[2]);
-        Turn t_3_4 = sg.addTurn("S3 --> S4",servers[2], servers[3]);
+        Turn t_2_3 = sg.addTurn("S2 --> S3", servers[1], servers[2]);
+        Turn t_3_4 = sg.addTurn("S3 --> S4", servers[2], servers[3]);
 
         /* Define path for flow 1 */
         LinkedList<Turn> path0 = new LinkedList<Turn>();
@@ -95,21 +85,15 @@ public class Demo_Line {
         path0.add(t_2_3);
         path0.add(t_3_4);
         sg.addFlow("Flow 1", ac_flow1, path0);
+        sg.addFlow("Flow 4", ac_flow4, path0);
 
-        /* Define path for flow 2 */
-        LinkedList<Turn> path1 = new LinkedList<Turn>();
-        path1.add(t_2_3);
-        path1.add(t_3_4);
-        sg.addFlow("Flow 2", ac_flow2, path1);
-
-        /* Define path for flow 3 */
-        LinkedList<Turn> path2 = new LinkedList<Turn>();
-        path2.add(t_3_4);
-        sg.addFlow("Flow 3", ac_flow3, path2);
 
         /* Create analysis */
         CompFFApresets compffa_analyses = new CompFFApresets( sg );
-        TotalFlowAnalysis tfa = compffa_analyses.tf_analysis;
+        /* ToDo: the default config calculates weird TFA (and probably also SFA, PMOO and TMA) results.
+         * Need to find out whats going on here. With a blank config the results are correct
+         * */
+        TotalFlowAnalysis tfa = new TotalFlowAnalysis(sg, new AnalysisConfig());
         SeparateFlowAnalysis sfa = compffa_analyses.sf_analysis;
         PmooAnalysis pmoo = compffa_analyses.pmoo_analysis;
         TandemMatchingAnalysis tma = compffa_analyses.tandem_matching_analysis;

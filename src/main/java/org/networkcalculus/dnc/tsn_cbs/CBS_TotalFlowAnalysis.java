@@ -6,7 +6,6 @@ import org.networkcalculus.dnc.curves.ServiceCurve;
 import org.networkcalculus.num.Num;
 
 import java.math.BigDecimal;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Map;
@@ -16,9 +15,9 @@ import java.util.Map;
  */
 public class CBS_TotalFlowAnalysis {
     private static class CBS_ResultsTotalFlowAnalysis {
-        private Map<CBS_Server, Double> serverLocalDelays;
+        private Map<CBS_Server, Num> serverLocalDelays;
 
-        private double totalDelay;
+        private Num totalDelay;
 
         private CBS_Flow flow;
 
@@ -26,22 +25,22 @@ public class CBS_TotalFlowAnalysis {
             this.reset();
         }
 
-        public void addServerLocalDelay(CBS_Server server, double delay) {
+        public void addServerLocalDelay(CBS_Server server, Num delay) {
             this.serverLocalDelays.put(server, delay);
-            this.totalDelay += delay;
+            this.totalDelay = Num.getUtils(Calculator.getInstance().getNumBackend()).add(this.totalDelay, delay);
         }
 
-        public double getTotalDelay() {
+        public Num getTotalDelay() {
             return this.totalDelay;
         }
 
-        public Map<CBS_Server, Double> getServerLocalDelays() {
+        public Map<CBS_Server, Num> getServerLocalDelays() {
             return this.serverLocalDelays;
         }
 
         public void reset() {
-            this.totalDelay = 0.0;
-            this.serverLocalDelays = new LinkedHashMap<CBS_Server, Double>();
+            this.totalDelay = Num.getFactory(Calculator.getInstance().getNumBackend()).createZero();;
+            this.serverLocalDelays = new LinkedHashMap<CBS_Server, Num>();
             this.flow = null;
         }
 
@@ -75,14 +74,14 @@ public class CBS_TotalFlowAnalysis {
     /**
      * @return  Sum of all server local delays on the flows path
      */
-    public double getTotalDelay() {
+    public Num getTotalDelay() {
         return this.results.getTotalDelay();
     }
 
     /**
      * @return  Mapping of all servers on the flows path and their local delays
      */
-    public Map<CBS_Server, Double> getServerLocalDelays() {
+    public Map<CBS_Server, Num> getServerLocalDelays() {
         return this.results.getServerLocalDelays();
     }
     
@@ -110,7 +109,7 @@ public class CBS_TotalFlowAnalysis {
                     ServiceCurve sc = queue.getServiceCurve();
                     //ToDo: assume FIFO per micro flow property
                     Num localDelay = Calculator.getInstance().getDncBackend().getBounds().delayFIFO(ac, sc);
-                    this.results.addServerLocalDelay(link.getSource(), localDelay.doubleValue());
+                    this.results.addServerLocalDelay(link.getSource(), localDelay);
                 }
             }
             //else skip
@@ -121,11 +120,11 @@ public class CBS_TotalFlowAnalysis {
         StringBuffer cbs_tfa_str = new StringBuffer();
 
         cbs_tfa_str.append("\r\nCBS TFA results for flow " + this.results.getFlow().getAlias() + ":\r\n");
-        Map<CBS_Server, Double> localDelay = this.results.getServerLocalDelays();
+        cbs_tfa_str.append("Total delay : " + this.getTotalDelay() + "s \r\n");
+        Map<CBS_Server, Num> localDelay = this.results.getServerLocalDelays();
         for(CBS_Server server:localDelay.keySet()) {
-            cbs_tfa_str.append("Delay @ " + server.getAlias() + " : " + new BigDecimal(localDelay.get(server)) + "s \r\n");
+            cbs_tfa_str.append("\tDelay @ " + server.getAlias() + " : " + localDelay.get(server) + "s \r\n");
         }
-        cbs_tfa_str.append("Total delay : " + new BigDecimal(this.getTotalDelay()) + "s \r\n");
         return cbs_tfa_str.toString();
     }
 }

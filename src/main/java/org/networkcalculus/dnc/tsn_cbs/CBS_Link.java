@@ -90,10 +90,10 @@ public class CBS_Link {
     }
 
     /**
-     * Set max. packet size for this link if value is larger than current value.
+     * Update max. packet size for this link if value is larger than current value.
      * @param maxPacketSize Max. packet size in bit
      */
-    public void setMaxPacketSize(double maxPacketSize) {
+    public void updateMaxPacketSize(double maxPacketSize) {
         this.maxPacketSize = Math.max(this.maxPacketSize, maxPacketSize);
     }
 }
