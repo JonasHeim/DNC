@@ -120,10 +120,10 @@ public class CBS_TotalFlowAnalysis {
         StringBuffer cbs_tfa_str = new StringBuffer();
 
         cbs_tfa_str.append("\r\nCBS TFA results for flow " + this.results.getFlow().getAlias() + ":\r\n");
-        cbs_tfa_str.append("Total delay : " + this.getTotalDelay() + "s \r\n");
+        cbs_tfa_str.append("Total delay : " + this.getTotalDelay().doubleValue() + "s \r\n");
         Map<CBS_Server, Num> localDelay = this.results.getServerLocalDelays();
         for(CBS_Server server:localDelay.keySet()) {
-            cbs_tfa_str.append("\tDelay @ " + server.getAlias() + " : " + localDelay.get(server) + "s \r\n");
+            cbs_tfa_str.append("\tDelay @ " + server.getAlias() + " : " + localDelay.get(server).doubleValue() + "s \r\n");
         }
         return cbs_tfa_str.toString();
     }

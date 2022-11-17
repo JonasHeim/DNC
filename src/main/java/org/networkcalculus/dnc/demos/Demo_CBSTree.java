@@ -57,10 +57,10 @@ public class Demo_CBSTree {
         idleSlopeMapping.put(2, 25.0e6);
 
         /* Flows with priority 0 */
-        CBS_Flow flow1 = new CBS_Flow("flow1", 1.0e-3, 12000, 1, 0, CBS_Flow.Periodicity.PERIODIC);
-        CBS_Flow flow2 = new CBS_Flow("flow2", 1.0e-3, 12000, 1, 0, CBS_Flow.Periodicity.PERIODIC);
-        CBS_Flow flow3 = new CBS_Flow("flow3", 1.0e-3, 12000, 1, 0, CBS_Flow.Periodicity.APERIODIC);
-        CBS_Flow flow4 = new CBS_Flow("flow4", 1.0e-3, 12000, 1, 0, CBS_Flow.Periodicity.APERIODIC);
+        CBS_Flow flow1 = new CBS_Flow("flow1", 1.0e-3, 6000, 1, 0, CBS_Flow.Periodicity.PERIODIC);
+        CBS_Flow flow2 = new CBS_Flow("flow2", 1.0e-3, 6000, 1, 0, CBS_Flow.Periodicity.PERIODIC);
+        CBS_Flow flow3 = new CBS_Flow("flow3", 1.0e-3, 6000, 1, 0, CBS_Flow.Periodicity.PERIODIC);
+        CBS_Flow flow4 = new CBS_Flow("flow4", 1.0e-3, 6000, 1, 0, CBS_Flow.Periodicity.PERIODIC);
 
         /* Flows with priority 1 */
         CBS_Flow flow5 = new CBS_Flow("flow5", 1.0e-3, 12000, 1, 1, CBS_Flow.Periodicity.PERIODIC);
@@ -124,7 +124,20 @@ public class Demo_CBSTree {
         path3.add(t_3_4);
         path3.add(t_4_L1);
 
-        /* Add flows with decreasing priority */
+        /* Map paths to flows */
+        flow1.setPath(path0);
+        flow5.setPath(path0);
+
+        flow2.setPath(path1);
+        flow7.setPath(path1);
+
+        flow3.setPath(path2);
+        flow6.setPath(path2);
+
+        flow4.setPath(path3);
+        flow8.setPath(path3);
+
+
         //Prio 0
         sg.addFlow(flow1);
         sg.addFlow(flow2);
@@ -139,7 +152,8 @@ public class Demo_CBSTree {
         sg.addFlow(flow7);
         sg.addFlow(flow8);
 
-        System.out.println(sg);
+        /* Finally compute all CBS queues within the server graph */
+        sg.computeCBSQueues(CBS_ServerGraph.SHAPING_CONF.NO_SHAPING);
 
         CBS_TotalFlowAnalysis tfa = new CBS_TotalFlowAnalysis(sg);
         tfa.performAnalysis(flow1);
@@ -158,5 +172,8 @@ public class Demo_CBSTree {
         System.out.println(tfa);
         tfa.performAnalysis(flow8);
         System.out.println(tfa);
+
+        //ToDo: enable for debugging
+        //System.out.println(sg);
     }
 }

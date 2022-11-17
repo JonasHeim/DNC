@@ -152,7 +152,8 @@ public class Demo_CBSLine {
         tfa.performAnalysis(flow5);
         System.out.println(tfa);
 
-        System.out.println(sg);
+        //ToDo: enable for debugging
+        //System.out.println(sg);
 
     }
 }
