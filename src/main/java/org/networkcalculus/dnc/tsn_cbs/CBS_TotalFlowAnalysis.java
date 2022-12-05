@@ -5,10 +5,7 @@ import org.networkcalculus.dnc.curves.ArrivalCurve;
 import org.networkcalculus.dnc.curves.ServiceCurve;
 import org.networkcalculus.num.Num;
 
-import java.math.BigDecimal;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Class representation of the latency Total-Flow-Analysis of a server graph
@@ -107,8 +104,25 @@ public class CBS_TotalFlowAnalysis {
                 else {
                     ArrivalCurve ac = queue.getAggregateArrivalCurve();
                     ServiceCurve sc = queue.getServiceCurve();
-                    //ToDo: assume FIFO per micro flow property
+
+                    /* Get CrossFlows and Calculate LeftOverServiceCurve on that specific queue */
+                    Set<CBS_Flow> crossFlows = this.server_graph.getCrossFlowsAtServer(flow, link.getSource());
+                    for(CBS_Flow cFlow:crossFlows)
+                    {
+                        /* Get AC of crossflow */
+                        ArrivalCurve singleAC = queue.getArrivalCurveOfFlow(cFlow);
+
+                        /* Subtract AC from SC */
+                        if(null != singleAC)
+                        {
+                            sc = Calculator.getInstance().getDncBackend().getCurveUtils().sub(sc, singleAC);
+                            //ToDo: check if SC >= 0? -> infeasible then
+                        }
+                    }
+
+                    //ToDo: Make FIFO/ARB configurable
                     Num localDelay = Calculator.getInstance().getDncBackend().getBounds().delayFIFO(ac, sc);
+                    //Num localDelay = Calculator.getInstance().getDncBackend().getBounds().delayARB(ac, sc);
                     this.results.addServerLocalDelay(link.getSource(), localDelay);
                 }
             }

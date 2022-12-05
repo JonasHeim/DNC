@@ -4,7 +4,9 @@ import org.networkcalculus.dnc.curves.ArrivalCurve;
 import org.networkcalculus.dnc.curves.Curve;
 import org.networkcalculus.dnc.curves.ServiceCurve;
 
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 
 public class CBS_Queue {
 
@@ -65,6 +67,8 @@ public class CBS_Queue {
      */
     private final double maxPacketSize_BestEffort = 12.0e3;
 
+    private Map<CBS_Flow, ArrivalCurve> mapACOfFlows;
+
     /**
      * Aggregated Token-Bucket ArrivalCurve over all reserved flows at this queue
      */
@@ -91,6 +95,8 @@ public class CBS_Queue {
         this.sendSlope = this.idleSlope - this.linkCapacity;
 
         this.aggregateArrivalCurve = ac;
+        this.mapACOfFlows = new HashMap<CBS_Flow, ArrivalCurve>();
+        this.mapACOfFlows.put(flow, ac);
         this.maxPacketSize = flow.getMfs();
         this.recalculateQueue();
     }
@@ -105,6 +111,15 @@ public class CBS_Queue {
      */
     public ServiceCurve getServiceCurve() {
         return serviceCurve;
+    }
+
+    /**
+     * Get a Arrival Curve of a specific flow that traverses this queue.
+     * @param flow  Flow of interest
+     * @return  Arrival Curve of the flow or null if not available.
+     */
+    public ArrivalCurve getArrivalCurveOfFlow(CBS_Flow flow) {
+        return this.mapACOfFlows.get(flow);
     }
 
     /**
@@ -164,6 +179,7 @@ public class CBS_Queue {
      * @param ac            The TokenBucket ArrivalCurve of the new flow
      */
     public void update(CBS_Flow flow, ArrivalCurve ac) {
+        this.mapACOfFlows.put(flow, ac);
         this.aggregateArrivalCurve = Curve.getUtils().add(this.aggregateArrivalCurve, ac);
         /* New max. packet size? */
         this.maxPacketSize = Math.max(flow.getMfs(), this.maxPacketSize);

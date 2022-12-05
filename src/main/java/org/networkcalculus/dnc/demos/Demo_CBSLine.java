@@ -63,6 +63,8 @@ public class Demo_CBSLine {
                 CBS_Flow.Periodicity.PERIODIC);
         CBS_Flow flow4 = new CBS_Flow("flow4", 1.0e-3, 368, 1, 0,
                 CBS_Flow.Periodicity.PERIODIC);
+        CBS_Flow flow6 = new CBS_Flow("flow6", 1.0e-3, 368, 1, 0,
+                CBS_Flow.Periodicity.PERIODIC);
 
         //Prio 1
         CBS_Flow flow2 = new CBS_Flow("flow2", 10.0e-3, 7664, 2, 1,
@@ -82,6 +84,7 @@ public class Demo_CBSLine {
 
         /* Listener */
         CBS_Server CbsListener1 = sg.addServer("Listener1", CBS_Server.SRV_TYPE.LISTENER, idleSlopeMapping);
+        CBS_Server CbsListener2 = sg.addServer("Listener2", CBS_Server.SRV_TYPE.LISTENER, idleSlopeMapping);
 
         /* Switches */
         CBS_Server CbsRlServer1 = sg.addServer("s1", CBS_Server.SRV_TYPE.SWITCH, idleSlopeMapping);
@@ -95,6 +98,7 @@ public class Demo_CBSLine {
         CBS_Link t_2_3 = sg.addLink("s2 --> s3", CbsRlServer2, CbsRlServer3, 100.0e6);
         CBS_Link t_T3_3 = sg.addLink("Talker3 --> s3", CbsTalker3, CbsRlServer3, 100.0e6);
         CBS_Link t_3_4 = sg.addLink("s3 --> s4", CbsRlServer3, CbsRlServer4, 100.0e6);
+        CBS_Link t_3_L2 = sg.addLink("s3 --> Listener2", CbsRlServer3, CbsListener2, 100.0e6);
         CBS_Link t_4_L1 = sg.addLink("s4 --> Listener1", CbsRlServer4, CbsListener1, 100.0e6);
 
         LinkedList<CBS_Link> path0 = new LinkedList<CBS_Link>();
@@ -115,6 +119,11 @@ public class Demo_CBSLine {
         path2.add(t_3_4);
         path2.add(t_4_L1);
 
+        LinkedList<CBS_Link> path3 = new LinkedList<>();
+        path3.add(t_T2_2);
+        path3.add(t_2_3);
+        path3.add(t_3_L2);
+
         /* Map paths to flows */
         flow1.setPath(path0);
         flow4.setPath(path0);
@@ -124,10 +133,13 @@ public class Demo_CBSLine {
 
         flow5.setPath(path2);
 
+        flow6.setPath(path3);
+
 
         // Prio 0
         sg.addFlow(flow1);
         sg.addFlow(flow4);
+        sg.addFlow(flow6);
         // Prio 1
         sg.addFlow(flow2);
         // Prio 2
@@ -150,6 +162,8 @@ public class Demo_CBSLine {
         tfa.performAnalysis(flow4);
         System.out.println(tfa);
         tfa.performAnalysis(flow5);
+        System.out.println(tfa);
+        tfa.performAnalysis(flow6);
         System.out.println(tfa);
 
         //ToDo: enable for debugging

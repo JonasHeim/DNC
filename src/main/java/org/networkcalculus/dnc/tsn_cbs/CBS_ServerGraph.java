@@ -231,6 +231,83 @@ public class CBS_ServerGraph {
     }
 
     /**
+     * Determine all crossflows for given flow
+     * @param flow      Given flow of interest to find cross flows for
+     * @param server    Server to start from
+     * @return          Set of all cross flows. Empty set if there are none
+     * @throws Exception    Parameter error.
+     */
+    public Set<CBS_Flow> getCrossFlowsAtServer(CBS_Flow flow, CBS_Server server) throws Exception {
+        Set<CBS_Flow> setCrossFlows = new HashSet<CBS_Flow>();
+
+        if(!this.flows.contains(flow)) {
+            throw new Exception("Flow not added to the server graph");
+        }
+        else if(!this.servers.contains(server))
+        {
+            throw new Exception("Server not contained in the server graph");
+        }
+
+        /* Simple algorithm: Just check for all flows that are registered in the server graph if they eventually traverse the given server */
+        /* If they do check path from that server on - if they part eventually they are cross flows */
+        for(CBS_Flow candidate:this.flows)
+        {
+            if( (flow == candidate) || (candidate.getPriority() != flow.getPriority()) )
+            {
+                /* Same flow or  mismatching priority - can't be a cross flow */
+                continue;
+            }
+
+            else
+            {
+                /* We always assume acyclic paths! so every server can only be in the path once */
+                Iterator<CBS_Link> iterFlow = flow.getPath().iterator();
+                /* Move iterator to position */
+                while(iterFlow.hasNext()){
+                    if(server == iterFlow.next().getSource())
+                    {
+                        break;
+                    }
+                }
+
+                /* We always assume acyclic paths! so every server can only be in the path once */
+                Iterator<CBS_Link> iterCandidate = candidate.getPath().iterator();
+                /* Move iterator to position */
+                while(iterCandidate.hasNext()){
+                    if(server == iterCandidate.next().getSource())
+                    {
+                        break;
+                    }
+                }
+
+                if(!iterFlow.hasNext() || !iterCandidate.hasNext())
+                {
+                    /* This is already the last server so it can't be a cross flow */
+                    continue;
+                }
+
+                /* Compare rest of the candidates path until they divide or either one ends */
+                while(iterCandidate.hasNext() && iterFlow.hasNext())
+                {
+                    /* Is the outgoing link for both flows the same? */
+                    if(iterCandidate.next() != iterFlow.next())
+                    {
+                        setCrossFlows.add(candidate);
+                        break;
+                    }
+                }
+
+                /* If either one of the paths has at least one successor they are CrossFlows
+
+                 */
+
+            }
+        }
+
+        return setCrossFlows;
+    }
+
+    /**
      * @return String representation of the server graph used for printing
      */
     public String toString() {

@@ -151,7 +151,10 @@ public class CBS_Server {
         LinkedList<CBS_Queue> list = new LinkedList<CBS_Queue>();
 
         for(int priority: this.mapping_priorities_to_queues.keySet()) {
-            list.add(this.mapping_priorities_to_queues.get(priority).get(link));
+            CBS_Queue outputQueue = this.mapping_priorities_to_queues.get(priority).get(link);
+            if(null != outputQueue) {
+                list.add(outputQueue);
+            }
         }
 
         return list;
