@@ -113,11 +113,13 @@ public class CompFFApresets {
 		
 		// TFA + aggrPBOOAB
 		AnalysisConfig tfa_config = base_config.copy();
+		tfa_config.enforceMultiplexing( MultiplexingEnforcement.GLOBAL_FIFO);
 		tfa_config.setArrivalBoundMethod( ArrivalBoundMethod.AGGR_PBOO_CONCATENATION );
 		tf_analysis = new TotalFlowAnalysis( server_graph, tfa_config );
 		
 		// SFA + aggrPBOOAB
 		AnalysisConfig sfa_config = base_config.copy();
+		sfa_config.enforceMultiplexing( MultiplexingEnforcement.GLOBAL_FIFO);
 		sfa_config.setArrivalBoundMethod( ArrivalBoundMethod.AGGR_PBOO_CONCATENATION );
 		sf_analysis = new SeparateFlowAnalysis( server_graph, sfa_config );
 
