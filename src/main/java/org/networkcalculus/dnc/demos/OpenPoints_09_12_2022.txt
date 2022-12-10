@@ -1,0 +1,26 @@
+- Implementierung CrossTraffic TFA
+	Vorgehen:
+		Für jeden f_oi:
+			Pfad traversieren und für jeden server:
+				Flows, die Server traversieren holen
+				Davon alle CrossFlows holen
+				Für Server Vorgänger:
+				Für jeden CrossFlow dessen Pfad traversierern, da die left over SC
+- Eval Netzwerke
+	x Variation in:
+		o Shaping (No, Link, CBS, Link+CBS)
+		o Burst (min, ... max)
+			Unterscheidung: 
+		o Link capacity (1MBit, 10MBit, 100MBit, 1GBit)
+		o IdleSlopes
+			
+	x Line und Tree Netzwerk sind modelliert, da hab ich auch schon angefangen mit der Auswertung (2 Prioritäten, AVB Classes)
+	x Renault Netzwerk Modell angefangen. Problem, dass nicht für alle Flows die Pfade festgelegt sind.
+		Hier muss ich noch schauen, wie ich diese Flows modelliere.
+		
+- Ausarbeitung
+	Evaluierungskapitel fehlt noch.
+	
+	22.12 9:30
+	
+	24.01. Kolloqium - Abstract
