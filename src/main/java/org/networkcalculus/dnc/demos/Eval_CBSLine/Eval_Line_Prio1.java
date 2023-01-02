@@ -71,11 +71,11 @@ public class Eval_Line_Prio1 {
         int numServers = 6;
         Server[] servers = new Server[numServers];
 
-        servers[0] = sg.addServer("S1", Curve.getFactory().createRateLatency(5.0E7, 1.856E-4), AnalysisConfig.Multiplexing.FIFO);
-        servers[1] = sg.addServer("S2", Curve.getFactory().createRateLatency(5.0E7, 1.856E-4), AnalysisConfig.Multiplexing.FIFO);
-        servers[2] = sg.addServer("S3", Curve.getFactory().createRateLatency(5.0E7, 1.856E-4), AnalysisConfig.Multiplexing.FIFO);
-        servers[3] = sg.addServer("S4", Curve.getFactory().createRateLatency(5.0E7, 1.856E-4), AnalysisConfig.Multiplexing.FIFO);
-        servers[4] = sg.addServer("S5", Curve.getFactory().createRateLatency(5.0E7, 1.856E-4), AnalysisConfig.Multiplexing.FIFO);
+        servers[0] = sg.addServer("S1", Curve.getFactory().createRateLatency(5.0E7, 2.0544E-4), AnalysisConfig.Multiplexing.FIFO);
+        servers[1] = sg.addServer("S2", Curve.getFactory().createRateLatency(5.0E7, 2.0544E-4), AnalysisConfig.Multiplexing.FIFO);
+        servers[2] = sg.addServer("S3", Curve.getFactory().createRateLatency(5.0E7, 2.0544E-4), AnalysisConfig.Multiplexing.FIFO);
+        servers[3] = sg.addServer("S4", Curve.getFactory().createRateLatency(5.0E7, 2.0544E-4), AnalysisConfig.Multiplexing.FIFO);
+        servers[4] = sg.addServer("S5", Curve.getFactory().createRateLatency(5.0E7, 2.0544E-4), AnalysisConfig.Multiplexing.FIFO);
         servers[5] = sg.addServer("S6", Curve.getFactory().createRateLatency(5.0E7, 1.2336E-4), AnalysisConfig.Multiplexing.FIFO);
 
         /****************** Definition of links ***************/
