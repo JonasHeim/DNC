@@ -65,7 +65,7 @@ public class CBS_Queue {
      * Constant maximum packet size for BestEffort packets in bit (Ethernet MTU is 1500 Byte = 12kbit)
      *
      */
-    private final double maxPacketSize_BestEffort = 12.0e3;
+    private final double maxPacketSize_BestEffort = 12.336e3;
 
     private Map<CBS_Flow, ArrivalCurve> mapACOfFlows;
 
