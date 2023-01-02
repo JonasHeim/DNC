@@ -53,28 +53,28 @@ public class Eval_CBSLine {
          ******************************************************/
 
         LinkedHashMap <Integer, Double> idleSlopeMapping = new LinkedHashMap <Integer, Double>();
-        idleSlopeMapping.put(0, 5.0e6);
-        idleSlopeMapping.put(1, 10.0e6);
+        idleSlopeMapping.put(0, 25.0e6);
+        idleSlopeMapping.put(1, 50.0e6);
 
         /* First step always */
         CBS_ServerGraph sg = new CBS_ServerGraph("CBS shaped line network");
 
         /****************** Definition of flows ***************/
 
-        /* Priority 1 */
-        CBS_Flow flow0 = new CBS_Flow("flow0", 20.0e-3, 12000, 2, 1,
+        /* Priority 1 - Class B */
+        CBS_Flow flow0 = new CBS_Flow("flow0", 2.5e-4, 368, 2, 1,
                 CBS_Flow.Periodicity.PERIODIC);
 
-        /* Priority 0 */
-        CBS_Flow flow1 = new CBS_Flow("flow1", 20.0e-3, 12000, 2, 0,
+        /* Priority 0 - Class A */
+        CBS_Flow flow1 = new CBS_Flow("flow1", 1.25e-4, 368, 2, 0,
                 CBS_Flow.Periodicity.PERIODIC);
-        CBS_Flow flow2 = new CBS_Flow("flow2", 20.0e-3, 12000, 2, 0,
+        CBS_Flow flow2 = new CBS_Flow("flow2", 1.25e-4, 368, 2, 0,
                 CBS_Flow.Periodicity.PERIODIC);
-        CBS_Flow flow3 = new CBS_Flow("flow3", 20.0e-3, 12000, 2, 0,
+        CBS_Flow flow3 = new CBS_Flow("flow3", 1.25e-4, 368, 2, 0,
                 CBS_Flow.Periodicity.PERIODIC);
-        CBS_Flow flow4 = new CBS_Flow("flow4", 20.0e-3, 12000, 2, 0,
+        CBS_Flow flow4 = new CBS_Flow("flow4", 1.25e-4, 368, 2, 0,
                 CBS_Flow.Periodicity.PERIODIC);
-        CBS_Flow flow5 = new CBS_Flow("flow5", 20.0e-3, 12000, 2, 0,
+        CBS_Flow flow5 = new CBS_Flow("flow5", 1.25e-4, 368, 2, 0,
                 CBS_Flow.Periodicity.PERIODIC);
 
         CBS_Flow flows[] = { flow0, flow1, flow2, flow3, flow4, flow5 };
@@ -165,6 +165,7 @@ public class Eval_CBSLine {
 
         /****************** Mapping of flows to paths. ***************/
         flow0.setPath(path0);
+
         flow1.setPath(path1);
         flow2.setPath(path2);
         flow3.setPath(path3);
@@ -178,7 +179,7 @@ public class Eval_CBSLine {
         }
 
         /****************** Calculate server graph ***************/
-        sg.computeCBSQueues(CBS_ServerGraph.SHAPING_CONF.LINK_AND_CBS_SHAPING);
+        sg.computeCBSQueues(CBS_ServerGraph.SHAPING_CONF.NO_SHAPING);
 
         /******************************************************
          ******************* Apply TFA ************************
@@ -191,7 +192,7 @@ public class Eval_CBSLine {
         }
 
         //ToDo: enable for debugging
-        //System.out.println(sg);
+        System.out.println(sg);
 
     }
 }

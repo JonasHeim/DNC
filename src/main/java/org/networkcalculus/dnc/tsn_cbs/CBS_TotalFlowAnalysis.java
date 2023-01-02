@@ -1,9 +1,13 @@
 package org.networkcalculus.dnc.tsn_cbs;
 
+import org.apache.commons.math3.util.Pair;
 import org.networkcalculus.dnc.Calculator;
 import org.networkcalculus.dnc.curves.ArrivalCurve;
 import org.networkcalculus.dnc.curves.ServiceCurve;
+import org.networkcalculus.dnc.feedforward.ArrivalBoundDispatch;
+import org.networkcalculus.dnc.tandem.analyses.TotalFlowResults;
 import org.networkcalculus.num.Num;
+import org.networkcalculus.num.values.NaN;
 
 import java.util.*;
 
@@ -36,7 +40,7 @@ public class CBS_TotalFlowAnalysis {
         }
 
         public void reset() {
-            this.totalDelay = Num.getFactory(Calculator.getInstance().getNumBackend()).createZero();;
+            this.totalDelay = Num.getFactory(Calculator.getInstance().getNumBackend()).createZero();
             this.serverLocalDelays = new LinkedHashMap<CBS_Server, Num>();
             this.flow = null;
         }
@@ -83,51 +87,75 @@ public class CBS_TotalFlowAnalysis {
     }
     
     /**
-     * Run the Total-Flow-Analyis of the given flow.
+     * Run the Total-Flow-Analyis + PBOO Arrival Bounding of the given flow.
      * @param flow  The flow to perform the analysis on
      */
     //ToDo: Rework exception handling
-    public void performAnalysis(CBS_Flow flow) throws Exception
-    {
+    public void performAnalysis(CBS_Flow flow) throws Exception {
         this.results.reset();
         this.results.setFlow(flow);
         LinkedList<CBS_Link> path = this.server_graph.getPath(flow);
 
+        Num delay_bound = Num.getFactory(Calculator.getInstance().getNumBackend()).createZero();
+        Num backlog_bound = Num.getFactory(Calculator.getInstance().getNumBackend()).createZero();
+
+        /* Calculate local delays for each server on flows path */
         for(CBS_Link link:path) {
             if(link.getSource().getServerType() == CBS_Server.SRV_TYPE.SWITCH)
             {
-                CBS_Queue queue = link.getSource().getQueue(flow.getPriority(), link);
-                if(null == queue) {
-                    //No matching queue found, something is wrong in server configuration...
-                    throw new Exception("No matching queue found in TFA analysis for server " + link.getSource().getAlias());
-                }
-                else {
-                    ArrivalCurve ac = queue.getAggregateArrivalCurve();
-                    ServiceCurve sc = queue.getServiceCurve();
+                delay_bound = deriveBoundsAtServer(flow, link.getSource(), link);
 
-                    /* Get CrossFlows and Calculate LeftOverServiceCurve on that specific queue */
-                    Set<CBS_Flow> crossFlows = this.server_graph.getCrossFlowsAtServer(flow, link.getSource());
-                    for(CBS_Flow cFlow:crossFlows)
-                    {
-                        /* Get AC of crossflow */
-                        ArrivalCurve singleAC = queue.getArrivalCurveOfFlow(cFlow);
+                //backlog_bound = Num.getUtils(Calculator.getInstance().getNumBackend()).max(backlog_bound, min_D_B.getSecond());
 
-                        /* Subtract AC from SC */
-                        if(null != singleAC)
-                        {
-                            sc = Calculator.getInstance().getDncBackend().getCurveUtils().sub(sc, singleAC);
-                            //ToDo: check if SC >= 0? -> infeasible then
-                        }
-                    }
-
-                    //ToDo: Make FIFO/ARB configurable
-                    Num localDelay = Calculator.getInstance().getDncBackend().getBounds().delayFIFO(ac, sc);
-                    //Num localDelay = Calculator.getInstance().getDncBackend().getBounds().delayARB(ac, sc);
-                    this.results.addServerLocalDelay(link.getSource(), localDelay);
-                }
+                this.results.addServerLocalDelay(link.getSource(), delay_bound);
             }
             //else skip
         }
+    }
+
+    private Num deriveBoundsAtServer(CBS_Flow flow, CBS_Server source, CBS_Link link) throws Exception
+    {
+        Num localDelay = Num.getFactory(Calculator.getInstance().getNumBackend()).createZero();;
+        CBS_Queue queue = source.getQueue(flow.getPriority(), link);
+        if(null == queue) {
+            //No matching queue found, something is wrong in server configuration...
+            throw new Exception("No matching queue found in TFA analysis for server " + source.getAlias());
+        }
+        else {
+
+            //ToDo: PBOOAB computation
+            Set<ArrivalCurve> alphas_server = computeArrivalBounds(flow, source);
+
+
+
+            ArrivalCurve ac = queue.getAggregateArrivalCurve();
+            ServiceCurve sc = queue.getServiceCurve();
+
+//            /* Get CrossFlows and Calculate LeftOverServiceCurve on that specific queue */
+//            Set<CBS_Flow> crossFlows = this.server_graph.getCrossFlowsAtServer(flow, link.getSource());
+//            for(CBS_Flow cFlow:crossFlows)
+//            {
+//                /* Get AC of crossflow */
+//                ArrivalCurve singleAC = queue.getArrivalCurveOfFlow(cFlow);
+//
+//                /* Subtract AC from SC */
+//                if(null != singleAC)
+//                {
+//                    sc = Calculator.getInstance().getDncBackend().getCurveUtils().sub(sc, singleAC);
+//                    //ToDo: check if SC >= 0? -> infeasible then
+//                }
+//            }
+
+            //ToDo: Make FIFO/ARB configurable
+            localDelay = Calculator.getInstance().getDncBackend().getBounds().delayFIFO(ac, sc);
+            //Num localDelay = Calculator.getInstance().getDncBackend().getBounds().delayARB(ac, sc);
+        }
+        return localDelay;
+    }
+
+    private Set<ArrivalCurve> computeArrivalBounds(CBS_Flow flow, CBS_Server source) {
+        //ToDo: implement PBOOAB
+        return null;
     }
 
     public String toString() {

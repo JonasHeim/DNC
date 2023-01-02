@@ -77,7 +77,7 @@ public class CBS_Link {
     public String toString() {
         StringBuffer cbs_link_str = new StringBuffer();
 
-        cbs_link_str.append("CBS Link \"" + this.alias + "\" connecting " + this.source.getAlias() + " to " + this.destination.getAlias() + " with a capacity of " + this.getCapacity() + " Bit/s\r\n");
+        cbs_link_str.append("CBS Link \"" + this.alias + "\" connecting " + this.source.getAlias() + " to " + this.destination.getAlias() + " with a capacity of " + this.getCapacity() + " Bit/s, max. Packet size " + this.getMaxPacketSize() + " \r\n");
 
         return cbs_link_str.toString();
     }

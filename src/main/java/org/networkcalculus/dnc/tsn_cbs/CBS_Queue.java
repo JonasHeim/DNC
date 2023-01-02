@@ -201,10 +201,11 @@ public class CBS_Queue {
     }
 
     /**
-     * Update the Credit-Based-Shaper shaping curve based on the min. credit, max. credit and IdleSlope
+     * Update the Credit-Based-Shaper shaping curve based on the min. credit, max. credit, nmax. Packetsize of the link
+     * and the IdleSlope
      */
     private void calculateCBSShapingCurve() {
-        double burst = this.getMaxCredit() - this.getMinCredit();
+        double burst = this.getMaxCredit() - this.getMinCredit() + this.getOutputLink().getMaxPacketSize();
         this.cbsShapingCurve = Curve.getFactory().createTokenBucket(this.idleSlope, burst);
     }
 
