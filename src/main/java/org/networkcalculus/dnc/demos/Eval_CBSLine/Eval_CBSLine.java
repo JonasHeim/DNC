@@ -66,15 +66,15 @@ public class Eval_CBSLine {
                 CBS_Flow.Periodicity.PERIODIC);
 
         /* Priority 0 - Class A */
-        CBS_Flow flow1 = new CBS_Flow("flow1", 1.25e-4, 368, 2, 0,
+        CBS_Flow flow1 = new CBS_Flow("flow1", 1.25e-4, 1072, 2, 0,
                 CBS_Flow.Periodicity.PERIODIC);
-        CBS_Flow flow2 = new CBS_Flow("flow2", 1.25e-4, 368, 2, 0,
+        CBS_Flow flow2 = new CBS_Flow("flow2", 1.25e-4, 1072, 2, 0,
                 CBS_Flow.Periodicity.PERIODIC);
-        CBS_Flow flow3 = new CBS_Flow("flow3", 1.25e-4, 368, 2, 0,
+        CBS_Flow flow3 = new CBS_Flow("flow3", 1.25e-4, 1072, 2, 0,
                 CBS_Flow.Periodicity.PERIODIC);
-        CBS_Flow flow4 = new CBS_Flow("flow4", 1.25e-4, 368, 2, 0,
+        CBS_Flow flow4 = new CBS_Flow("flow4", 1.25e-4, 1072, 2, 0,
                 CBS_Flow.Periodicity.PERIODIC);
-        CBS_Flow flow5 = new CBS_Flow("flow5", 1.25e-4, 368, 2, 0,
+        CBS_Flow flow5 = new CBS_Flow("flow5", 1.25e-4, 1072, 2, 0,
                 CBS_Flow.Periodicity.PERIODIC);
 
         CBS_Flow flows[] = { flow0, flow1, flow2, flow3, flow4, flow5 };
