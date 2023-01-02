@@ -2,20 +2,20 @@ E:\Programme\OpenJDK\jdk-16.0.2\bin\java.exe -javaagent:E:\Programme\JetBrains\I
 Flow of interest : Flow(Flow 1, 0, AC{(0.0,0.0),0.0;!(0.0,1328.70144),5632000.0}, {Turn(S1 --> S2, 0, Server(S1, 0), Server(S2, 1)),Turn(S2 --> S3, 1, Server(S2, 1), Server(S3, 2)),Turn(S3 --> S4, 2, Server(S3, 2), Server(S4, 3)),Turn(S4 --> S5, 3, Server(S4, 3), Server(S5, 4)),Turn(S5 --> S6, 4, Server(S5, 4), Server(S6, 5))})
 
 --- Total Flow Analysis ---
-delay bound     : 0.0014772991488000002
+delay bound     : 0,0014772991488000002
      per server : {Server(S1, 0)={2.051340288E-4}, Server(S3, 2)={2.453600256E-4}, Server(S5, 4)={2.855860224E-4}, Server(S4, 3)={2.65473024E-4}, Server(S2, 1)={2.252470272E-4}, Server(S6, 5)={2.504990208E-4}}
 
 --- Separated Flow Analysis ---
-delay bound     : 0.0010427340288000002
+delay bound     : 0,0010427340288000002
 e2e SFA SCs     : [SC{(0.0,0.0),0.0;!(0.0010161600000000001,0.0),5.0E7}]
      per server : {Server(S1, 0)={SC{(0.0,0.0),0.0;!(1.7856E-4,0.0),5.0E7}}, Server(S3, 2)={SC{(0.0,0.0),0.0;!(1.7856E-4,0.0),5.0E7}}, Server(S5, 4)={SC{(0.0,0.0),0.0;!(1.7856E-4,0.0),5.0E7}}, Server(S4, 3)={SC{(0.0,0.0),0.0;!(1.7856E-4,0.0),5.0E7}}, Server(S2, 1)={SC{(0.0,0.0),0.0;!(1.7856E-4,0.0),5.0E7}}, Server(S6, 5)={SC{(0.0,0.0),0.0;!(1.2336E-4,0.0),5.0E7}}}
 
 --- PMOO Analysis ---
-delay bound     : 0.0010427340288000002
+delay bound     : 0,0010427340288000002
 e2e PMOO SCs    : [SC{(0.0,0.0),0.0;!(0.0010161600000000001,0.0),5.0E7}]
 
 --- Tandem Matching Analysis ---
-delay bound     : 0.0010427340288
+delay bound     : 0,0010427340288
 e2e TMA SCs     : [SC{(0.0,0.0),0.0;!(0.00101616,0.0),5.0E7}, SC{(0.0,0.0),0.0;!(0.0010161600000000001,0.0),5.0E7}]
 
 
