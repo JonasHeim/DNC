@@ -64,18 +64,18 @@ public class Eval_Line_Prio1 {
         ServerGraph sg = new ServerGraph();
 
         /****************** Definition of flows ***************/
-        ArrivalCurve ac_flow0 = Curve.getFactory().createTokenBucket(5.632e6, 1328.70144);
+        ArrivalCurve ac_flow0 = Curve.getFactory().createTokenBucket(1.1264E7, 2498.80576);
 
         /****************** Definition of servers ***************/
         /* Create a network of 4 systems in line topology */
         int numServers = 6;
         Server[] servers = new Server[numServers];
 
-        servers[0] = sg.addServer("S1", Curve.getFactory().createRateLatency(5.0E7, 2.2688E-4), AnalysisConfig.Multiplexing.FIFO);
-        servers[1] = sg.addServer("S2", Curve.getFactory().createRateLatency(5.0E7, 2.2688E-4), AnalysisConfig.Multiplexing.FIFO);
-        servers[2] = sg.addServer("S3", Curve.getFactory().createRateLatency(5.0E7, 2.2688E-4), AnalysisConfig.Multiplexing.FIFO);
-        servers[3] = sg.addServer("S4", Curve.getFactory().createRateLatency(5.0E7, 2.2688E-4), AnalysisConfig.Multiplexing.FIFO);
-        servers[4] = sg.addServer("S5", Curve.getFactory().createRateLatency(5.0E7, 2.2688E-4), AnalysisConfig.Multiplexing.FIFO);
+        servers[0] = sg.addServer("S1", Curve.getFactory().createRateLatency(5.0E7, 1.7856E-4), AnalysisConfig.Multiplexing.FIFO);
+        servers[1] = sg.addServer("S2", Curve.getFactory().createRateLatency(5.0E7, 1.7856E-4), AnalysisConfig.Multiplexing.FIFO);
+        servers[2] = sg.addServer("S3", Curve.getFactory().createRateLatency(5.0E7, 1.7856E-4), AnalysisConfig.Multiplexing.FIFO);
+        servers[3] = sg.addServer("S4", Curve.getFactory().createRateLatency(5.0E7, 1.7856E-4), AnalysisConfig.Multiplexing.FIFO);
+        servers[4] = sg.addServer("S5", Curve.getFactory().createRateLatency(5.0E7, 1.7856E-4), AnalysisConfig.Multiplexing.FIFO);
         servers[5] = sg.addServer("S6", Curve.getFactory().createRateLatency(5.0E7, 1.2336E-4), AnalysisConfig.Multiplexing.FIFO);
 
         /****************** Definition of links ***************/
