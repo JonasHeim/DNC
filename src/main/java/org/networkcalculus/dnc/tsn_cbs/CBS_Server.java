@@ -185,6 +185,8 @@ public class CBS_Server {
                         queue.getMaxCredit() + " Bit");
                 cbs_rl_server_str.append("\r\n\t\tCBS-ServiceCurve " + queue.getServiceCurve());
                 cbs_rl_server_str.append("\r\n\t\tCBS-ShapingCurve " + queue.getCbsShapingCurve());
+                cbs_rl_server_str.append("\r\n\t\tAggr. ArrivalCurve " + queue.getAggregateArrivalCurve());
+                cbs_rl_server_str.append("\r\n\t\tLink ShapingCurve " + queue.getLinkShapingCurve());
             }
             cbs_rl_server_str.append("\r\n");
         }

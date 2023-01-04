@@ -64,7 +64,7 @@ public class Eval_Line_Prio1 {
         ServerGraph sg = new ServerGraph();
 
         /****************** Definition of flows ***************/
-        ArrivalCurve ac_flow0 = Curve.getFactory().createTokenBucket(1.6896E7, 3510.31296);
+        ArrivalCurve ac_flow0 = Curve.getFactory().createTokenBucket(3.2768E7, 5507.64544);
 
         /****************** Definition of servers ***************/
         /* Create a network of 4 systems in line topology */

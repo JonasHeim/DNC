@@ -217,7 +217,7 @@ Total delay : 0,0019194066432s
 
 
 CBS TFA results for flow flow1:
-Total delay : 5.324110848E-4s 
+Total delay : 5,324110848E-4s 
 	Delay @ s1 : 2.106244608E-4s 
 	Delay @ s2 : 3.21786624E-4s 
 
