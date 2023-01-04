@@ -62,7 +62,7 @@ public class Eval_CBSLine {
         /****************** Definition of flows ***************/
 
         /* Priority 1 - Class B */
-        CBS_Flow flow0 = new CBS_Flow("flow0", 2.5e-4, 1072, 2, 1,
+        CBS_Flow flow0 = new CBS_Flow("flow0", 2.5e-4, 1776, 2, 1,
                 CBS_Flow.Periodicity.PERIODIC);
 
         /* Priority 0 - Class A */

@@ -205,7 +205,9 @@ public class CBS_Queue {
      * and the IdleSlope
      */
     private void calculateCBSShapingCurve() {
-        double burst = this.getMaxCredit() - this.getMinCredit() + this.getOutputLink().getMaxPacketSize();
+        //double burst = this.getMaxCredit() - this.getMinCredit() + this.getOutputLink().getMaxPacketSize();
+        double burst = this.getMaxCredit() - this.getMinCredit() + this.maxPacketSize;
+        //double burst = this.getMaxCredit() - this.getMinCredit();
         this.cbsShapingCurve = Curve.getFactory().createTokenBucket(this.idleSlope, burst);
     }
 
