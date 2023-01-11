@@ -50,7 +50,7 @@ public class CBS_Server {
 
         /* Initialize server with empty CBS queues */
         this.priorities = new TreeSet<Integer>();
-        this.mapping_priorities_to_queues = new LinkedHashMap <Integer, Map<CBS_Link, CBS_Queue>>();
+        this.mapping_priorities_to_queues = new TreeMap<Integer, Map<CBS_Link, CBS_Queue>>();
         this.idleSlopeMapping = idleSlopes;
     }
 
@@ -105,27 +105,35 @@ public class CBS_Server {
         if(this.mapping_priorities_to_queues.containsKey(priority)) {
             if(this.mapping_priorities_to_queues.get(priority).containsKey(link_out)) {
                 /* Case 3: Update existing queue */
-                System.out.println("CBS_Server.addFlow - Update queue for priority " + priority + " at server " + this.getAlias());
+                System.out.println("CBS_Server.addFlow - Update queue for priority " + priority + " at server "
+                        + this.getAlias());
+
                 this.mapping_priorities_to_queues.get(priority).get(link_out).update(flow, ac, link_in);
             }
             else {
                 /* Case 2: Create new CBS queue */
-                System.out.println("CBS_Server.addFlow - Creating new queue for priority " + priority + " at server " + this.getAlias());
-                CBS_Queue queue = new CBS_Queue(flow, ac, idleSlp, link_out);
+                System.out.println("CBS_Server.addFlow - Creating new queue for priority " + priority + " at server "
+                        + this.getAlias());
+
+                CBS_Queue queue = new CBS_Queue(this, flow, ac, idleSlp, link_out, link_in);
                 this.mapping_priorities_to_queues.get(priority).put(link_out, queue);
             }
         }
         else {
             /* Case 1: No queue for priority exists yet so we will create one */
-            System.out.println("CBS_Server.addFlow - Creating the first queue for priority " + priority + " at server " + this.getAlias());
-            CBS_Queue queue = new CBS_Queue(flow, ac, idleSlp, link_out);
+            System.out.println("CBS_Server.addFlow - Creating the first queue for priority " + priority + " at server "
+                    + this.getAlias() + " for out link " + link_out.getAlias());
+
+            CBS_Queue queue = new CBS_Queue(this, flow, ac, idleSlp, link_out, link_in);
+
             LinkedHashMap <CBS_Link, CBS_Queue> hashMap = new LinkedHashMap <>();
             hashMap.put(link_out, queue);
-
             this.mapping_priorities_to_queues.put(priority, hashMap);
         }
 
-        // All lower priority queues of the server must recalculate their values because the credits, etc. will change
+        /* All lower priority queues of the server must recalculate their values
+         * because the credits, etc. will change if a higher priority queue was added or updated
+         */
         this.updateAllQueuesLowerPriority(priority, link_out);
     }
 
@@ -147,6 +155,7 @@ public class CBS_Server {
      * Get all queues for given output link regardless of their priority.
      * @param link  Output link
      * @return  List of matching queues or null if no queues found.
+     *          List is sorted by priority (high (0) -> low)
      */
     public LinkedList<CBS_Queue> getQueuesOfOutputLink(CBS_Link link) {
         LinkedList<CBS_Queue> list = new LinkedList<CBS_Queue>();
@@ -179,15 +188,21 @@ public class CBS_Server {
             cbs_rl_server_str.append("\r\n\tCBS queues for priority " + priority);
             Map<CBS_Link, CBS_Queue> queues = this.mapping_priorities_to_queues.get(priority);
             for (CBS_Queue queue: queues.values()) {
-                cbs_rl_server_str.append("\r\n\t\tmax. PacketSize " + queue.getMaxPacketSize() + " Bit");
-                cbs_rl_server_str.append("\r\n\t\tidSlp " + queue.getIdleSlope() + " Bit/s sdSlp " +
+                cbs_rl_server_str.append("\r\n\t\tQueue:");
+                cbs_rl_server_str.append("\r\n\t\t\tOutLink" + queue.getOutputLink());
+                for(CBS_Link l:queue.getInputLinks())
+                {
+                    cbs_rl_server_str.append("\r\n\t\t\tInLink" + l);
+                }
+                cbs_rl_server_str.append("\r\n\t\t\tmax. PacketSize " + queue.getMaxPacketSize() + " Bit");
+                cbs_rl_server_str.append("\r\n\t\t\tidSlp " + queue.getIdleSlope() + " Bit/s sdSlp " +
                         queue.getSendSlope() + " Bit/s");
-                cbs_rl_server_str.append("\r\n\t\tminCredit " + queue.getMinCredit() + " Bit maxCredit " +
+                cbs_rl_server_str.append("\r\n\t\t\tminCredit " + queue.getMinCredit() + " Bit maxCredit " +
                         queue.getMaxCredit() + " Bit");
-                cbs_rl_server_str.append("\r\n\t\tCBS-ServiceCurve " + queue.getServiceCurve());
-                cbs_rl_server_str.append("\r\n\t\tCBS-ShapingCurve " + queue.getCbsShapingCurve());
-                cbs_rl_server_str.append("\r\n\t\tAggr. ArrivalCurve " + queue.getAggregateArrivalCurve());
-                cbs_rl_server_str.append("\r\n\t\tLink ShapingCurve " + queue.getLinkShapingCurve());
+                cbs_rl_server_str.append("\r\n\t\t\tAggr. ArrivalCurve " + queue.getAggregateArrivalCurve());
+                cbs_rl_server_str.append("\r\n\t\t\tServiceCurve " + queue.getServiceCurve());
+                cbs_rl_server_str.append("\r\n\t\t\tCBS-ShapingCurve " + queue.getCbsShapingCurve());
+                cbs_rl_server_str.append("\r\n\t\t\tLink ShapingCurve " + queue.getLinkShapingCurve());
             }
             cbs_rl_server_str.append("\r\n");
         }

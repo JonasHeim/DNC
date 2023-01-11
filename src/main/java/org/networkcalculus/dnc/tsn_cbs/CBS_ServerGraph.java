@@ -114,9 +114,9 @@ public class CBS_ServerGraph {
     }
 
     /**
-     * Rerserve a flow in the server graph
+     * Add a flow to the server graph for future calculation
      *
-     * @param flow Flow to reserve
+     * @param flow Flow to add
      */
     public void addFlow(CBS_Flow flow) throws Exception {
         LinkedList<CBS_Link> path = flow.getPath();
@@ -144,7 +144,6 @@ public class CBS_ServerGraph {
             list = new LinkedList<CBS_Flow>();
             this.mapping_priorityToFlow.put(flow.getPriority(), list);
         }
-
         list.add(flow);
     }
 
@@ -167,21 +166,19 @@ public class CBS_ServerGraph {
         this.resetCBSQueues();
         this.shaping_config = shapingConf;
 
-        /* Go through all priorities of the server graph, from highest (0) to lowest */
-        /* For each priority p: */
+        /* Go through all priorities of the server graph, from highest (0) to lowest.
+         * this.priorities is a sorted set so we will start automatically at 0
+         */
         for (int p:this.priorities) {
-            /* Go through all flows with that priority */
-            /* For each flow f: */
+            /* Go through all flows with that priority, traverse its path and update the queues on the path */
             for (CBS_Flow flow: this.mapping_priorityToFlow.get(p)) {
-                /* Traverse path of flow and update/create CBS queues, ACs, SCs on each server on the path */
-                /* For each server s: */
-                /* s.updateCBSQueue(f) */
                 /* For the first link from Talker to the first hop only Link-Shaping is applied to the AC */
                 LinkedList<CBS_Link> path = flow.getPath();
-                double linkCapacity = path.getFirst().getCapacity();
 
+                double linkCapacity = path.getFirst().getCapacity();
                 ArrivalCurve ac = Curve.getFactory().createZeroArrivals();
                 CBS_Link prevLink = path.getFirst();
+
                 for(CBS_Link link: path) {
                     System.out.println("SG addFlow @ link " + link + " with dst. server " + link.getDestination());
 
@@ -191,10 +188,10 @@ public class CBS_ServerGraph {
 
                         /* Apply link shaping to initial link? */
                         if( (SHAPING_CONF.LINK_SHAPING == this.shaping_config) || (SHAPING_CONF.LINK_AND_CBS_SHAPING == this.shaping_config) ) {
-                            ArrivalCurve shaperLink = Curve.getFactory().createTokenBucket(linkCapacity, link.getMaxPacketSize());
 
-                            /* Get the shaped ArrivalCurve for the first hop */
-                            ac = Curve.getUtils().min(ac, shaperLink);
+                            /* Create link shaping curve manually here */
+                            ArrivalCurve linkShapingCurve = Curve.getFactory().createTokenBucket(linkCapacity, link.getMaxPacketSize());
+                            ac = Curve.getUtils().min(ac, linkShapingCurve);
                         }
 
                         System.out.println("SG initial AC " + ac);
@@ -209,7 +206,7 @@ public class CBS_ServerGraph {
                         CBS_Queue queue = serverSource.getQueue(flow.getPriority(), link);
 
                         //ToDo: is this needed?
-                        //ac = queue.getAggregateArrivalCurve();
+                        ac = queue.getAggregateArrivalCurve();
 
                         /* Calculate output flow bound */
                         ServiceCurve sc = queue.getServiceCurve();

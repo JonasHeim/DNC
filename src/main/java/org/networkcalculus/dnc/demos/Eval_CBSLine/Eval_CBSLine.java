@@ -179,7 +179,7 @@ public class Eval_CBSLine {
         }
 
         /****************** Calculate server graph ***************/
-        sg.computeCBSQueues(CBS_ServerGraph.SHAPING_CONF.LINK_AND_CBS_SHAPING);
+        sg.computeCBSQueues(CBS_ServerGraph.SHAPING_CONF.NO_SHAPING);
 
         /******************************************************
          ******************* Apply TFA ************************
