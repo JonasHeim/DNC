@@ -87,9 +87,10 @@ public class CBS_Server {
      * output link will recalculate their values (credits, ServiceCurve, ...).
      * @param flow      Flow to be added to server
      * @param ac        Shaped ArrivalCurve of the flow from previous server
-     * @param link      Output link to next hop
+     * @param link_out  Output link to next hop
+     * @param link_in   Input link from previous hop
      */
-    public void addFlow(CBS_Flow flow, ArrivalCurve ac, CBS_Link link) {
+    public void addFlow(CBS_Flow flow, ArrivalCurve ac, CBS_Link link_out, CBS_Link link_in) {
         //ToDo: Arguments OK?
         int priority = flow.getPriority();
         this.priorities.add(priority);
@@ -102,30 +103,30 @@ public class CBS_Server {
          */
 
         if(this.mapping_priorities_to_queues.containsKey(priority)) {
-            if(this.mapping_priorities_to_queues.get(priority).containsKey(link)) {
+            if(this.mapping_priorities_to_queues.get(priority).containsKey(link_out)) {
                 /* Case 3: Update existing queue */
                 System.out.println("CBS_Server.addFlow - Update queue for priority " + priority + " at server " + this.getAlias());
-                this.mapping_priorities_to_queues.get(priority).get(link).update(flow, ac);
+                this.mapping_priorities_to_queues.get(priority).get(link_out).update(flow, ac, link_in);
             }
             else {
                 /* Case 2: Create new CBS queue */
                 System.out.println("CBS_Server.addFlow - Creating new queue for priority " + priority + " at server " + this.getAlias());
-                CBS_Queue queue = new CBS_Queue(flow, ac, idleSlp, link);
-                this.mapping_priorities_to_queues.get(priority).put(link, queue);
+                CBS_Queue queue = new CBS_Queue(flow, ac, idleSlp, link_out);
+                this.mapping_priorities_to_queues.get(priority).put(link_out, queue);
             }
         }
         else {
             /* Case 1: No queue for priority exists yet so we will create one */
             System.out.println("CBS_Server.addFlow - Creating the first queue for priority " + priority + " at server " + this.getAlias());
-            CBS_Queue queue = new CBS_Queue(flow, ac, idleSlp, link);
+            CBS_Queue queue = new CBS_Queue(flow, ac, idleSlp, link_out);
             LinkedHashMap <CBS_Link, CBS_Queue> hashMap = new LinkedHashMap <>();
-            hashMap.put(link, queue);
+            hashMap.put(link_out, queue);
 
             this.mapping_priorities_to_queues.put(priority, hashMap);
         }
 
         // All lower priority queues of the server must recalculate their values because the credits, etc. will change
-        this.updateAllQueuesLowerPriority(priority, link);
+        this.updateAllQueuesLowerPriority(priority, link_out);
     }
 
     /**

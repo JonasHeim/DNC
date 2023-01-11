@@ -20,6 +20,8 @@ public class CBS_Flow {
         APERIODIC
     }
 
+    private Periodicity periodicity;
+
     /**
      * Number of bytes that are added to the number of payload bytes and make up
      * a 802.1Q tagged ethernet frame.
@@ -96,6 +98,7 @@ public class CBS_Flow {
         this.mfs = mfs + ethFrameOverhead;
         this.mif = mif;
         this.priority = priority;
+        this.periodicity = periodicity;
         this.is_periodic = periodicity == Periodicity.PERIODIC;
 
         /* Calculate m */

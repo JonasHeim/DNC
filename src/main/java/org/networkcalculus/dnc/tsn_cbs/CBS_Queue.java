@@ -3,8 +3,10 @@ package org.networkcalculus.dnc.tsn_cbs;
 import org.networkcalculus.dnc.curves.ArrivalCurve;
 import org.networkcalculus.dnc.curves.Curve;
 import org.networkcalculus.dnc.curves.ServiceCurve;
+import org.networkcalculus.dnc.model.Link;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Map;
 
@@ -61,13 +63,15 @@ public class CBS_Queue {
     //ToDo: is this always Best effort packet size of the maximum over all reserved flows?
     private double maxPacketSize;
 
+    private HashSet<CBS_Link> inputLinks;
+
     /**
      * Constant maximum packet size for BestEffort packets in bit (Ethernet MTU is 1500 Byte = 12kbit)
      *
      */
     private final double maxPacketSize_BestEffort = 12.336e3;
 
-    private Map<CBS_Flow, ArrivalCurve> mapACOfFlows;
+    private Map<CBS_Link, ArrivalCurve> mapACOfLinks;
 
     /**
      * Aggregated Token-Bucket ArrivalCurve over all reserved flows at this queue
@@ -87,7 +91,10 @@ public class CBS_Queue {
      * @param idleSlope IdleSlope/Bandwidth reservation of the traversing flow in bit/s
      * @param link      The output link of the queue
      */
-    public CBS_Queue(CBS_Flow flow, ArrivalCurve ac, double idleSlope, CBS_Link link) {
+    public CBS_Queue(CBS_Flow flow, ArrivalCurve ac, double idleSlope, CBS_Link link, CBS_Link in_link) {
+        this.inputLinks = new HashSet<CBS_Link>();
+        this.inputLinks.add(in_link);
+
         this.outputLink = link;
         this.priority = flow.getPriority();
         this.linkCapacity = link.getCapacity();
@@ -95,8 +102,8 @@ public class CBS_Queue {
         this.sendSlope = this.idleSlope - this.linkCapacity;
 
         this.aggregateArrivalCurve = ac;
-        this.mapACOfFlows = new HashMap<CBS_Flow, ArrivalCurve>();
-        this.mapACOfFlows.put(flow, ac);
+        this.mapACOfLinks = new HashMap<CBS_Link, ArrivalCurve>();
+        this.mapACOfLinks.put(in_link, ac);
         this.maxPacketSize = flow.getMfs();
         this.recalculateQueue();
     }
@@ -114,12 +121,12 @@ public class CBS_Queue {
     }
 
     /**
-     * Get a Arrival Curve of a specific flow that traverses this queue.
-     * @param flow  Flow of interest
-     * @return  Arrival Curve of the flow or null if not available.
+     * Get a Arrival Curve of a specific link that precedes this queue
+     * @param Link  Link of interest
+     * @return  Arrival Curve of the link or null if not available.
      */
-    public ArrivalCurve getArrivalCurveOfFlow(CBS_Flow flow) {
-        return this.mapACOfFlows.get(flow);
+    public ArrivalCurve getArrivalCurveOfLink(CBS_Link link) {
+        return this.mapACOfLinks.get(link);
     }
 
     /**
@@ -175,12 +182,24 @@ public class CBS_Queue {
     /**
      * Update the queue by a new traversing flow.
      * Changes IdleSlope, SendSlope, max. PacketSize, Credits, ServiceCurve and shaping curves
-     * @param flow          The new flow that traverses the queue
-     * @param ac            The TokenBucket ArrivalCurve of the new flow
+     *
+     * @param flow    The new flow that traverses the queue
+     * @param ac      The TokenBucket ArrivalCurve of the new flow
+     * @param link_in Input link
      */
-    public void update(CBS_Flow flow, ArrivalCurve ac) {
-        this.mapACOfFlows.put(flow, ac);
-        this.aggregateArrivalCurve = Curve.getUtils().add(this.aggregateArrivalCurve, ac);
+    public void update(CBS_Flow flow, ArrivalCurve ac, CBS_Link link_in) {
+
+        /* Update AC of given link */
+        this.mapACOfLinks.put(link_in, ac);
+        this.inputLinks.add(link_in);
+
+        ArrivalCurve tmp_aggrAc = Curve.getFactory().createZeroArrivals();
+        for(CBS_Link l:this.inputLinks)
+        {
+            /* Calculate aggregated AC over all incoming links */
+            tmp_aggrAc = Curve.getUtils().add(this.mapACOfLinks.get(l), tmp_aggrAc);
+        }
+
         /* New max. packet size? */
         this.maxPacketSize = Math.max(flow.getMfs(), this.maxPacketSize);
         this.recalculateQueue();
