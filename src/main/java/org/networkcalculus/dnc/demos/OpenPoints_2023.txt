@@ -1,0 +1,24 @@
+Offene Fragen:
+- Zitieren mit Seitenangabe bei @INPROCEEDINGS
+	=> Seite aus proceeding
+
+####################################
+OpenPoints 2023
+
+- Allgemein:
+	+ Bilder in Platzhalter einfügen
+	
+- Chapter Implementierung
+	+ aggrPBOOAB beschreiben
+	
+- Chapter Auswertung
+	+ Graphen
+		# Delay Vergleich der Methoden
+		# Darstellung Differenz zu TMA
+	+ Line-Topology
+		Graphen fertig und fertig schreiben
+	+ Tree-/Renault-Topology
+		Messungen fertig und schreiben
+		
+- Zusammenfassung/Ausblick
+- Abstracts
