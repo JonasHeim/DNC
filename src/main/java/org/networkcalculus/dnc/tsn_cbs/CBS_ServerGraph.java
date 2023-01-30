@@ -11,19 +11,6 @@ import java.util.*;
  * Class representing of a server graph with CBS shaped servers
  */
 public class CBS_ServerGraph {
-
-    /**
-     * Possible shaping types of a server graph
-     */
-    public enum SHAPING_CONF {
-        NO_SHAPING,
-        LINK_SHAPING,
-        CBS_SHAPING,
-        LINK_AND_CBS_SHAPING
-    }
-
-    private SHAPING_CONF shaping_config;
-
     /**
      * String identification of the server graph
      */
@@ -158,13 +145,11 @@ public class CBS_ServerGraph {
 
     /**
      * Calculate all CBS queues for all flows of the server graph.
-     * Will delete all existing queues of the servers.
-     * @param shapingConf Enum value of shaping curves supported by sever graph.
+     * Will delete all existing queues of the servers
      */
-    public void computeCBSQueues(SHAPING_CONF shapingConf) {
+    public void computeCBSQueues() throws Exception {
         /* Reset server graph in case the CBS queues have been calculated already and need to be updated */
         this.resetCBSQueues();
-        this.shaping_config = shapingConf;
 
         /* Go through all priorities of the server graph, from highest (0) to lowest.
          * this.priorities is a sorted set so we will start automatically at 0
@@ -172,7 +157,6 @@ public class CBS_ServerGraph {
         for (int p:this.priorities) {
             /* Go through all flows with that priority, traverse its path and update the queues on the path */
             for (CBS_Flow flow: this.mapping_priorityToFlow.get(p)) {
-                /* For the first link from Talker to the first hop only Link-Shaping is applied to the AC */
                 LinkedList<CBS_Link> path = flow.getPath();
 
                 double linkCapacity = path.getFirst().getCapacity();
@@ -186,44 +170,19 @@ public class CBS_ServerGraph {
                         /* Initial link */
                         ac = flow.calculateAndSetAC(linkCapacity);
 
-                        /* Apply link shaping to initial link? */
-                        if( (SHAPING_CONF.LINK_SHAPING == this.shaping_config) || (SHAPING_CONF.LINK_AND_CBS_SHAPING == this.shaping_config) ) {
-
-                            /* Create link shaping curve manually here */
-                            ArrivalCurve linkShapingCurve = Curve.getFactory().createTokenBucket(linkCapacity, link.getMaxPacketSize());
-                            ac = Curve.getUtils().min(ac, linkShapingCurve);
-                        }
-
                         System.out.println("SG initial AC " + ac);
                     }
                     else if(CBS_Server.SRV_TYPE.SWITCH == link.getSource().getServerType()) {
                         /* Only update CBS Queues for forwarding devices */
                         CBS_Server serverSource = link.getSource();
 
-                        /* Update the queue at the server with shaped arrival curve
-                         * Calculates aggregated ArrivalCurve, min./max. Credits, ServiceCurve, etc. at the Queue */
                         serverSource.addFlow(flow, ac, link, prevLink);
                         CBS_Queue queue = serverSource.getQueue(flow.getPriority(), link);
-
-                        //ToDo: is this needed?
-                        ac = queue.getAggregateArrivalCurve();
 
                         /* Calculate output flow bound */
                         ServiceCurve sc = queue.getServiceCurve();
                         ac = Deconvolution_Disco_Affine.deconvolve(ac, sc);
                         System.out.println("Output flow bound AC for flow " + flow.getAlias() + " at server " + serverSource.getAlias() + " : " + ac);
-
-                        /* Apply CBS shaping? */
-                        if( (SHAPING_CONF.CBS_SHAPING == this.shaping_config) || (SHAPING_CONF.LINK_AND_CBS_SHAPING == this.shaping_config) ) {
-                            /* Apply CBS shaping */
-                            ac = Curve.getUtils().min(ac, queue.getCbsShapingCurve());
-                        }
-
-                        /* Apply link shaping? */
-                        if( (SHAPING_CONF.LINK_SHAPING == this.shaping_config) || (SHAPING_CONF.LINK_AND_CBS_SHAPING == this.shaping_config) ) {
-                            /* Apply link shaping */
-                            ac = Curve.getUtils().min(ac, queue.getLinkShapingCurve());
-                        }
                     }
 
                     prevLink = link;

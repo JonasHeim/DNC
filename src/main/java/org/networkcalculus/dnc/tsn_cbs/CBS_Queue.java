@@ -72,20 +72,19 @@ public class CBS_Queue {
     private HashSet<CBS_Link> inputLinks;
 
     /**
-     * Mapping of input links and their corresponding arrival curves with the queues priority
+     * Mapping of input links and the flows arriving on that link at the queue
      */
-    private Map<CBS_Link, ArrivalCurve> acOfInputLinks;
+    private Map<CBS_Link, HashSet<CBS_Flow>> flowsOnInputLinks;
+
+    /**
+     * Mapping of flows and their arrival curves at the queue
+     */
+    private Map<CBS_Flow, ArrivalCurve> acOfFlows;
 
     /**
      * Constant maximum packet size for BestEffort packets in bit (Ethernet MTU is 1500 Byte = 12kbit + overhead)
      */
     private final double maxPacketSize_BestEffort = 12.336e3;
-
-    /**
-     * Aggregated Token-Bucket ArrivalCurve over all reserved flows at this queue.
-     * Represents the sum of acOfInputLinks over all links
-     */
-    private ArrivalCurve aggregateArrivalCurve;
 
     /**
      * Output link of the queue
@@ -108,11 +107,13 @@ public class CBS_Queue {
         this.inputLinks = new HashSet<CBS_Link>();
         this.inputLinks.add(in_link);
 
-        /* Remember arrival curve on input link */
-        this.acOfInputLinks = new HashMap<CBS_Link, ArrivalCurve>();
-        this.acOfInputLinks.put(in_link, ac);
+        /* Remember arrival curve and flow on input link */
+        this.flowsOnInputLinks = new HashMap<>();
+        this.flowsOnInputLinks.put(in_link, new HashSet<>());
+        this.flowsOnInputLinks.get(in_link).add(flow);
 
-        this.aggregateArrivalCurve = ac;
+        this.acOfFlows = new HashMap<>();
+        this.acOfFlows.put(flow, ac);
 
         /* Set output link */
         this.outputLink = outLink;
@@ -137,15 +138,6 @@ public class CBS_Queue {
      */
     public ServiceCurve getServiceCurve() {
         return serviceCurve;
-    }
-
-    /**
-     * Get the Arrival Curve of a specific link that precedes this queue
-     * @param inLink  Link of interest
-     * @return  Arrival Curve of the link or null if not available.
-     */
-    public ArrivalCurve getArrivalCurveOfInputLink(CBS_Link inLink) {
-        return this.acOfInputLinks.get(inLink);
     }
 
     /**
@@ -205,31 +197,26 @@ public class CBS_Queue {
      * @param ac      The TokenBucket ArrivalCurve of the new flow
      * @param inLink  Input link over which the flow arrives
      */
-    public void update(CBS_Flow flow, ArrivalCurve ac, CBS_Link inLink) {
+    public void update(CBS_Flow flow, ArrivalCurve ac, CBS_Link inLink) throws Exception {
 
-        /* Update AC of given link */
-        this.acOfInputLinks.put(inLink, ac);
-        this.inputLinks.add(inLink);
-
-        /* Re-Calculate aggregated AC over all incoming links because of the update */
-        ArrivalCurve tmp_aggrAc = Curve.getFactory().createZeroArrivals();
-        for(CBS_Link l:this.inputLinks)
+        /* Remember AC of flow on input link */
+        if(!this.flowsOnInputLinks.containsKey(inLink))
         {
-            tmp_aggrAc = Curve.getUtils().add(this.acOfInputLinks.get(l), tmp_aggrAc);
+            /* No flow on this input link yet registered at the queue */
+            this.flowsOnInputLinks.put(inLink, new HashSet<>());
         }
-        this.aggregateArrivalCurve = tmp_aggrAc;
+        this.flowsOnInputLinks.get(inLink).add(flow);
+
+        if(this.acOfFlows.containsKey(flow))
+        {
+            throw new Exception(("Flow already registered at queue!"));
+        }
+        this.acOfFlows.put(flow, ac);
 
         /* New max. packet size? */
         this.maxPacketSize = Math.max(flow.getMfs(), this.maxPacketSize);
 
         this.recalculateQueue();
-    }
-
-    /**
-     * @return Aggregated ArrivalCurve over all reserved flows at this queue
-     */
-    public ArrivalCurve getAggregateArrivalCurve() {
-        return aggregateArrivalCurve;
     }
 
     /**

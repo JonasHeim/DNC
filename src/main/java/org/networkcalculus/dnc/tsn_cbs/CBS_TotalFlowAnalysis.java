@@ -1,13 +1,10 @@
 package org.networkcalculus.dnc.tsn_cbs;
 
-import org.apache.commons.math3.util.Pair;
 import org.networkcalculus.dnc.Calculator;
 import org.networkcalculus.dnc.curves.ArrivalCurve;
+import org.networkcalculus.dnc.curves.Curve;
 import org.networkcalculus.dnc.curves.ServiceCurve;
-import org.networkcalculus.dnc.feedforward.ArrivalBoundDispatch;
-import org.networkcalculus.dnc.tandem.analyses.TotalFlowResults;
 import org.networkcalculus.num.Num;
-import org.networkcalculus.num.values.NaN;
 
 import java.util.*;
 
@@ -15,6 +12,7 @@ import java.util.*;
  * Class representation of the latency Total-Flow-Analysis of a server graph
  */
 public class CBS_TotalFlowAnalysis {
+
     private static class CBS_ResultsTotalFlowAnalysis {
         private Map<CBS_Server, Num> serverLocalDelays;
 
@@ -54,6 +52,39 @@ public class CBS_TotalFlowAnalysis {
         }
     }
 
+    public enum TFA_CONFIG {
+        DEFAULT_TFA,
+        AGGR_PBOOAB_TFA
+    };
+
+    /**
+     * TFA configuration.
+     * Determines mode of arrival bounding at CBS servers:
+     * - DEFAULT_TFA: trivial arrival bounding
+     * - AGGR_PBOOAB: aggregated PBOO arrival bounding
+     */
+    private TFA_CONFIG configuration;
+
+    public TFA_CONFIG getConfiguration() {
+        return configuration;
+    }
+
+    public void setConfiguration(TFA_CONFIG configuration) {
+        this.configuration = configuration;
+    }
+
+    /**
+     * Possible shaping types of a server graph
+     */
+    public enum SHAPING_CONF {
+        NO_SHAPING,
+        LINK_SHAPING,
+        CBS_SHAPING,
+        LINK_AND_CBS_SHAPING
+    }
+
+    private SHAPING_CONF shaping_config;
+
     /**
      * Server graph used for the analysis
      */
@@ -67,7 +98,9 @@ public class CBS_TotalFlowAnalysis {
     /**
      * @param server_graph  Server Graph that will be used for the analysis
      */
-    public CBS_TotalFlowAnalysis(CBS_ServerGraph server_graph) {
+    public CBS_TotalFlowAnalysis(CBS_ServerGraph server_graph, TFA_CONFIG config, SHAPING_CONF shaping_config) {
+        this.configuration = config;
+        this.shaping_config = shaping_config;
         this.server_graph = server_graph;
         this.results = new CBS_ResultsTotalFlowAnalysis();
     }
@@ -97,38 +130,52 @@ public class CBS_TotalFlowAnalysis {
         LinkedList<CBS_Link> path = this.server_graph.getPath(flow);
 
         Num delay_bound = Num.getFactory(Calculator.getInstance().getNumBackend()).createZero();
-        Num backlog_bound = Num.getFactory(Calculator.getInstance().getNumBackend()).createZero();
+        //ToDo: Eventually calculate backlog bound as well
+        //Num backlog_bound = Num.getFactory(Calculator.getInstance().getNumBackend()).createZero();
 
         /* Calculate local delays for each server on flows path */
         for(CBS_Link link:path) {
+            /* Skip initial talker hop. Only link shaping will be applied there when analyzing next hop */
             if(link.getSource().getServerType() == CBS_Server.SRV_TYPE.SWITCH)
             {
                 delay_bound = deriveBoundsAtServer(flow, link.getSource(), link);
 
+                //ToDo: Eventually calculate backlog bound as well
                 //backlog_bound = Num.getUtils(Calculator.getInstance().getNumBackend()).max(backlog_bound, min_D_B.getSecond());
 
                 this.results.addServerLocalDelay(link.getSource(), delay_bound);
             }
-            //else skip
         }
     }
 
-    private Num deriveBoundsAtServer(CBS_Flow flow, CBS_Server source, CBS_Link link) throws Exception
+    private Num deriveBoundsAtServer(CBS_Flow flow, CBS_Server source, CBS_Link out_link) throws Exception
     {
+        if(CBS_Server.SRV_TYPE.SWITCH != source.getServerType())
+        {
+            throw new Exception("Only forwarding (SWITCH) devices supported.");
+        }
+
         Num localDelay = Num.getFactory(Calculator.getInstance().getNumBackend()).createZero();;
-        CBS_Queue queue = source.getQueue(flow.getPriority(), link);
+        CBS_Queue queue = source.getQueue(flow.getPriority(), out_link);
         if(null == queue) {
             //No matching queue found, something is wrong in server configuration...
             throw new Exception("No matching queue found in TFA analysis for server " + source.getAlias());
         }
         else {
+            Set<ArrivalCurve> alphas_server = computeArrivalBounds(flow, queue);
 
-            //ToDo: PBOOAB computation
-            Set<ArrivalCurve> alphas_server = computeArrivalBounds(flow, source);
+            ArrivalCurve ac = Curve.getFactory().createZeroArrivals();
 
+            if(alphas_server.size() != 1)
+            {
+                throw new Exception("Arrival bounds at server " + source + " not 1");
+            }
+            else {
+                for (ArrivalCurve ac_tmp : alphas_server) {
+                    ac = Curve.getUtils().add(ac, ac_tmp);
+                }
+            }
 
-
-            ArrivalCurve ac = queue.getAggregateArrivalCurve();
             ServiceCurve sc = queue.getServiceCurve();
 
 //            /* Get CrossFlows and Calculate LeftOverServiceCurve on that specific queue */
@@ -153,9 +200,51 @@ public class CBS_TotalFlowAnalysis {
         return localDelay;
     }
 
-    private Set<ArrivalCurve> computeArrivalBounds(CBS_Flow flow, CBS_Server source) {
-        //ToDo: implement PBOOAB
-        return null;
+    private Set<ArrivalCurve> computeArrivalBounds(CBS_Flow flow, CBS_Queue queue) throws Exception {
+        if(TFA_CONFIG.DEFAULT_TFA == this.configuration)
+        {
+            HashSet<ArrivalCurve> alphas = new HashSet<ArrivalCurve>();
+
+            /* Re-Calculate aggregated AC over all incoming links */
+            ArrivalCurve tmp_aggrAc = Curve.getFactory().createZeroArrivals();
+            for(CBS_Link prec_link:queue.getInputLinks())
+            {
+                ArrivalCurve alpha = Curve.getFactory().createZeroArrivals();
+                CBS_Server prec_server = prec_link.getSource();
+
+                if(CBS_Server.SRV_TYPE.TALKER == prec_server.getServerType())
+                {
+                    //ToDo: We assume that a Talker has exactly one flow/arrival curve
+                    /* Just take the initial AC of the flow at the Talker. */
+                    alpha = flow.getArrivalCurve();
+
+                    if((SHAPING_CONF.LINK_SHAPING == this.shaping_config) || (SHAPING_CONF.LINK_AND_CBS_SHAPING == this.shaping_config))
+                    {
+                        /* Create link shaping curve manually here because we can no calculate it from the talker 'queue' */
+                        ArrivalCurve linkShapingCurve = Curve.getFactory().createTokenBucket(prec_link.getCapacity(), prec_link.getMaxPacketSize());
+
+                        /* Apply link shaping on initial arrival curve from talker */
+                        alpha = Curve.getUtils().min(alpha, linkShapingCurve);
+                    }
+                }
+                else {
+                    /* Get preceding CBS queue */
+                    CBS_Queue prec_queue = getQueue(flow.getPriority(), prec_link);
+                    /* Build aggregated AC of preceding queue */
+                    //alphas.add(Curve.getFactory().createArrivalCurve(queue.getAggregateArrivalCurve()));
+                }
+
+                /* Finally add arrival curve to aggregated arrival curve */
+                tmp_aggrAc = Curve.getUtils().add(tmp_aggrAc, alpha);
+            }
+            return null;
+        }
+        else
+        {
+            //ToDo: PBOOAB computation
+            throw new Exception("Only TFA_CONFIG.DEFAULT_TFA implemented for now!");
+        }
+        //return null;
     }
 
     public String toString() {

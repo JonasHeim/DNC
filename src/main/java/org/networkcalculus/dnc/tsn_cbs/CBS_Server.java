@@ -90,7 +90,7 @@ public class CBS_Server {
      * @param link_out  Output link to next hop
      * @param link_in   Input link from previous hop
      */
-    public void addFlow(CBS_Flow flow, ArrivalCurve ac, CBS_Link link_out, CBS_Link link_in) {
+    public void addFlow(CBS_Flow flow, ArrivalCurve ac, CBS_Link link_out, CBS_Link link_in) throws Exception {
         //ToDo: Arguments OK?
         int priority = flow.getPriority();
         this.priorities.add(priority);
@@ -199,7 +199,6 @@ public class CBS_Server {
                         queue.getSendSlope() + " Bit/s");
                 cbs_rl_server_str.append("\r\n\t\t\tminCredit " + queue.getMinCredit() + " Bit maxCredit " +
                         queue.getMaxCredit() + " Bit");
-                cbs_rl_server_str.append("\r\n\t\t\tAggr. ArrivalCurve " + queue.getAggregateArrivalCurve());
                 cbs_rl_server_str.append("\r\n\t\t\tServiceCurve " + queue.getServiceCurve());
                 cbs_rl_server_str.append("\r\n\t\t\tCBS-ShapingCurve " + queue.getCbsShapingCurve());
                 cbs_rl_server_str.append("\r\n\t\t\tLink ShapingCurve " + queue.getLinkShapingCurve());
