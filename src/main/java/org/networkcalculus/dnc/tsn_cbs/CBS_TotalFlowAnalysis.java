@@ -228,16 +228,30 @@ public class CBS_TotalFlowAnalysis {
                     }
                 }
                 else {
-                    /* Get preceding CBS queue */
-                    CBS_Queue prec_queue = getQueue(flow.getPriority(), prec_link);
-                    /* Build aggregated AC of preceding queue */
-                    //alphas.add(Curve.getFactory().createArrivalCurve(queue.getAggregateArrivalCurve()));
+                    /* Build aggregated AC of preceding queue over all traversing flows at that queue */
+                    for(ArrivalCurve ac_tmp:queue.getAcOfFlows().values()) {
+                        alpha = Curve.getUtils().add(alpha, ac_tmp);
+                    }
+
+                    /* Apply CBS shaping if configured */
+                    if((SHAPING_CONF.CBS_SHAPING == this.shaping_config) || (SHAPING_CONF.LINK_AND_CBS_SHAPING == this.shaping_config))
+                    {
+                        alpha = Curve.getUtils().min(alpha, queue.getCbsShapingCurve());
+                    }
+
+                    /* Apply Link shaping if configured */
+                    if((SHAPING_CONF.LINK_SHAPING == this.shaping_config) || (SHAPING_CONF.LINK_AND_CBS_SHAPING == this.shaping_config))
+                    {
+                        alpha = Curve.getUtils().min(alpha, queue.getLinkShapingCurve());
+                    }
                 }
 
-                /* Finally add arrival curve to aggregated arrival curve */
+                /* Finally add preceding link arrival curve to queue arrival curve */
                 tmp_aggrAc = Curve.getUtils().add(tmp_aggrAc, alpha);
             }
-            return null;
+
+            alphas.add(tmp_aggrAc);
+            return alphas;
         }
         else
         {

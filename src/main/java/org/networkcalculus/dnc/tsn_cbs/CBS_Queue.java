@@ -189,6 +189,8 @@ public class CBS_Queue {
         return maxPacketSize;
     }
 
+    public Map<CBS_Flow, ArrivalCurve> getAcOfFlows() { return this.acOfFlows; }
+
     /**
      * Update the queue by a new traversing flow.
      * Recalculates IdleSlope, SendSlope, max. PacketSize, Credits, ServiceCurve and shaping curves
@@ -218,6 +220,8 @@ public class CBS_Queue {
 
         this.recalculateQueue();
     }
+
+
 
     /**
      * @return  The output link of the queue

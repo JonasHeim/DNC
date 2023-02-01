@@ -179,12 +179,12 @@ public class Eval_CBSLine {
         }
 
         /****************** Calculate server graph ***************/
-        sg.computeCBSQueues(CBS_ServerGraph.SHAPING_CONF.NO_SHAPING);
+        sg.computeCBSQueues();
 
         /******************************************************
          ******************* Apply TFA ************************
          ******************************************************/
-        CBS_TotalFlowAnalysis tfa = new CBS_TotalFlowAnalysis(sg);
+        CBS_TotalFlowAnalysis tfa = new CBS_TotalFlowAnalysis(sg, CBS_TotalFlowAnalysis.TFA_CONFIG.DEFAULT_TFA, CBS_TotalFlowAnalysis.SHAPING_CONF.LINK_AND_CBS_SHAPING);
         for(CBS_Flow f:flows)
         {
             tfa.performAnalysis(f);
