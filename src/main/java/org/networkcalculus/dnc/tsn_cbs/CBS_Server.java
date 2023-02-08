@@ -9,6 +9,25 @@ import java.util.*;
 public class CBS_Server {
 
     /**
+     * Get all queues of this server over all priorities and output links
+     * @return HashSet<CBS_Queue> of queues. Empty Set if no queues are present.
+     */
+    public Set<CBS_Queue> getQueues() {
+        Set<CBS_Queue> queues = new HashSet<>();
+
+        /* Merge all queues from all priorities and output links */
+        for(Integer prioCandidate:this.mapping_priorities_to_queues.keySet())
+        {
+            for(CBS_Link linkCandidate:this.mapping_priorities_to_queues.get(prioCandidate).keySet())
+            {
+                queues.add(this.mapping_priorities_to_queues.get(prioCandidate).get(linkCandidate));
+            }
+        }
+
+        return queues;
+    }
+
+    /**
      * Possible TSN server types
      */
     public enum SRV_TYPE {

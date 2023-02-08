@@ -3,11 +3,9 @@ package org.networkcalculus.dnc.tsn_cbs;
 import org.networkcalculus.dnc.curves.ArrivalCurve;
 import org.networkcalculus.dnc.curves.Curve;
 import org.networkcalculus.dnc.curves.ServiceCurve;
+import org.networkcalculus.dnc.network.server_graph.Flow;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.Map;
+import java.util.*;
 
 public class CBS_Queue {
 
@@ -82,6 +80,11 @@ public class CBS_Queue {
     private Map<CBS_Flow, ArrivalCurve> acOfFlows;
 
     /**
+     *  Set or flows that arrive at that queue
+     */
+    private Set<CBS_Flow> flows;
+
+    /**
      * Constant maximum packet size for BestEffort packets in bit (Ethernet MTU is 1500 Byte = 12kbit + overhead)
      */
     private final double maxPacketSize_BestEffort = 12.336e3;
@@ -108,6 +111,9 @@ public class CBS_Queue {
         this.inputLinks.add(in_link);
 
         /* Remember arrival curve and flow on input link */
+        this.flows = new HashSet<>();
+        this.flows.add(flow);
+
         this.flowsOnInputLinks = new HashMap<>();
         this.flowsOnInputLinks.put(in_link, new HashSet<>());
         this.flowsOnInputLinks.get(in_link).add(flow);
@@ -132,6 +138,15 @@ public class CBS_Queue {
      * @return  The priority of the queue.
      */
     int getPriority() { return this.priority; };
+
+    /**
+     * Get the server the queues is located at
+     * @return CBS_Server
+     */
+    CBS_Server getServer()
+    {
+        return this.server;
+    }
 
     /**
      * @return  The ServiceCurve of the queue modeled as a Rate-Latency ServiceCurve
@@ -200,6 +215,8 @@ public class CBS_Queue {
      * @param inLink  Input link over which the flow arrives
      */
     public void update(CBS_Flow flow, ArrivalCurve ac, CBS_Link inLink) throws Exception {
+
+        this.flows.add(flow);
 
         /* Remember AC of flow on input link */
         if(!this.flowsOnInputLinks.containsKey(inLink))
@@ -303,5 +320,9 @@ public class CBS_Queue {
         this.calculateCBSShapingCurve();
         this.calculateLinkShapingCurve();
         this.calculateServiceCurve();
+    }
+
+    public Set<CBS_Flow> getFlows() {
+        return this.flows;
     }
 }

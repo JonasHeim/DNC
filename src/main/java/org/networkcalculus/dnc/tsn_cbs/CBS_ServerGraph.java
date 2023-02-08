@@ -144,6 +144,59 @@ public class CBS_ServerGraph {
     }
 
     /**
+     * Calculate the flows arrival curve up to a given queue along its path.
+     * @param flow  Flow to calculate AC for
+     * @param queue Queue to calculate the arrival
+     * @return  Affine ArrivalCurve. ZeroArrival if empty.
+     * @throws Exception
+     */
+    public ArrivalCurve calculateAcOfFlowAtQueue(CBS_Flow flow, CBS_Queue queue) throws Exception {
+        ArrivalCurve ac = Curve.getFactory().createZeroArrivals();
+
+        if(!this.flows.contains(flow))
+        {
+            throw new Exception("Flow not registered at server graph");
+        }
+
+        CBS_Server server = null;
+        for(CBS_Server serverCandidate:this.servers)
+        {
+            if(serverCandidate.getQueues().contains(queue)) {
+                server = queue.getServer();
+                break;
+            }
+        }
+
+        if(null == server)
+        {
+            throw new Exception("Could ont find queues at any server in server graph");
+        }
+
+        /* Finally calculate AC of the flow up to the queues server */
+
+        for(CBS_Link linkCandidate:flow.getPath())
+        {
+            if(server == linkCandidate.getSource())
+            {
+                break;
+            }
+
+            if(CBS_Server.SRV_TYPE.TALKER == linkCandidate.getSource().getServerType())
+            {
+                /* Initial arrival curve of the flow */
+                ac = flow.getArrivalCurve();
+            }
+            else
+            {
+                /* Calculate output flow bound */
+                ac = Deconvolution_Disco_Affine.deconvolve(ac, queue.getServiceCurve());
+            }
+        }
+
+       return ac;
+    }
+
+    /**
      * Calculate all CBS queues for all flows of the server graph.
      * Will delete all existing queues of the servers
      */

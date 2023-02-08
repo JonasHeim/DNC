@@ -4,6 +4,7 @@ import org.networkcalculus.dnc.Calculator;
 import org.networkcalculus.dnc.curves.ArrivalCurve;
 import org.networkcalculus.dnc.curves.Curve;
 import org.networkcalculus.dnc.curves.ServiceCurve;
+import org.networkcalculus.dnc.network.server_graph.Flow;
 import org.networkcalculus.num.Num;
 
 import java.util.*;
@@ -166,6 +167,7 @@ public class CBS_TotalFlowAnalysis {
 
             ArrivalCurve ac = Curve.getFactory().createZeroArrivals();
 
+            /* For TFA we assume that alphas_server has the size 1 because it is the aggregated AC of all flows */
             if(alphas_server.size() != 1)
             {
                 throw new Exception("Arrival bounds at server " + source + " not 1");
@@ -175,23 +177,7 @@ public class CBS_TotalFlowAnalysis {
                     ac = Curve.getUtils().add(ac, ac_tmp);
                 }
             }
-
             ServiceCurve sc = queue.getServiceCurve();
-
-//            /* Get CrossFlows and Calculate LeftOverServiceCurve on that specific queue */
-//            Set<CBS_Flow> crossFlows = this.server_graph.getCrossFlowsAtServer(flow, link.getSource());
-//            for(CBS_Flow cFlow:crossFlows)
-//            {
-//                /* Get AC of crossflow */
-//                ArrivalCurve singleAC = queue.getArrivalCurveOfFlow(cFlow);
-//
-//                /* Subtract AC from SC */
-//                if(null != singleAC)
-//                {
-//                    sc = Calculator.getInstance().getDncBackend().getCurveUtils().sub(sc, singleAC);
-//                    //ToDo: check if SC >= 0? -> infeasible then
-//                }
-//            }
 
             //ToDo: Make FIFO/ARB configurable
             localDelay = Calculator.getInstance().getDncBackend().getBounds().delayFIFO(ac, sc);
@@ -206,7 +192,7 @@ public class CBS_TotalFlowAnalysis {
             HashSet<ArrivalCurve> alphas = new HashSet<ArrivalCurve>();
 
             /* Re-Calculate aggregated AC over all incoming links */
-            ArrivalCurve tmp_aggrAc = Curve.getFactory().createZeroArrivals();
+            ArrivalCurve aggregatedArrival = Curve.getFactory().createZeroArrivals();
             for(CBS_Link prec_link:queue.getInputLinks())
             {
                 ArrivalCurve alpha = Curve.getFactory().createZeroArrivals();
@@ -229,8 +215,10 @@ public class CBS_TotalFlowAnalysis {
                 }
                 else {
                     /* Build aggregated AC of preceding queue over all traversing flows at that queue */
-                    for(ArrivalCurve ac_tmp:queue.getAcOfFlows().values()) {
-                        alpha = Curve.getUtils().add(alpha, ac_tmp);
+                    for(CBS_Flow flowCandidate:queue.getFlows())
+                    {
+                        ArrivalCurve arrivalBound = this.server_graph.calculateAcOfFlowAtQueue(flowCandidate, queue);
+                        alpha = Curve.getUtils().add(alpha, arrivalBound);
                     }
 
                     /* Apply CBS shaping if configured */
@@ -247,10 +235,10 @@ public class CBS_TotalFlowAnalysis {
                 }
 
                 /* Finally add preceding link arrival curve to queue arrival curve */
-                tmp_aggrAc = Curve.getUtils().add(tmp_aggrAc, alpha);
+                aggregatedArrival = Curve.getUtils().add(aggregatedArrival, alpha);
             }
 
-            alphas.add(tmp_aggrAc);
+            alphas.add(aggregatedArrival);
             return alphas;
         }
         else

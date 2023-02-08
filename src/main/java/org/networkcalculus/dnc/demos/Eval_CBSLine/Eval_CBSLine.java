@@ -184,7 +184,7 @@ public class Eval_CBSLine {
         /******************************************************
          ******************* Apply TFA ************************
          ******************************************************/
-        CBS_TotalFlowAnalysis tfa = new CBS_TotalFlowAnalysis(sg, CBS_TotalFlowAnalysis.TFA_CONFIG.DEFAULT_TFA, CBS_TotalFlowAnalysis.SHAPING_CONF.LINK_AND_CBS_SHAPING);
+        CBS_TotalFlowAnalysis tfa = new CBS_TotalFlowAnalysis(sg, CBS_TotalFlowAnalysis.TFA_CONFIG.DEFAULT_TFA, CBS_TotalFlowAnalysis.SHAPING_CONF.NO_SHAPING);
         for(CBS_Flow f:flows)
         {
             tfa.performAnalysis(f);

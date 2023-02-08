@@ -53,8 +53,8 @@ public class Eval_CBSTree {
          ******************************************************/
 
         LinkedHashMap <Integer, Double> idleSlopeMapping = new LinkedHashMap <Integer, Double>();
-        idleSlopeMapping.put(0, 5.0e6);
-        idleSlopeMapping.put(1, 10.0e6);
+        idleSlopeMapping.put(0, 50.0e6);
+        idleSlopeMapping.put(1, 25.0e6);
 
         /* First step always */
         CBS_ServerGraph sg = new CBS_ServerGraph("CBS shaped line network");
@@ -176,12 +176,12 @@ public class Eval_CBSTree {
         }
 
         /****************** Calculate server graph ***************/
-        sg.computeCBSQueues(CBS_ServerGraph.SHAPING_CONF.NO_SHAPING);
+        sg.computeCBSQueues();
 
         /******************************************************
          ******************* Apply TFA ************************
          ******************************************************/
-        CBS_TotalFlowAnalysis tfa = new CBS_TotalFlowAnalysis(sg);
+        CBS_TotalFlowAnalysis tfa = new CBS_TotalFlowAnalysis(sg, CBS_TotalFlowAnalysis.TFA_CONFIG.DEFAULT_TFA, CBS_TotalFlowAnalysis.SHAPING_CONF.NO_SHAPING);
         for(CBS_Flow f:flows)
         {
             tfa.performAnalysis(f);
