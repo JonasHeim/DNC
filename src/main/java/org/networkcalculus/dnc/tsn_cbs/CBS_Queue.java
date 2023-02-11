@@ -85,9 +85,10 @@ public class CBS_Queue {
     private Set<CBS_Flow> flows;
 
     /**
-     * Constant maximum packet size for BestEffort packets in bit (Ethernet MTU is 1500 Byte = 12kbit + overhead)
+     * Constant maximum packet size for BestEffort packets in bit (Ethernet MTU is 1500 Byte = 12kbit,
+     * Ethernet Frame Overhead 30 Byte = 240bit, IPG 12 Byte = 96 Bit)
      */
-    private final double maxPacketSize_BestEffort = 12.336e3;
+    private final double maxPacketSize_BestEffort = 12336;
 
     /**
      * Output link of the queue
@@ -204,8 +205,6 @@ public class CBS_Queue {
         return maxPacketSize;
     }
 
-    public Map<CBS_Flow, ArrivalCurve> getAcOfFlows() { return this.acOfFlows; }
-
     /**
      * Update the queue by a new traversing flow.
      * Recalculates IdleSlope, SendSlope, max. PacketSize, Credits, ServiceCurve and shaping curves
@@ -238,15 +237,18 @@ public class CBS_Queue {
         this.recalculateQueue();
     }
 
-
-
     /**
-     * @return  The output link of the queue
+     * Get the output link of this queue
+     * @return Single link
      */
     public CBS_Link getOutputLink() {
         return this.outputLink;
     }
 
+    /**
+     * Get all links of incoming flows at this queue
+     * @return Set of links
+     */
     public HashSet<CBS_Link> getInputLinks() {
         return this.inputLinks;
     }
@@ -307,7 +309,7 @@ public class CBS_Queue {
      */
     private void calculateLinkShapingCurve() {
         this.linkShapingCurve = Curve.getFactory().createTokenBucket(this.outputLink.getCapacity(),
-                this.maxPacketSize);
+                this.outputLink.getMaxPacketSize());
 
     }
 
@@ -322,6 +324,10 @@ public class CBS_Queue {
         this.calculateServiceCurve();
     }
 
+    /**
+     * Get all flow that traverse this queue
+     * @return Set of flows
+     */
     public Set<CBS_Flow> getFlows() {
         return this.flows;
     }

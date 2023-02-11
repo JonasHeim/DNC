@@ -1,0 +1,285 @@
+#!markdown
+
+This tutorials shows the code used for the examples in the *Quick Intro*.
+
+The following three cells are setup: they compile the library, reference the necessary packages, define the functions we use to plot.
+If I could abstract this out of view I would, alas you will have to scroll a bit.
+
+#!csharp
+
+#r "nuget: Unipi.Nancy"
+// The following is the package we use to plot inside notebooks
+#r "nuget: XPlot.Plotly.Interactive"
+
+#!csharp
+
+// Preamble code, see README.md for a quick reference on plot() 
+
+using XPlot.Plotly;
+using Unipi.Nancy.Numerics;
+using Unipi.Nancy.MinPlusAlgebra;
+using Unipi.Nancy.NetworkCalculus;
+
+// the plot method, and its overloads, uses XPlot to plot the given curves
+// there is no particular reason in the choice of XPlot, only that it works well in this context - it can be replaced with other libraries in other context
+void plot(IEnumerable<Curve> curves, IEnumerable<string> names, Rational? upTo = null)
+{
+    //Console.WriteLine("plot(IEnumerable<(Curve curve, string name)> namedCurves, Rational? upTo = null)");
+    Rational t;
+    if(upTo is not null)
+        t = (Rational) upTo;
+    else
+        t = curves.Max(c => c.SecondPseudoPeriodEnd);
+    t = t == 0 ? 10 : t;
+    //Console.WriteLine(t);
+
+    var cuts = curves
+        .Select(c => c.Cut(0, t, isEndInclusive: true))
+        .ToList();
+    
+    plot(cuts, names);
+}
+
+void plot(Curve curve, string name, Rational? upTo = null)
+{
+    //Console.WriteLine("plot(Curve curve, string name, Rational? upTo = null)");
+    plot(new []{curve}, new []{name}, upTo);
+}
+
+void plot(IEnumerable<Curve> curves, Rational? upTo = null)
+{
+    //Console.WriteLine("plot(IEnumerable<Curve> curves, Rational? upTo = null)");
+    var names = curves.Select((_, i) => $"{(char)('a' + i)}");
+    plot(curves, names, upTo);
+}
+
+void plot(Curve curve, Rational? upTo = null)
+{
+    //Console.WriteLine("plot(Curve curve, Rational? upTo = null)");
+    plot(new []{curve}, new []{"a"}, upTo);
+}
+
+void plot(params Curve[] curves)
+{
+    //Console.WriteLine("plot(params Curve[] curves)");
+    plot(curves, null);
+}
+
+void plot(IEnumerable<Sequence> sequences, IEnumerable<string> names)
+{
+    //Console.WriteLine("plot(IEnumerable<(Sequence sequence, string name)> namedSequences)");
+    var colors = new List<string> {
+        "#636EFA",
+        "#EF553B",
+        "#00CC96",
+        "#AB63FA",
+        "#FFA15A",
+        "#19D3F3",
+        "#FF6692",
+        "#B6E880",
+        "#FF97FF",
+        "#FECB52"
+    };
+
+    var traces = Enumerable.Zip(sequences, names) 
+        .SelectMany((ns, i) => getTrace(ns.First, ns.Second, i));
+
+    var chart = Chart.Plot(traces);
+    
+    chart.WithLayout(
+        new Layout.Layout {
+            xaxis = new Xaxis { zeroline = true, showgrid = true, title = "time" },
+            yaxis = new Yaxis { zeroline = true, showgrid = true, title = "data" },
+            showlegend = true,
+            hovermode = "closest"
+        }
+    );
+
+    display(chart);
+    
+    IEnumerable<Scattergl> getTrace(Sequence sequence, string name, int index)
+    {
+        var color = colors[index % colors.Count];
+
+        if(sequence.IsContinuous)
+        {
+            var points = sequence.Elements
+                .Where(e => e is Point)
+                .Select(e => (Point) e)
+                .Select(p => (x: (decimal) p.Time, y: (decimal) p.Value))
+                .ToList();
+
+            if(sequence.IsRightOpen)
+            {
+                var tail = sequence.Elements.Last() as Segment;
+                points.Add((x: (decimal) tail.EndTime, y: (decimal) tail.LeftLimitAtEndTime));
+            }
+
+            var trace = new Scattergl {
+                x = points.Select(p => p.x).ToArray(),
+                y = points.Select(p => p.y).ToArray(),
+                name = name,
+                fillcolor = color,
+                mode = "lines+markers",
+                line = new Line {
+                    color = color
+                },
+                marker = new Marker {
+                    symbol = "circle",
+                    color = color
+                }
+            };
+            yield return trace;
+        }
+        else
+        {
+            var segments = new List<((decimal x, decimal y) a, (decimal x, decimal y) b)>();
+            var points = new List<(decimal x, decimal y)>();
+            var discontinuities = new List<(decimal x, decimal y)>();
+            
+            var breakpoints = sequence.EnumerateBreakpoints();
+            foreach(var (left, center, right) in breakpoints)
+            {
+                points.Add((x: (decimal) center.Time, y: (decimal) center.Value));
+                if(left is not null && left.LeftLimitAtEndTime != center.Value)
+                {
+                    discontinuities.Add((x: (decimal) center.Time, y: (decimal) left.LeftLimitAtEndTime));
+                }
+                if(right is not null)
+                {
+                    segments.Add((
+                        a: (x: (decimal) right.StartTime, y: (decimal) right.RightLimitAtStartTime),
+                        b: (x: (decimal) right.EndTime, y: (decimal) right.LeftLimitAtEndTime)
+                    ));
+                    if(right.RightLimitAtStartTime != center.Value)
+                    {
+                        discontinuities.Add((x: (decimal) center.Time, y: (decimal) right.RightLimitAtStartTime));
+                    }
+                }
+            }
+            if(sequence.IsRightOpen)
+            {
+                var tail = sequence.Elements.Last() as Segment;
+                segments.Add((
+                    a: (x: (decimal) tail.StartTime, y: (decimal) tail.RightLimitAtStartTime),
+                    b: (x: (decimal) tail.EndTime, y: (decimal) tail.LeftLimitAtEndTime)
+                ));
+            }
+
+            var segmentsLegend = segments.Any();
+
+            bool isFirst = true;
+            foreach(var (a, b) in segments)
+            {
+                var trace = new Scattergl {
+                    x = new []{ a.x, b.x },
+                    y = new []{ a.y, b.y },
+                    name = name,
+                    legendgroup = name,
+                    fillcolor = color,
+                    mode = "lines",
+                    line = new Line {
+                        color = color
+                    },
+                    showlegend = segmentsLegend && isFirst
+                };
+                yield return trace;
+                isFirst = false; 
+            }
+            
+            var pointsTrace = new Scattergl {
+                x = points.Select(p => p.x).ToArray(),
+                y = points.Select(p => p.y).ToArray(),
+                name = name,
+                legendgroup = name,
+                fillcolor = color,
+                mode = "markers",
+                line = new Line {
+                    color = color
+                },
+                marker = new Marker {
+                    symbol = "circle",
+                    color = color
+                },
+                showlegend = !segmentsLegend
+            };
+            yield return pointsTrace;
+
+            var discontinuitiesTrace = new Scattergl {
+                x = discontinuities.Select(p => p.x).ToArray(),
+                y = discontinuities.Select(p => p.y).ToArray(),
+                name = name,
+                legendgroup = name,
+                fillcolor = color,
+                mode = "markers",
+                line = new Line {
+                    color = color
+                },
+                marker = new Marker {
+                    symbol = "circle-open",
+                    color = color,
+                    line = new Line {
+                        color = color
+                    }
+                },
+                showlegend = false,
+            };
+            yield return discontinuitiesTrace;
+        }
+    }
+}
+
+void plot(Sequence sequence, string name)
+{
+    //Console.WriteLine("plot(Sequence sequence, string name)");
+    plot(new []{sequence}, new []{name});
+}
+
+void plot(IEnumerable<Sequence> sequences)
+{
+    //Console.WriteLine("plot(IEnumerable<Sequence> sequences)");
+    var names = sequences.Select((_, i) => $"{(char)('a' + i)}");
+    plot(sequences, names);
+}
+
+void plot(Sequence sequence)
+{
+    //Console.WriteLine("plot(Sequence sequence)");
+    plot(new []{sequence}, new []{"a"});
+}
+
+#!markdown
+
+# CBS Line S2
+
+#!markdown
+
+### Initial Link Shaping at Talker T1 for arrival at S1 queue
+
+#!csharp
+
+var ac_f0_initial = new SigmaRhoArrivalCurve(sigma: 1271.74656m, rho: 5376000.0m); 
+var link_shaping_t1 = new SigmaRhoArrivalCurve(sigma: 672.0m, rho: 100000000.0m); 
+
+/* Apply link shaping for Talker 1 */
+var ac_f0_s1 = Curve.Minimum(ac_f0_initial, link_shaping_t1);
+plot(new Curve[]{ac_f0_initial, link_shaping_t1, ac_f0_s1}, new []{"AC f0", "Link shaping curve at Talker T1", "Shaped arrival curve of f0 at S1"}, 0.00002m);
+
+#!markdown
+
+### CBS and Link Shaping at S1 queue for arrival at S2 queue
+
+#!csharp
+
+var sc_s1_classB = new RateLatencyServiceCurve(rate: 50000000.0m, latency: 0.0001712m);
+var ac_f0_out_s1 = Curve.Deconvolution(ac_f0_s1, sc_s1_classB);
+plot(new Curve[]{ac_f0_s1, sc_s1_classB, ac_f0_out_s1}, new []{"AC f0 at S1", "SC class B at S1", "Output Flow Bound f0 at S1"}, 0.0003m);
+
+#!csharp
+
+var cbs_shaping_curve_s1 = new SigmaRhoArrivalCurve(sigma: 9568.0m, rho: 50000000.0m); 
+var f0_cbs_shaped_s1 = Curve.Minimum(ac_f0_out_s1, cbs_shaping_curve_s1);
+var link_shaping_s1 = new SigmaRhoArrivalCurve(sigma: 672.0m, rho: 100000000.0m); 
+var f0_cbs_and_link_shaped_s1 = Curve.Minimum(f0_cbs_shaped_s1, link_shaping_s1);
+
+plot(new Curve[]{f0_cbs_shaped_s1, f0_cbs_and_link_shaped_s1, ac_f0_out_s1}, new []{"f0 CBS shaped", "f0 CBS and link shaped", "Output Flow Bound f0 at S1"}, 0.0001m);

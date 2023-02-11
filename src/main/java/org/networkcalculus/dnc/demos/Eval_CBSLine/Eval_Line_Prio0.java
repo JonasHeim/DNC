@@ -65,11 +65,11 @@ public class Eval_Line_Prio0 {
 
         /****************** Definition of flows ***************/
 
-        ArrivalCurve ac_flow1 = Curve.getFactory().createTokenBucket(2.2528E7, 2181.61152);
-        ArrivalCurve ac_flow2 = Curve.getFactory().createTokenBucket(2.2528E7, 2181.61152);
-        ArrivalCurve ac_flow3 = Curve.getFactory().createTokenBucket(2.2528E7, 2181.61152);
-        ArrivalCurve ac_flow4 = Curve.getFactory().createTokenBucket(2.2528E7, 2181.61152);
-        ArrivalCurve ac_flow5 = Curve.getFactory().createTokenBucket(2.2528E7, 2181.61152);
+        ArrivalCurve ac_flow1 = Curve.getFactory().createTokenBucket(1.0752E7, 1199.4931199999999);
+        ArrivalCurve ac_flow2 = Curve.getFactory().createTokenBucket(1.0752E7, 1199.4931199999999);
+        ArrivalCurve ac_flow3 = Curve.getFactory().createTokenBucket(1.0752E7, 1199.4931199999999);
+        ArrivalCurve ac_flow4 = Curve.getFactory().createTokenBucket(1.0752E7, 1199.4931199999999);
+        ArrivalCurve ac_flow5 = Curve.getFactory().createTokenBucket(1.0752E7, 1199.4931199999999);
 
         /****************** Definition of servers ***************/
 

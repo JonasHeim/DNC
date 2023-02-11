@@ -15,47 +15,84 @@ import java.util.*;
 public class CBS_TotalFlowAnalysis {
 
     private static class CBS_ResultsTotalFlowAnalysis {
+        /**
+         * Maps the server to their local delays for the given flow
+         */
         private Map<CBS_Server, Num> serverLocalDelays;
 
+        /**
+         *  Summed up total delay over all local delays
+         */
         private Num totalDelay;
 
+        /**
+         * Current foi used for the analysis
+         */
         private CBS_Flow flow;
 
+        /**
+         * Constructor only resets analysis configuration
+         */
         public CBS_ResultsTotalFlowAnalysis() {
             this.reset();
         }
 
+        /**
+         * Add a new local delay for a given server to the total delay.
+         * @param server    Server
+         * @param delay     Local delay of the server
+         */
         public void addServerLocalDelay(CBS_Server server, Num delay) {
             this.serverLocalDelays.put(server, delay);
             this.totalDelay = Num.getUtils(Calculator.getInstance().getNumBackend()).add(this.totalDelay, delay);
         }
 
+        /**
+         * @return Total delay of the foi
+         */
         public Num getTotalDelay() {
             return this.totalDelay;
         }
 
+        /**
+         * @return Local delays at the queues that are traversed by the foi
+         */
         public Map<CBS_Server, Num> getServerLocalDelays() {
             return this.serverLocalDelays;
         }
 
+        /**
+         * Reset the analysis. Reset the total and all local delays as well as the foi reference
+         */
         public void reset() {
             this.totalDelay = Num.getFactory(Calculator.getInstance().getNumBackend()).createZero();
             this.serverLocalDelays = new LinkedHashMap<CBS_Server, Num>();
             this.flow = null;
         }
 
+        /**
+         * Set the foi for the analysis
+         * @param flow  foi
+         */
         public void setFlow(CBS_Flow flow) {
             this.flow = flow;
         }
 
+        /**
+         * @return foi
+         */
         public CBS_Flow getFlow() {
             return flow;
         }
     }
 
+    /**
+     * Configuration options for TFA arrival bounding.
+     * TODO: Only deault supported atm. PBOOAB was disabled due to an unresolved error.
+     */
     public enum TFA_CONFIG {
         DEFAULT_TFA,
-        AGGR_PBOOAB_TFA
+        AGGR_PBOOAB_TFA //DO NOT USE!
     };
 
     /**
@@ -66,10 +103,17 @@ public class CBS_TotalFlowAnalysis {
      */
     private TFA_CONFIG configuration;
 
+    /**
+     * @return Current TFA configuration
+     */
     public TFA_CONFIG getConfiguration() {
         return configuration;
     }
 
+    /**
+     * Set TFA configuration
+     * @param configuration configuration
+     */
     public void setConfiguration(TFA_CONFIG configuration) {
         this.configuration = configuration;
     }
@@ -84,6 +128,9 @@ public class CBS_TotalFlowAnalysis {
         LINK_AND_CBS_SHAPING
     }
 
+    /**
+     * Current shaping configuration
+     */
     private SHAPING_CONF shaping_config;
 
     /**
@@ -121,10 +168,11 @@ public class CBS_TotalFlowAnalysis {
     }
     
     /**
-     * Run the Total-Flow-Analyis + PBOO Arrival Bounding of the given flow.
+     * Run the Total-Flow-Analyis of the given flow.
+     * Only returns delay bound.
+     * TODO: PBOOOAB was removed due to an unresolved error! Only default TFA supported
      * @param flow  The flow to perform the analysis on
      */
-    //ToDo: Rework exception handling
     public void performAnalysis(CBS_Flow flow) throws Exception {
         this.results.reset();
         this.results.setFlow(flow);
@@ -149,6 +197,14 @@ public class CBS_TotalFlowAnalysis {
         }
     }
 
+    /**
+     * Derive the local NC bounds for a given flow at a server
+     * @param flow  foi
+     * @param source    server the bound will be calculated at
+     * @param out_link  output link at the server
+     * @return  Local NC delay bound
+     * @throws Exception Only SWITCH server supported,
+     */
     private Num deriveBoundsAtServer(CBS_Flow flow, CBS_Server source, CBS_Link out_link) throws Exception
     {
         if(CBS_Server.SRV_TYPE.SWITCH != source.getServerType())
@@ -186,6 +242,13 @@ public class CBS_TotalFlowAnalysis {
         return localDelay;
     }
 
+    /**
+     * Compute arrival bounds for flow at queue
+     * @param flow  foi
+     * @param queue queue to bound the arrivals for
+     * @return  Set of ACs
+     * @throws Exception IdleSlope of the queue must be large enough for bounded ACs
+     */
     private Set<ArrivalCurve> computeArrivalBounds(CBS_Flow flow, CBS_Queue queue) throws Exception {
         if(TFA_CONFIG.DEFAULT_TFA == this.configuration)
         {
@@ -200,7 +263,6 @@ public class CBS_TotalFlowAnalysis {
 
                 if(CBS_Server.SRV_TYPE.TALKER == prec_server.getServerType())
                 {
-                    //ToDo: We assume that a Talker has exactly one flow/arrival curve
                     /* Just take the initial AC of the flow at the Talker. */
                     alpha = flow.getArrivalCurve();
 
@@ -219,6 +281,12 @@ public class CBS_TotalFlowAnalysis {
                     {
                         ArrivalCurve arrivalBound = this.server_graph.calculateAcOfFlowAtQueue(flowCandidate, queue);
                         alpha = Curve.getUtils().add(alpha, arrivalBound);
+                    }
+
+                    /* Verify that idleSlope condition holds for the aggregate AC rate */
+                    if(queue.getIdleSlope() < alpha.getUltAffineRate().doubleValue())
+                    {
+                        throw new Exception("IdleSlope of queue is smaller than rate of aggregate AC.");
                     }
 
                     /* Apply CBS shaping if configured */
@@ -243,12 +311,14 @@ public class CBS_TotalFlowAnalysis {
         }
         else
         {
-            //ToDo: PBOOAB computation
+            //ToDo: Fix when PBOOAB computation is resolved
             throw new Exception("Only TFA_CONFIG.DEFAULT_TFA implemented for now!");
         }
-        //return null;
     }
 
+    /**
+     * @return String representation of the TFA
+     */
     public String toString() {
         StringBuffer cbs_tfa_str = new StringBuffer();
 

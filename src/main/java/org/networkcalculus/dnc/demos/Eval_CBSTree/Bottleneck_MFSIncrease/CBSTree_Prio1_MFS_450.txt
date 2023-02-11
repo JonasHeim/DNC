@@ -1,0 +1,87 @@
+E:\Programme\OpenJDK\jdk-16.0.2\bin\java.exe -javaagent:E:\Programme\JetBrains\IntelliJ_IDEA_CommEdition2022.2.2\lib\idea_rt.jar=63318:E:\Programme\JetBrains\IntelliJ_IDEA_CommEdition2022.2.2\bin -Dfile.encoding=UTF-8 -classpath E:\ForceXX\Documents\Studium\FAU_Informatik_Master\FS5\Masterarbeit\Network_Calculus_in_TSN\DNC\IntelliJ\target\classes;C:\Users\ForceXX\.m2\repository\org\apache\commons\commons-math3\3.6.1\commons-math3-3.6.1.jar;C:\Users\ForceXX\.m2\repository\org\networkcalculus\num\NetCal-NumBackend\1.1.1\NetCal-NumBackend-1.1.1.jar;C:\Users\ForceXX\.m2\repository\org\networkcalculus\model\NetCal-NetworkModel\1.0.0\NetCal-NetworkModel-1.0.0.jar;C:\Users\ForceXX\.m2\repository\org\eclipse\emf\org.eclipse.emf.ecore\2.28.0\org.eclipse.emf.ecore-2.28.0.jar;C:\Users\ForceXX\.m2\repository\org\eclipse\emf\org.eclipse.emf.common\2.26.0\org.eclipse.emf.common-2.26.0.jar;C:\Users\ForceXX\.m2\repository\org\eclipse\emf\org.eclipse.emf.ecore.xcore.lib\1.4.0\org.eclipse.emf.ecore.xcore.lib-1.4.0.jar;C:\Users\ForceXX\.m2\repository\org\eclipse\xtext\org.eclipse.xtext.xbase.lib\2.18.0\org.eclipse.xtext.xbase.lib-2.18.0.jar;C:\Users\ForceXX\.m2\repository\com\google\guava\guava\21.0\guava-21.0.jar;E:\ForceXX\Documents\Studium\FAU_Informatik_Master\FS5\Masterarbeit\Network_Calculus_in_TSN\DNC\IntelliJ\lib\RTCToolbox\rtc\rtc.jar;C:\Users\ForceXX\.m2\repository\org\junit\jupiter\junit-jupiter-params\5.7.2\junit-jupiter-params-5.7.2.jar;C:\Users\ForceXX\.m2\repository\org\apiguardian\apiguardian-api\1.1.0\apiguardian-api-1.1.0.jar;C:\Users\ForceXX\.m2\repository\org\junit\jupiter\junit-jupiter-api\5.7.2\junit-jupiter-api-5.7.2.jar;C:\Users\ForceXX\.m2\repository\org\opentest4j\opentest4j\1.2.0\opentest4j-1.2.0.jar;C:\Users\ForceXX\.m2\repository\org\junit\platform\junit-platform-commons\1.7.2\junit-platform-commons-1.7.2.jar org.networkcalculus.dnc.demos.Eval_CBSTree.Eval_Tree_Prio1
+Flow of interest : Flow(Flow 3, 3, AC{(0.0,0.0),0.0;!(0.0,1271.74656),5376000.0}, {Turn(S5_S2 --> S2_S1, 1, Server(S5.1 to S2.1, 1), Server(S2.1 to S1.1, 2)),Turn(S2_S1 --> S1_S3, 2, Server(S2.1 to S1.1, 2), Server(S1.1 to S3.1, 3)),Turn(S1_S3--> S1_S3_S6, 3, Server(S1.1 to S3.1, 3), Server(S3.1 to S6.1, 4)),Turn(S3--> S6_L4, 5, Server(S3.1 to S6.1, 4), Server(S6.1 to L4.1, 6))})
+
+--- Total Flow Analysis ---
+delay bound     : 0.0018208735514014596
+     per server : {Server(S6.1 to L4.1, 6)={3.9301931117354053E-4}, Server(S2.1 to S1.1, 2)={3.20379791976E-4}, Server(S3.1 to S6.1, 4)={4.7182422266471905E-4}, Server(S1.1 to S3.1, 3)={3.7555828758720005E-4}, Server(S5.1 to S2.1, 1)={2.60091938E-4}}
+alpha per server: {Server(S6.1 to L4.1, 6)={AC{(0.0,0.0),0.0;!(0.0,7860.5880469416215),5376000.0}}, Server(S2.1 to S1.1, 2)={AC{(0.0,0.0),0.0;!(0.0,17770.19879808),4.4928E7}}, Server(S3.1 to S6.1, 4)={AC{(0.0,0.0),0.0;!(0.0,11012.784506588763),1.0752E7}}, Server(S1.1 to S3.1, 3)={AC{(0.0,0.0),0.0;!(0.0,22184.478446976),4.4928E7}}, Server(S5.1 to S2.1, 1)={AC{(0.0,0.0),0.0;!(0.0,2543.49312),1.0752E7}}}
+
+--- Separated Flow Analysis ---
+delay bound     : 0.001458837768487444
+e2e SFA SCs     : [SC{(0.0,0.0),0.0;(0.001422107565160272,0.0),3.4624E7}]
+     per server : {Server(S6.1 to L4.1, 6)={SC{(0.0,0.0),0.0;!(1.9650461E-4,0.0),4.0E7}}, Server(S2.1 to S1.1, 2)={SC{(0.0,0.0),0.0;(2.934143844048E-4,0.0),4.0448E7}}, Server(S3.1 to S6.1, 4)={SC{(0.0,0.0),0.0;!(3.4645566922914363E-4,9.094947017729282E-13),3.4624E7}}, Server(S1.1 to S3.1, 3)={SC{(0.0,0.0),0.0;!(3.574346275263283E-4,0.0),4.0448E7}}, Server(S5.1 to S2.1, 1)={SC{(0.0,0.0),0.0;(2.28298274E-4,0.0),3.4624E7}}}
+
+--- PMOO Analysis ---
+delay bound     : 0.0015237249276820702
+e2e PMOO SCs    : [SC{(0.0,0.0),0.0;!(0.0014869947243548983,0.0),3.4624E7}]
+
+--- Tandem Matching Analysis ---
+delay bound     : 0.0015237249276820702
+e2e TMA SCs     : [SC{(0.0,0.0),0.0;!(0.001554235809826248,0.0),3.4624E7}, SC{(0.0,0.0),0.0;!(0.001651936536331478,0.0),3.4624E7}, SC{(0.0,0.0),0.0;!(0.0015542358098262481,0.0),3.4624E7}, SC{(0.0,0.0),0.0;!(0.002138817271365474,0.0),3.4624E7}, SC{(0.0,0.0),0.0;!(0.0016226390913642585,0.0),3.4624E7}, SC{(0.0,0.0),0.0;!(0.002125680456154057,0.0),3.4624E7}, SC{(0.0,0.0),0.0;!(0.0021136269425028904,0.0),3.4624E7}, SC{(0.0,0.0),0.0;!(0.0014869947243548983,0.0),3.4624E7}, SC{(0.0,0.0),0.0;!(0.0021004901272914734,0.0),3.4624E7}, SC{(0.0,0.0),0.0;!(0.0014869947243548985,0.0),3.4624E7}]
+
+
+Flow of interest : Flow(Flow 2, 2, AC{(0.0,0.0),0.0;!(0.0,1271.74656),5376000.0}, {Turn(S5_S2 --> S2_S1, 1, Server(S5.1 to S2.1, 1), Server(S2.1 to S1.1, 2)),Turn(S2_S1 --> S1_S3, 2, Server(S2.1 to S1.1, 2), Server(S1.1 to S3.1, 3)),Turn(S1_S3--> S1_S3_S6, 3, Server(S1.1 to S3.1, 3), Server(S3.1 to S6.1, 4)),Turn(S3--> S6_L3, 6, Server(S3.1 to S6.1, 4), Server(S6.1 to L3.1, 7))})
+
+--- Total Flow Analysis ---
+delay bound     : 0.0018208735514014596
+     per server : {Server(S6.1 to L4.1, 6)={3.9301931117354053E-4}, Server(S2.1 to S1.1, 2)={3.20379791976E-4}, Server(S3.1 to S6.1, 4)={4.7182422266471905E-4}, Server(S1.1 to S3.1, 3)={3.7555828758720005E-4}, Server(S5.1 to S2.1, 1)={2.60091938E-4}, Server(S6.1 to L3.1, 7)={3.9301931117354053E-4}}
+alpha per server: {Server(S6.1 to L4.1, 6)={AC{(0.0,0.0),0.0;!(0.0,7860.5880469416215),5376000.0}}, Server(S2.1 to S1.1, 2)={AC{(0.0,0.0),0.0;!(0.0,17770.19879808),4.4928E7}}, Server(S3.1 to S6.1, 4)={AC{(0.0,0.0),0.0;!(0.0,11012.784506588763),1.0752E7}}, Server(S1.1 to S3.1, 3)={AC{(0.0,0.0),0.0;!(0.0,22184.478446976),4.4928E7}}, Server(S5.1 to S2.1, 1)={AC{(0.0,0.0),0.0;!(0.0,2543.49312),1.0752E7}}, Server(S6.1 to L3.1, 7)={AC{(0.0,0.0),0.0;!(0.0,7860.5880469416215),5376000.0}}}
+
+--- Separated Flow Analysis ---
+delay bound     : 0.001458837768487444
+e2e SFA SCs     : [SC{(0.0,0.0),0.0;(0.001422107565160272,0.0),3.4624E7}]
+     per server : {Server(S2.1 to S1.1, 2)={SC{(0.0,0.0),0.0;(2.934143844048E-4,0.0),4.0448E7}}, Server(S3.1 to S6.1, 4)={SC{(0.0,0.0),0.0;!(3.4645566922914363E-4,9.094947017729282E-13),3.4624E7}}, Server(S1.1 to S3.1, 3)={SC{(0.0,0.0),0.0;(3.574346275263283E-4,0.0),4.0448E7}}, Server(S5.1 to S2.1, 1)={SC{(0.0,0.0),0.0;(2.28298274E-4,0.0),3.4624E7}}, Server(S6.1 to L3.1, 7)={SC{(0.0,0.0),0.0;!(1.9650461E-4,0.0),4.0E7}}}
+
+--- PMOO Analysis ---
+delay bound     : 0.0015237249276820702
+e2e PMOO SCs    : [SC{(0.0,0.0),0.0;!(0.0014869947243548983,0.0),3.4624E7}]
+
+--- Tandem Matching Analysis ---
+delay bound     : 0.0015237249276820702
+e2e TMA SCs     : [SC{(0.0,0.0),0.0;!(0.001554235809826248,0.0),3.4624E7}, SC{(0.0,0.0),0.0;!(0.001651936536331478,0.0),3.4624E7}, SC{(0.0,0.0),0.0;!(0.0015542358098262481,0.0),3.4624E7}, SC{(0.0,0.0),0.0;!(0.002138817271365474,0.0),3.4624E7}, SC{(0.0,0.0),0.0;!(0.0016226390913642585,0.0),3.4624E7}, SC{(0.0,0.0),0.0;!(0.002125680456154057,0.0),3.4624E7}, SC{(0.0,0.0),0.0;!(0.0021136269425028904,0.0),3.4624E7}, SC{(0.0,0.0),0.0;!(0.0014869947243548983,0.0),3.4624E7}, SC{(0.0,0.0),0.0;!(0.0021004901272914734,0.0),3.4624E7}, SC{(0.0,0.0),0.0;!(0.0014869947243548985,0.0),3.4624E7}]
+
+
+Flow of interest : Flow(Flow 0, 0, AC{(0.0,0.0),0.0;!(0.0,5126.4),2.88E7}, {Turn(S4_S2 --> S2_S1, 0, Server(S4.1 to S2.1, 0), Server(S2.1 to S1.1, 2)),Turn(S2_S1 --> S1_S3, 2, Server(S2.1 to S1.1, 2), Server(S1.1 to S3.1, 3)),Turn(S1_S3--> S1_S3_S7, 4, Server(S1.1 to S3.1, 3), Server(S3.1 to S7.1, 5)),Turn(S3--> S7_L1, 8, Server(S3.1 to S7.1, 5), Server(S7.1 to L1.1, 9))})
+
+--- Total Flow Analysis ---
+delay bound     : 0.002866084035685279
+     per server : {Server(S6.1 to L4.1, 6)={3.9301931117354053E-4}, Server(S7.1 to L1.1, 9)={9.918775147482511E-4}, Server(S2.1 to S1.1, 2)={3.20379791976E-4}, Server(S3.1 to S6.1, 4)={4.7182422266471905E-4}, Server(S4.1 to S2.1, 0)={3.5645827399999997E-4}, Server(S1.1 to S3.1, 3)={3.7555828758720005E-4}, Server(S5.1 to S2.1, 1)={2.60091938E-4}, Server(S6.1 to L3.1, 7)={3.9301931117354053E-4}, Server(S3.1 to S7.1, 5)={8.218101673738278E-4}}
+alpha per server: {Server(S6.1 to L4.1, 6)={AC{(0.0,0.0),0.0;!(0.0,7860.5880469416215),5376000.0}}, Server(S7.1 to L1.1, 9)={AC{(0.0,0.0),0.0;!(0.0,34740.70058993004),2.88E7}}, Server(S2.1 to S1.1, 2)={AC{(0.0,0.0),0.0;!(0.0,17770.19879808),4.4928E7}}, Server(S3.1 to S6.1, 4)={AC{(0.0,0.0),0.0;!(0.0,11012.784506588763),1.0752E7}}, Server(S4.1 to S2.1, 0)={AC{(0.0,0.0),0.0;!(0.0,6398.146559999999),3.4176E7}}, Server(S1.1 to S3.1, 3)={AC{(0.0,0.0),0.0;!(0.0,22184.478446976),4.4928E7}}, Server(S5.1 to S2.1, 1)={AC{(0.0,0.0),0.0;!(0.0,2543.49312),1.0752E7}}, Server(S6.1 to L3.1, 7)={AC{(0.0,0.0),0.0;!(0.0,7860.5880469416215),5376000.0}}, Server(S3.1 to S7.1, 5)={AC{(0.0,0.0),0.0;!(0.0,25012.222294953113),3.4176E7}}}
+
+--- Separated Flow Analysis ---
+delay bound     : 0,0012996934757619732
+e2e SFA SCs     : [SC{(0.0,0.0),0.0;(0.0011516343260392376,0.0),3.4624E7}]
+     per server : {Server(S7.1 to L1.1, 9)={SC{(0.0,0.0),0.0;!(1.2336E-4,0.0),4.0E7}}, Server(S4.1 to S2.1, 0)={SC{(0.0,0.0),0.0;(2.28298274E-4,0.0),3.4624E7}}, Server(S2.1 to S1.1, 2)={SC{(0.0,0.0),0.0;!(1.94170484376E-4,0.0),6.3872E7}}, Server(S1.1 to S3.1, 3)={SC{(0.0,0.0),0.0;!(2.43465653001024E-4,0.0),6.3872E7}}, Server(S3.1 to S7.1, 5)={SC{(0.0,0.0),0.0;!(3.623399146622135E-4,9.094947017729282E-13),3.4624E7}}}
+
+--- PMOO Analysis ---
+delay bound     : 0,0011846997705767096
+e2e PMOO SCs    : [SC{(0.0,0.0),0.0;!(0.001036640620853974,0.0),3.4624E7}]
+
+--- Tandem Matching Analysis ---
+delay bound     : 0.0011846997705767096
+e2e TMA SCs     : [SC{(0.0,0.0),0.0;!(0.0013088255660111754,0.0),3.4624E7}, SC{(0.0,0.0),0.0;!(0.0012627372543715044,0.0),3.4624E7}, SC{(0.0,0.0),0.0;!(0.0013088255660111757,0.0),3.4624E7}, SC{(0.0,0.0),0.0;!(0.0012627372543715042,0.0),3.4624E7}, SC{(0.0,0.0),0.0;!(0.001149570343862984,0.0),3.4624E7}, SC{(0.0,0.0),0.0;!(0.0012166850912898673,0.0),3.4624E7}, SC{(0.0,0.0),0.0;!(0.0011038817063253237,0.0),3.4624E7}, SC{(0.0,0.0),0.0;!(0.0011038817063253234,0.0),3.4624E7}, SC{(0.0,0.0),0.0;!(0.001036640620853974,0.0),3.4624E7}, SC{(0.0,0.0),0.0;!(0.0010825249078389655,0.0),3.4624E7}, SC{(0.0,0.0),0.0;!(0.0012627734029295385,0.0),3.4624E7}]
+
+
+Flow of interest : Flow(Flow 1, 1, AC{(0.0,0.0),0.0;!(0.0,1271.74656),5376000.0}, {Turn(S4_S2 --> S2_S1, 0, Server(S4.1 to S2.1, 0), Server(S2.1 to S1.1, 2)),Turn(S2_S1 --> S1_S3, 2, Server(S2.1 to S1.1, 2), Server(S1.1 to S3.1, 3)),Turn(S1_S3--> S1_S3_S7, 4, Server(S1.1 to S3.1, 3), Server(S3.1 to S7.1, 5)),Turn(S3--> S7_L2, 7, Server(S3.1 to S7.1, 5), Server(S7.1 to L2.1, 8))})
+
+--- Total Flow Analysis ---
+delay bound     : 0.002344622500303373
+     per server : {Server(S6.1 to L4.1, 6)={3.9301931117354053E-4}, Server(S7.1 to L2.1, 8)={4.7041597936634536E-4}, Server(S7.1 to L1.1, 9)={9.918775147482511E-4}, Server(S2.1 to S1.1, 2)={3.20379791976E-4}, Server(S3.1 to S6.1, 4)={4.7182422266471905E-4}, Server(S4.1 to S2.1, 0)={3.5645827399999997E-4}, Server(S1.1 to S3.1, 3)={3.7555828758720005E-4}, Server(S5.1 to S2.1, 1)={2.60091938E-4}, Server(S6.1 to L3.1, 7)={3.9301931117354053E-4}, Server(S3.1 to S7.1, 5)={8.218101673738278E-4}}
+alpha per server: {Server(S6.1 to L4.1, 6)={AC{(0.0,0.0),0.0;!(0.0,7860.5880469416215),5376000.0}}, Server(S7.1 to L2.1, 8)={AC{(0.0,0.0),0.0;!(0.0,10956.454774653814),5376000.0}}, Server(S7.1 to L1.1, 9)={AC{(0.0,0.0),0.0;!(0.0,34740.70058993004),2.88E7}}, Server(S2.1 to S1.1, 2)={AC{(0.0,0.0),0.0;!(0.0,17770.19879808),4.4928E7}}, Server(S3.1 to S6.1, 4)={AC{(0.0,0.0),0.0;!(0.0,11012.784506588763),1.0752E7}}, Server(S4.1 to S2.1, 0)={AC{(0.0,0.0),0.0;!(0.0,6398.146559999999),3.4176E7}}, Server(S1.1 to S3.1, 3)={AC{(0.0,0.0),0.0;!(0.0,22184.478446976),4.4928E7}}, Server(S5.1 to S2.1, 1)={AC{(0.0,0.0),0.0;!(0.0,2543.49312),1.0752E7}}, Server(S6.1 to L3.1, 7)={AC{(0.0,0.0),0.0;!(0.0,7860.5880469416215),5376000.0}}, Server(S3.1 to S7.1, 5)={AC{(0.0,0.0),0.0;!(0.0,25012.222294953113),3.4176E7}}}
+
+--- Separated Flow Analysis ---
+delay bound     : 0.002111524432071022
+e2e SFA SCs     : [SC{(0.0,0.0),0.0;(0.0019979756320710217,0.0),1.12E7}]
+     per server : {Server(S7.1 to L2.1, 8)={SC{(0.0,0.0),0.0;!(1.9650461E-4,0.0),4.0E7}}, Server(S4.1 to S2.1, 0)={SC{(0.0,0.0),0.0;(3.2466461000000006E-4,0.0),1.12E7}}, Server(S2.1 to S1.1, 2)={SC{(0.0,0.0),0.0;(3.02723569224E-4,0.0),4.0448E7}}, Server(S1.1 to S3.1, 3)={SC{(0.0,0.0),0.0;(3.699454566555648E-4,0.0),4.0448E7}}, Server(S3.1 to S7.1, 5)={SC{(0.0,0.0),0.0;(8.041373861914571E-4,0.0),1.12E7}}}
+
+--- PMOO Analysis ---
+delay bound     : 0.0034775607007542855
+e2e PMOO SCs    : [SC{(0.0,0.0),0.0;!(0.003364011900754285,0.0),1.12E7;(0.0033640119007542855,0.0),1.12E7}]
+
+--- Tandem Matching Analysis ---
+delay bound     : 0.0034775607007542855
+e2e TMA SCs     : [SC{(0.0,0.0),0.0;!(0.0050257774077363355,0.0),1.12E7}, SC{(0.0,0.0),0.0;!(0.004327023755039999,0.0),1.12E7;!(0.00432702375504,0.0),1.12E7}, SC{(0.0,0.0),0.0;!(0.003364011900754285,0.0),1.12E7;(0.0033640119007542855,0.0),1.12E7}, SC{(0.0,0.0),0.0;!(0.005310639401557692,0.0),1.12E7}, SC{(0.0,0.0),0.0;!(0.005557159446164505,0.0),1.12E7}, SC{(0.0,0.0),0.0;!(0.00432702375504,0.0),1.12E7}, SC{(0.0,0.0),0.0;!(0.003364011900754285,0.0),1.12E7;!(0.0033640119007542855,0.0),1.12E7}, SC{(0.0,0.0),0.0;!(0.005083683537934112,0.0),1.12E7}, SC{(0.0,0.0),0.0;!(0.004547926371809121,0.0),1.12E7}, SC{(0.0,0.0),0.0;!(0.005272297452343149,0.0),1.12E7;!(0.0052722974523431495,0.0),1.12E7}]
+
+
+
+Process finished with exit code 0

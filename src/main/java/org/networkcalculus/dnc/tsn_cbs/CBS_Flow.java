@@ -10,6 +10,7 @@ import java.util.LinkedList;
  */
 public class CBS_Flow {
 
+    /** List of queues the flow traverses within the network */
     private LinkedList<CBS_Link> path;
 
     /**
@@ -79,7 +80,7 @@ public class CBS_Flow {
      * @param cmi           TSN Class Measurement Interval [s]
      * @param mfs           TSN Max Frame Size [Byte]
      *                      Only lenght of the payload. No support of jumbo frames.
-     *                      Min. : 46 Byte
+     *                      Min. : 42 Byte
      *                      Max. : 1500 Byte
      *                      Preamble (7 Byte), start frame delim. (1 Byte),
      *                      Src. MAC (6 Byte), Dst. MAC (6 Byte),

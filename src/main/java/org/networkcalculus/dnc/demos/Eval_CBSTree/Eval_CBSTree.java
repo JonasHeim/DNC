@@ -53,8 +53,13 @@ public class Eval_CBSTree {
          ******************************************************/
 
         LinkedHashMap <Integer, Double> idleSlopeMapping = new LinkedHashMap <Integer, Double>();
-        idleSlopeMapping.put(0, 50.0e6);
-        idleSlopeMapping.put(1, 25.0e6);
+        idleSlopeMapping.put(0, 35.0e6);
+        idleSlopeMapping.put(1, 40.0e6);
+
+        LinkedHashMap <Integer, Double> bottleneckIdleSlopeMapping = new LinkedHashMap <Integer, Double>();
+        bottleneckIdleSlopeMapping.put(0, 70.0e6);
+        bottleneckIdleSlopeMapping.put(1, 80.0e6);
+
 
         /* First step always */
         CBS_ServerGraph sg = new CBS_ServerGraph("CBS shaped line network");
@@ -62,21 +67,21 @@ public class Eval_CBSTree {
         /****************** Definition of flows ***************/
 
         /* Priority 1 */
-        CBS_Flow flow0 = new CBS_Flow("flow0", 20.0e-3, 12000, 2, 1,
+        CBS_Flow flow0 = new CBS_Flow("flow0", 2.5e-4, 508*8, 2, 1,
                 CBS_Flow.Periodicity.PERIODIC);
-        CBS_Flow flow1 = new CBS_Flow("flow1", 20.0e-3, 12000, 2, 1,
+        CBS_Flow flow1 = new CBS_Flow("flow1", 2.5e-4, 42*8, 2, 1,
                 CBS_Flow.Periodicity.PERIODIC);
-        CBS_Flow flow2 = new CBS_Flow("flow2", 20.0e-3, 12000, 2, 1,
+        CBS_Flow flow2 = new CBS_Flow("flow2", 2.5e-4, 42*8, 2, 1,
                 CBS_Flow.Periodicity.PERIODIC);
-        CBS_Flow flow3 = new CBS_Flow("flow3", 20.0e-3, 12000, 2, 1,
+        CBS_Flow flow3 = new CBS_Flow("flow3", 2.5e-4, 42*8, 2, 1,
                 CBS_Flow.Periodicity.PERIODIC);
 
         /* Priority 0 */
-        CBS_Flow flow4 = new CBS_Flow("flow4", 20.0e-3, 12000, 2, 0,
+        CBS_Flow flow4 = new CBS_Flow("flow4", 1.25e-4, 42*8, 2, 0,
                 CBS_Flow.Periodicity.PERIODIC);
-        CBS_Flow flow5 = new CBS_Flow("flow5", 20.0e-3, 12000, 2, 0,
+        CBS_Flow flow5 = new CBS_Flow("flow5", 1.25e-4, 42*8, 2, 0,
                 CBS_Flow.Periodicity.PERIODIC);
-        CBS_Flow flow6 = new CBS_Flow("flow6", 20.0e-3, 12000, 2, 0,
+        CBS_Flow flow6 = new CBS_Flow("flow6", 1.25e-4, 42*8, 2, 0,
                 CBS_Flow.Periodicity.PERIODIC);
 
         CBS_Flow flows[] = { flow0, flow1, flow2, flow3, flow4, flow5, flow6 };
@@ -95,8 +100,8 @@ public class Eval_CBSTree {
         CBS_Server CbsListener4 = sg.addServer("Listener4", CBS_Server.SRV_TYPE.LISTENER, idleSlopeMapping);
 
         /* Switches */
-        CBS_Server CbsRlServer1 = sg.addServer("s1", CBS_Server.SRV_TYPE.SWITCH, idleSlopeMapping);
-        CBS_Server CbsRlServer2 = sg.addServer("s2", CBS_Server.SRV_TYPE.SWITCH, idleSlopeMapping);
+        CBS_Server CbsRlServer1 = sg.addServer("s1", CBS_Server.SRV_TYPE.SWITCH, bottleneckIdleSlopeMapping);
+        CBS_Server CbsRlServer2 = sg.addServer("s2", CBS_Server.SRV_TYPE.SWITCH, bottleneckIdleSlopeMapping);
         CBS_Server CbsRlServer3 = sg.addServer("s3", CBS_Server.SRV_TYPE.SWITCH, idleSlopeMapping);
         CBS_Server CbsRlServer4 = sg.addServer("s4", CBS_Server.SRV_TYPE.SWITCH, idleSlopeMapping);
         CBS_Server CbsRlServer5 = sg.addServer("s5", CBS_Server.SRV_TYPE.SWITCH, idleSlopeMapping);
@@ -114,8 +119,8 @@ public class Eval_CBSTree {
         /* Links: Server -> Server */
         CBS_Link t_4_2 = sg.addLink("s4 --> s2", CbsRlServer4, CbsRlServer2, 100.0e6);
         CBS_Link t_5_2 = sg.addLink("s5 --> s2", CbsRlServer5, CbsRlServer2, 100.0e6);
-        CBS_Link t_2_1 = sg.addLink("s2 --> s1", CbsRlServer2, CbsRlServer1, 100.0e6);
-        CBS_Link t_1_3 = sg.addLink("s1 --> s3", CbsRlServer1, CbsRlServer3, 100.0e6);
+        CBS_Link t_2_1 = sg.addLink("s2 --> s1", CbsRlServer2, CbsRlServer1, 200.0e6);
+        CBS_Link t_1_3 = sg.addLink("s1 --> s3", CbsRlServer1, CbsRlServer3, 200.0e6);
         CBS_Link t_3_6 = sg.addLink("s3 --> s6", CbsRlServer3, CbsRlServer6, 100.0e6);
         CBS_Link t_3_7 = sg.addLink("s3 --> s7", CbsRlServer3, CbsRlServer7, 100.0e6);
 
@@ -178,7 +183,7 @@ public class Eval_CBSTree {
         /****************** Calculate server graph ***************/
         sg.computeCBSQueues();
 
-        /******************************************************
+        /****************************************** ************
          ******************* Apply TFA ************************
          ******************************************************/
         CBS_TotalFlowAnalysis tfa = new CBS_TotalFlowAnalysis(sg, CBS_TotalFlowAnalysis.TFA_CONFIG.DEFAULT_TFA, CBS_TotalFlowAnalysis.SHAPING_CONF.NO_SHAPING);

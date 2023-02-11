@@ -40,6 +40,10 @@ public class CBS_ServerGraph {
      * All registered CBS flows
      */
     private final Set<CBS_Flow> flows;
+
+    /**
+     * All used priorities of flows within the server graph
+     */
     private Set<Integer> priorities;
 
     /**
@@ -245,13 +249,17 @@ public class CBS_ServerGraph {
     }
 
     /**
-     * Determine all crossflows for given flow
+     * NOT IMPLEMENTED!
+     * Determine all crossflows for given flow.
      * @param flow      Given flow of interest to find cross flows for
      * @param server    Server to start from
      * @return          Set of all cross flows. Empty set if there are none
      * @throws Exception    Parameter error.
      */
     public Set<CBS_Flow> getCrossFlowsAtServer(CBS_Flow flow, CBS_Server server) throws Exception {
+        //TODO: needs to be revisited after PBOOAB binding problem is fixed. For now throw exception when used
+        throw new Exception("Not implemented!");
+
         Set<CBS_Flow> setCrossFlows = new HashSet<CBS_Flow>();
 
         if(!this.flows.contains(flow)) {
@@ -311,9 +319,7 @@ public class CBS_ServerGraph {
                     }
                 }
 
-                /* If either one of the paths has at least one successor they are CrossFlows
-
-                 */
+                /* If either one of the paths has at least one successor they are CrossFlows */
 
             }
         }

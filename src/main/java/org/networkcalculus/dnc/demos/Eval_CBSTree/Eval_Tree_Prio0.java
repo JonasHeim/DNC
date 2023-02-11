@@ -64,24 +64,24 @@ public class Eval_Tree_Prio0 {
         ServerGraph sg = new ServerGraph();
 
         /****************** Definition of flows ***************/
-        ArrivalCurve ac_flow4 = Curve.getFactory().createTokenBucket(1233600.0, 24367.646208);
-        ArrivalCurve ac_flow5 = Curve.getFactory().createTokenBucket(1233600.0, 24367.646208);
-        ArrivalCurve ac_flow6 = Curve.getFactory().createTokenBucket(1233600.0, 24367.646208);
+        ArrivalCurve ac_flow4 = Curve.getFactory().createTokenBucket(1.0752E7, 1199.4931199999999);
+        ArrivalCurve ac_flow5 = Curve.getFactory().createTokenBucket(1.0752E7, 1199.4931199999999);
+        ArrivalCurve ac_flow6 = Curve.getFactory().createTokenBucket(1.0752E7, 1199.4931199999999);
 
         /****************** Definition of servers ***************/
 
         int numServers = 9;
         Server[] servers = new Server[numServers];
 
-        servers[0] = sg.addServer("S4.0 to S2.0", Curve.getFactory().createRateLatency(5.0E6, 1.2E-4), AnalysisConfig.Multiplexing.FIFO);
-        servers[1] = sg.addServer("S5.0 to S2.0", Curve.getFactory().createRateLatency(5.0E6, 1.2E-4), AnalysisConfig.Multiplexing.FIFO);
-        servers[2] = sg.addServer("S2.0 to S1.0", Curve.getFactory().createRateLatency(5.0E6, 1.2E-4), AnalysisConfig.Multiplexing.FIFO);
-        servers[3] = sg.addServer("S1.0 to S3.0", Curve.getFactory().createRateLatency(5.0E6, 1.2E-4), AnalysisConfig.Multiplexing.FIFO);
-        servers[4] = sg.addServer("S3.0 to S6.0", Curve.getFactory().createRateLatency(5.0E6, 1.2E-4), AnalysisConfig.Multiplexing.FIFO);
-        servers[5] = sg.addServer("S3.0 to S7.0", Curve.getFactory().createRateLatency(5.0E6, 1.2E-4), AnalysisConfig.Multiplexing.FIFO);
-        servers[6] = sg.addServer("S6.0 to L4.0", Curve.getFactory().createRateLatency(5.0E6, 1.2E-4), AnalysisConfig.Multiplexing.FIFO);
-        servers[7] = sg.addServer("S6.0 to L3.0", Curve.getFactory().createRateLatency(5.0E6, 1.2E-4), AnalysisConfig.Multiplexing.FIFO);
-        servers[8] = sg.addServer("S7.0 to L2.0", Curve.getFactory().createRateLatency(5.0E6, 1.2E-4), AnalysisConfig.Multiplexing.FIFO);
+        servers[0] = sg.addServer("S4.0 to S2.0", Curve.getFactory().createRateLatency(3.5E7, 1.2336E-4), AnalysisConfig.Multiplexing.FIFO);
+        servers[1] = sg.addServer("S5.0 to S2.0", Curve.getFactory().createRateLatency(3.5E7, 1.2336E-4), AnalysisConfig.Multiplexing.FIFO);
+        servers[2] = sg.addServer("S2.0 to S1.0", Curve.getFactory().createRateLatency(7.0E7, 6.168E-5), AnalysisConfig.Multiplexing.FIFO);
+        servers[3] = sg.addServer("S1.0 to S3.0", Curve.getFactory().createRateLatency(7.0E7, 6.168E-5), AnalysisConfig.Multiplexing.FIFO);
+        servers[4] = sg.addServer("S3.0 to S6.0", Curve.getFactory().createRateLatency(3.5E7, 1.2336E-4), AnalysisConfig.Multiplexing.FIFO);
+        servers[5] = sg.addServer("S3.0 to S7.0", Curve.getFactory().createRateLatency(3.5E7, 1.2336E-4), AnalysisConfig.Multiplexing.FIFO);
+        servers[6] = sg.addServer("S6.0 to L4.0", Curve.getFactory().createRateLatency(3.5E7, 1.2336E-4), AnalysisConfig.Multiplexing.FIFO);
+        servers[7] = sg.addServer("S6.0 to L3.0", Curve.getFactory().createRateLatency(3.5E7, 1.2336E-4), AnalysisConfig.Multiplexing.FIFO);
+        servers[8] = sg.addServer("S7.0 to L2.0", Curve.getFactory().createRateLatency(3.5E7, 1.2336E-4), AnalysisConfig.Multiplexing.FIFO);
 
         /****************** Definition of links ***************/
 

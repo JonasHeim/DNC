@@ -56,6 +56,9 @@ public class CBS_Server {
      */
     private final Map<Integer, Map<CBS_Link, CBS_Queue>> mapping_priorities_to_queues;
 
+    /**
+     * Mapping of priorities to their idleSlope in bit/s */
+     */
     private final Map<Integer, Double> idleSlopeMapping;
 
     /**

@@ -1,0 +1,992 @@
+E:\Programme\OpenJDK\jdk-16.0.2\bin\java.exe -javaagent:E:\Programme\JetBrains\IntelliJ_IDEA_CommEdition2022.2.2\lib\idea_rt.jar=63232:E:\Programme\JetBrains\IntelliJ_IDEA_CommEdition2022.2.2\bin -Dfile.encoding=UTF-8 -classpath E:\ForceXX\Documents\Studium\FAU_Informatik_Master\FS5\Masterarbeit\Network_Calculus_in_TSN\DNC\IntelliJ\target\classes;C:\Users\ForceXX\.m2\repository\org\apache\commons\commons-math3\3.6.1\commons-math3-3.6.1.jar;C:\Users\ForceXX\.m2\repository\org\networkcalculus\num\NetCal-NumBackend\1.1.1\NetCal-NumBackend-1.1.1.jar;C:\Users\ForceXX\.m2\repository\org\networkcalculus\model\NetCal-NetworkModel\1.0.0\NetCal-NetworkModel-1.0.0.jar;C:\Users\ForceXX\.m2\repository\org\eclipse\emf\org.eclipse.emf.ecore\2.28.0\org.eclipse.emf.ecore-2.28.0.jar;C:\Users\ForceXX\.m2\repository\org\eclipse\emf\org.eclipse.emf.common\2.26.0\org.eclipse.emf.common-2.26.0.jar;C:\Users\ForceXX\.m2\repository\org\eclipse\emf\org.eclipse.emf.ecore.xcore.lib\1.4.0\org.eclipse.emf.ecore.xcore.lib-1.4.0.jar;C:\Users\ForceXX\.m2\repository\org\eclipse\xtext\org.eclipse.xtext.xbase.lib\2.18.0\org.eclipse.xtext.xbase.lib-2.18.0.jar;C:\Users\ForceXX\.m2\repository\com\google\guava\guava\21.0\guava-21.0.jar;E:\ForceXX\Documents\Studium\FAU_Informatik_Master\FS5\Masterarbeit\Network_Calculus_in_TSN\DNC\IntelliJ\lib\RTCToolbox\rtc\rtc.jar;C:\Users\ForceXX\.m2\repository\org\junit\jupiter\junit-jupiter-params\5.7.2\junit-jupiter-params-5.7.2.jar;C:\Users\ForceXX\.m2\repository\org\apiguardian\apiguardian-api\1.1.0\apiguardian-api-1.1.0.jar;C:\Users\ForceXX\.m2\repository\org\junit\jupiter\junit-jupiter-api\5.7.2\junit-jupiter-api-5.7.2.jar;C:\Users\ForceXX\.m2\repository\org\opentest4j\opentest4j\1.2.0\opentest4j-1.2.0.jar;C:\Users\ForceXX\.m2\repository\org\junit\platform\junit-platform-commons\1.7.2\junit-platform-commons-1.7.2.jar org.networkcalculus.dnc.demos.Eval_CBSTree.Eval_CBSTree
+SG addFlow @ link CBS Link "Talker2 --> s4" connecting Talker2 to s4 with a capacity of 1.0E8 Bit/s, max. Packet size 672.0 with dst. server CBS Rate-Latency server "s4
+
+
+AC of Flow flow4 : AC{(0.0,0.0),0.0;!(0.0,1199.4931199999999),1.0752E7}
+SG initial AC AC{(0.0,0.0),0.0;!(0.0,1199.4931199999999),1.0752E7}
+SG addFlow @ link CBS Link "s4 --> s2" connecting s4 to s2 with a capacity of 1.0E8 Bit/s, max. Packet size 2000.0 with dst. server CBS Rate-Latency server "s2
+
+CBS_Server.addFlow - Creating the first queue for priority 0 at server s4 for out link s4 --> s2
+Output flow bound AC for flow flow4 at server s4 : AC{(0.0,0.0),0.0;!(0.0,2525.85984),1.0752E7}
+SG addFlow @ link CBS Link "s2 --> s1" connecting s2 to s1 with a capacity of 2.0E8 Bit/s, max. Packet size 2000.0 with dst. server CBS Rate-Latency server "s1
+
+CBS_Server.addFlow - Creating the first queue for priority 0 at server s2 for out link s2 --> s1
+Output flow bound AC for flow flow4 at server s2 : AC{(0.0,0.0),0.0;!(0.0,3189.0432),1.0752E7}
+SG addFlow @ link CBS Link "s1 --> s3" connecting s1 to s3 with a capacity of 2.0E8 Bit/s, max. Packet size 2000.0 with dst. server CBS Rate-Latency server "s3
+
+CBS_Server.addFlow - Creating the first queue for priority 0 at server s1 for out link s1 --> s3
+Output flow bound AC for flow flow4 at server s1 : AC{(0.0,0.0),0.0;!(0.0,3852.22656),1.0752E7}
+SG addFlow @ link CBS Link "s3 --> s7" connecting s3 to s7 with a capacity of 1.0E8 Bit/s, max. Packet size 2000.0 with dst. server CBS Rate-Latency server "s7
+
+CBS_Server.addFlow - Creating the first queue for priority 0 at server s3 for out link s3 --> s7
+Output flow bound AC for flow flow4 at server s3 : AC{(0.0,0.0),0.0;!(0.0,5178.59328),1.0752E7}
+SG addFlow @ link CBS Link "s7 --> Listener2" connecting s7 to Listener2 with a capacity of 1.0E8 Bit/s, max. Packet size 672.0 with dst. server CBS Rate-Latency server "Listener2
+
+CBS_Server.addFlow - Creating the first queue for priority 0 at server s7 for out link s7 --> Listener2
+Output flow bound AC for flow flow4 at server s7 : AC{(0.0,0.0),0.0;!(0.0,6504.96),1.0752E7}
+SG addFlow @ link CBS Link "Talker3 --> s5" connecting Talker3 to s5 with a capacity of 1.0E8 Bit/s, max. Packet size 672.0 with dst. server CBS Rate-Latency server "s5
+
+
+AC of Flow flow5 : AC{(0.0,0.0),0.0;!(0.0,1199.4931199999999),1.0752E7}
+SG initial AC AC{(0.0,0.0),0.0;!(0.0,1199.4931199999999),1.0752E7}
+SG addFlow @ link CBS Link "s5 --> s2" connecting s5 to s2 with a capacity of 1.0E8 Bit/s, max. Packet size 672.0 with dst. server CBS Rate-Latency server "s2
+
+	CBS queues for priority 0
+		Queue:
+			OutLinkCBS Link "s2 --> s1" connecting s2 to s1 with a capacity of 2.0E8 Bit/s, max. Packet size 2000.0
+			InLinkCBS Link "s4 --> s2" connecting s4 to s2 with a capacity of 1.0E8 Bit/s, max. Packet size 2000.0
+			max. PacketSize 672.0 Bit
+			idSlp 7.0E7 Bit/s sdSlp -1.3E8 Bit/s
+			minCredit -436.8 Bit maxCredit 4317.6 Bit
+			ServiceCurve SC{(0.0,0.0),0.0;!(6.168E-5,0.0),7.0E7}
+			CBS-ShapingCurve AC{(0.0,0.0),0.0;!(0.0,5426.400000000001),7.0E7}
+			Link ShapingCurve AC{(0.0,0.0),0.0;!(0.0,2000.0),2.0E8}
+
+CBS_Server.addFlow - Creating the first queue for priority 0 at server s5 for out link s5 --> s2
+Output flow bound AC for flow flow5 at server s5 : AC{(0.0,0.0),0.0;!(0.0,2525.85984),1.0752E7}
+SG addFlow @ link CBS Link "s2 --> s1" connecting s2 to s1 with a capacity of 2.0E8 Bit/s, max. Packet size 2000.0 with dst. server CBS Rate-Latency server "s1
+
+	CBS queues for priority 0
+		Queue:
+			OutLinkCBS Link "s1 --> s3" connecting s1 to s3 with a capacity of 2.0E8 Bit/s, max. Packet size 2000.0
+			InLinkCBS Link "s2 --> s1" connecting s2 to s1 with a capacity of 2.0E8 Bit/s, max. Packet size 2000.0
+			max. PacketSize 672.0 Bit
+			idSlp 7.0E7 Bit/s sdSlp -1.3E8 Bit/s
+			minCredit -436.8 Bit maxCredit 4317.6 Bit
+			ServiceCurve SC{(0.0,0.0),0.0;!(6.168E-5,0.0),7.0E7}
+			CBS-ShapingCurve AC{(0.0,0.0),0.0;!(0.0,5426.400000000001),7.0E7}
+			Link ShapingCurve AC{(0.0,0.0),0.0;!(0.0,2000.0),2.0E8}
+
+CBS_Server.addFlow - Update queue for priority 0 at server s2
+Output flow bound AC for flow flow5 at server s2 : AC{(0.0,0.0),0.0;!(0.0,3189.0432),1.0752E7}
+SG addFlow @ link CBS Link "s1 --> s3" connecting s1 to s3 with a capacity of 2.0E8 Bit/s, max. Packet size 2000.0 with dst. server CBS Rate-Latency server "s3
+
+	CBS queues for priority 0
+		Queue:
+			OutLinkCBS Link "s3 --> s7" connecting s3 to s7 with a capacity of 1.0E8 Bit/s, max. Packet size 2000.0
+			InLinkCBS Link "s1 --> s3" connecting s1 to s3 with a capacity of 2.0E8 Bit/s, max. Packet size 2000.0
+			max. PacketSize 672.0 Bit
+			idSlp 3.5E7 Bit/s sdSlp -6.5E7 Bit/s
+			minCredit -436.8 Bit maxCredit 4317.6 Bit
+			ServiceCurve SC{(0.0,0.0),0.0;!(1.2336E-4,0.0),3.5E7}
+			CBS-ShapingCurve AC{(0.0,0.0),0.0;!(0.0,5426.400000000001),3.5E7}
+			Link ShapingCurve AC{(0.0,0.0),0.0;!(0.0,2000.0),1.0E8}
+
+CBS_Server.addFlow - Update queue for priority 0 at server s1
+Output flow bound AC for flow flow5 at server s1 : AC{(0.0,0.0),0.0;!(0.0,3852.22656),1.0752E7}
+SG addFlow @ link CBS Link "s3 --> s6" connecting s3 to s6 with a capacity of 1.0E8 Bit/s, max. Packet size 672.0 with dst. server CBS Rate-Latency server "s6
+
+CBS_Server.addFlow - Creating new queue for priority 0 at server s3
+Output flow bound AC for flow flow5 at server s3 : AC{(0.0,0.0),0.0;!(0.0,5178.59328),1.0752E7}
+SG addFlow @ link CBS Link "s6 --> Listener3" connecting s6 to Listener3 with a capacity of 1.0E8 Bit/s, max. Packet size 672.0 with dst. server CBS Rate-Latency server "Listener3
+
+CBS_Server.addFlow - Creating the first queue for priority 0 at server s6 for out link s6 --> Listener3
+Output flow bound AC for flow flow5 at server s6 : AC{(0.0,0.0),0.0;!(0.0,6504.96),1.0752E7}
+SG addFlow @ link CBS Link "Talker4 --> s5" connecting Talker4 to s5 with a capacity of 1.0E8 Bit/s, max. Packet size 672.0 with dst. server CBS Rate-Latency server "s5
+
+	CBS queues for priority 0
+		Queue:
+			OutLinkCBS Link "s5 --> s2" connecting s5 to s2 with a capacity of 1.0E8 Bit/s, max. Packet size 672.0
+			InLinkCBS Link "Talker3 --> s5" connecting Talker3 to s5 with a capacity of 1.0E8 Bit/s, max. Packet size 672.0
+			max. PacketSize 672.0 Bit
+			idSlp 3.5E7 Bit/s sdSlp -6.5E7 Bit/s
+			minCredit -436.8 Bit maxCredit 4317.6 Bit
+			ServiceCurve SC{(0.0,0.0),0.0;!(1.2336E-4,0.0),3.5E7}
+			CBS-ShapingCurve AC{(0.0,0.0),0.0;!(0.0,5426.400000000001),3.5E7}
+			Link ShapingCurve AC{(0.0,0.0),0.0;!(0.0,672.0),1.0E8}
+
+
+AC of Flow flow6 : AC{(0.0,0.0),0.0;!(0.0,1199.4931199999999),1.0752E7}
+SG initial AC AC{(0.0,0.0),0.0;!(0.0,1199.4931199999999),1.0752E7}
+SG addFlow @ link CBS Link "s5 --> s2" connecting s5 to s2 with a capacity of 1.0E8 Bit/s, max. Packet size 672.0 with dst. server CBS Rate-Latency server "s2
+
+	CBS queues for priority 0
+		Queue:
+			OutLinkCBS Link "s2 --> s1" connecting s2 to s1 with a capacity of 2.0E8 Bit/s, max. Packet size 2000.0
+			InLinkCBS Link "s4 --> s2" connecting s4 to s2 with a capacity of 1.0E8 Bit/s, max. Packet size 2000.0
+			max. PacketSize 672.0 Bit
+			idSlp 7.0E7 Bit/s sdSlp -1.3E8 Bit/s
+			minCredit -436.8 Bit maxCredit 4317.6 Bit
+			ServiceCurve SC{(0.0,0.0),0.0;!(6.168E-5,0.0),7.0E7}
+			CBS-ShapingCurve AC{(0.0,0.0),0.0;!(0.0,5426.400000000001),7.0E7}
+			Link ShapingCurve AC{(0.0,0.0),0.0;!(0.0,2000.0),2.0E8}
+
+CBS_Server.addFlow - Update queue for priority 0 at server s5
+Output flow bound AC for flow flow6 at server s5 : AC{(0.0,0.0),0.0;!(0.0,2525.85984),1.0752E7}
+SG addFlow @ link CBS Link "s2 --> s1" connecting s2 to s1 with a capacity of 2.0E8 Bit/s, max. Packet size 2000.0 with dst. server CBS Rate-Latency server "s1
+
+	CBS queues for priority 0
+		Queue:
+			OutLinkCBS Link "s1 --> s3" connecting s1 to s3 with a capacity of 2.0E8 Bit/s, max. Packet size 2000.0
+			InLinkCBS Link "s2 --> s1" connecting s2 to s1 with a capacity of 2.0E8 Bit/s, max. Packet size 2000.0
+			max. PacketSize 672.0 Bit
+			idSlp 7.0E7 Bit/s sdSlp -1.3E8 Bit/s
+			minCredit -436.8 Bit maxCredit 4317.6 Bit
+			ServiceCurve SC{(0.0,0.0),0.0;!(6.168E-5,0.0),7.0E7}
+			CBS-ShapingCurve AC{(0.0,0.0),0.0;!(0.0,5426.400000000001),7.0E7}
+			Link ShapingCurve AC{(0.0,0.0),0.0;!(0.0,2000.0),2.0E8}
+
+CBS_Server.addFlow - Update queue for priority 0 at server s2
+Output flow bound AC for flow flow6 at server s2 : AC{(0.0,0.0),0.0;!(0.0,3189.0432),1.0752E7}
+SG addFlow @ link CBS Link "s1 --> s3" connecting s1 to s3 with a capacity of 2.0E8 Bit/s, max. Packet size 2000.0 with dst. server CBS Rate-Latency server "s3
+
+	CBS queues for priority 0
+		Queue:
+			OutLinkCBS Link "s3 --> s7" connecting s3 to s7 with a capacity of 1.0E8 Bit/s, max. Packet size 2000.0
+			InLinkCBS Link "s1 --> s3" connecting s1 to s3 with a capacity of 2.0E8 Bit/s, max. Packet size 2000.0
+			max. PacketSize 672.0 Bit
+			idSlp 3.5E7 Bit/s sdSlp -6.5E7 Bit/s
+			minCredit -436.8 Bit maxCredit 4317.6 Bit
+			ServiceCurve SC{(0.0,0.0),0.0;!(1.2336E-4,0.0),3.5E7}
+			CBS-ShapingCurve AC{(0.0,0.0),0.0;!(0.0,5426.400000000001),3.5E7}
+			Link ShapingCurve AC{(0.0,0.0),0.0;!(0.0,2000.0),1.0E8}
+		Queue:
+			OutLinkCBS Link "s3 --> s6" connecting s3 to s6 with a capacity of 1.0E8 Bit/s, max. Packet size 672.0
+			InLinkCBS Link "s1 --> s3" connecting s1 to s3 with a capacity of 2.0E8 Bit/s, max. Packet size 2000.0
+			max. PacketSize 672.0 Bit
+			idSlp 3.5E7 Bit/s sdSlp -6.5E7 Bit/s
+			minCredit -436.8 Bit maxCredit 4317.6 Bit
+			ServiceCurve SC{(0.0,0.0),0.0;!(1.2336E-4,0.0),3.5E7}
+			CBS-ShapingCurve AC{(0.0,0.0),0.0;!(0.0,5426.400000000001),3.5E7}
+			Link ShapingCurve AC{(0.0,0.0),0.0;!(0.0,672.0),1.0E8}
+
+CBS_Server.addFlow - Update queue for priority 0 at server s1
+Output flow bound AC for flow flow6 at server s1 : AC{(0.0,0.0),0.0;!(0.0,3852.22656),1.0752E7}
+SG addFlow @ link CBS Link "s3 --> s6" connecting s3 to s6 with a capacity of 1.0E8 Bit/s, max. Packet size 672.0 with dst. server CBS Rate-Latency server "s6
+
+	CBS queues for priority 0
+		Queue:
+			OutLinkCBS Link "s6 --> Listener3" connecting s6 to Listener3 with a capacity of 1.0E8 Bit/s, max. Packet size 672.0
+			InLinkCBS Link "s3 --> s6" connecting s3 to s6 with a capacity of 1.0E8 Bit/s, max. Packet size 672.0
+			max. PacketSize 672.0 Bit
+			idSlp 3.5E7 Bit/s sdSlp -6.5E7 Bit/s
+			minCredit -436.8 Bit maxCredit 4317.6 Bit
+			ServiceCurve SC{(0.0,0.0),0.0;!(1.2336E-4,0.0),3.5E7}
+			CBS-ShapingCurve AC{(0.0,0.0),0.0;!(0.0,5426.400000000001),3.5E7}
+			Link ShapingCurve AC{(0.0,0.0),0.0;!(0.0,672.0),1.0E8}
+
+CBS_Server.addFlow - Update queue for priority 0 at server s3
+Output flow bound AC for flow flow6 at server s3 : AC{(0.0,0.0),0.0;!(0.0,5178.59328),1.0752E7}
+SG addFlow @ link CBS Link "s6 --> Listener4" connecting s6 to Listener4 with a capacity of 1.0E8 Bit/s, max. Packet size 672.0 with dst. server CBS Rate-Latency server "Listener4
+
+CBS_Server.addFlow - Creating new queue for priority 0 at server s6
+Output flow bound AC for flow flow6 at server s6 : AC{(0.0,0.0),0.0;!(0.0,6504.96),1.0752E7}
+SG addFlow @ link CBS Link "Talker1 --> s4" connecting Talker1 to s4 with a capacity of 1.0E8 Bit/s, max. Packet size 2000.0 with dst. server CBS Rate-Latency server "s4
+
+	CBS queues for priority 0
+		Queue:
+			OutLinkCBS Link "s4 --> s2" connecting s4 to s2 with a capacity of 1.0E8 Bit/s, max. Packet size 2000.0
+			InLinkCBS Link "Talker2 --> s4" connecting Talker2 to s4 with a capacity of 1.0E8 Bit/s, max. Packet size 672.0
+			max. PacketSize 672.0 Bit
+			idSlp 3.5E7 Bit/s sdSlp -6.5E7 Bit/s
+			minCredit -436.8 Bit maxCredit 4317.6 Bit
+			ServiceCurve SC{(0.0,0.0),0.0;!(1.2336E-4,0.0),3.5E7}
+			CBS-ShapingCurve AC{(0.0,0.0),0.0;!(0.0,5426.400000000001),3.5E7}
+			Link ShapingCurve AC{(0.0,0.0),0.0;!(0.0,2000.0),1.0E8}
+
+
+AC of Flow flow0 : AC{(0.0,0.0),0.0;!(0.0,3360.0),1.6E7}
+SG initial AC AC{(0.0,0.0),0.0;!(0.0,3360.0),1.6E7}
+SG addFlow @ link CBS Link "s4 --> s2" connecting s4 to s2 with a capacity of 1.0E8 Bit/s, max. Packet size 2000.0 with dst. server CBS Rate-Latency server "s2
+
+	CBS queues for priority 0
+		Queue:
+			OutLinkCBS Link "s2 --> s1" connecting s2 to s1 with a capacity of 2.0E8 Bit/s, max. Packet size 2000.0
+			InLinkCBS Link "s4 --> s2" connecting s4 to s2 with a capacity of 1.0E8 Bit/s, max. Packet size 2000.0
+			max. PacketSize 672.0 Bit
+			idSlp 7.0E7 Bit/s sdSlp -1.3E8 Bit/s
+			minCredit -436.8 Bit maxCredit 4317.6 Bit
+			ServiceCurve SC{(0.0,0.0),0.0;!(6.168E-5,0.0),7.0E7}
+			CBS-ShapingCurve AC{(0.0,0.0),0.0;!(0.0,5426.400000000001),7.0E7}
+			Link ShapingCurve AC{(0.0,0.0),0.0;!(0.0,2000.0),2.0E8}
+
+CBS_Server.addFlow - Creating the first queue for priority 1 at server s4 for out link s4 --> s2
+Output flow bound AC for flow flow0 at server s4 : AC{(0.0,0.0),0.0;!(0.0,6504.073846153846),1.6E7}
+SG addFlow @ link CBS Link "s2 --> s1" connecting s2 to s1 with a capacity of 2.0E8 Bit/s, max. Packet size 2000.0 with dst. server CBS Rate-Latency server "s1
+
+	CBS queues for priority 0
+		Queue:
+			OutLinkCBS Link "s1 --> s3" connecting s1 to s3 with a capacity of 2.0E8 Bit/s, max. Packet size 2000.0
+			InLinkCBS Link "s2 --> s1" connecting s2 to s1 with a capacity of 2.0E8 Bit/s, max. Packet size 2000.0
+			max. PacketSize 672.0 Bit
+			idSlp 7.0E7 Bit/s sdSlp -1.3E8 Bit/s
+			minCredit -436.8 Bit maxCredit 4317.6 Bit
+			ServiceCurve SC{(0.0,0.0),0.0;!(6.168E-5,0.0),7.0E7}
+			CBS-ShapingCurve AC{(0.0,0.0),0.0;!(0.0,5426.400000000001),7.0E7}
+			Link ShapingCurve AC{(0.0,0.0),0.0;!(0.0,2000.0),2.0E8}
+
+CBS_Server.addFlow - Creating the first queue for priority 1 at server s2 for out link s2 --> s1
+Output flow bound AC for flow flow0 at server s2 : AC{(0.0,0.0),0.0;!(0.0,8076.110769230769),1.6E7}
+SG addFlow @ link CBS Link "s1 --> s3" connecting s1 to s3 with a capacity of 2.0E8 Bit/s, max. Packet size 2000.0 with dst. server CBS Rate-Latency server "s3
+
+	CBS queues for priority 0
+		Queue:
+			OutLinkCBS Link "s3 --> s7" connecting s3 to s7 with a capacity of 1.0E8 Bit/s, max. Packet size 2000.0
+			InLinkCBS Link "s1 --> s3" connecting s1 to s3 with a capacity of 2.0E8 Bit/s, max. Packet size 2000.0
+			max. PacketSize 672.0 Bit
+			idSlp 3.5E7 Bit/s sdSlp -6.5E7 Bit/s
+			minCredit -436.8 Bit maxCredit 4317.6 Bit
+			ServiceCurve SC{(0.0,0.0),0.0;!(1.2336E-4,0.0),3.5E7}
+			CBS-ShapingCurve AC{(0.0,0.0),0.0;!(0.0,5426.400000000001),3.5E7}
+			Link ShapingCurve AC{(0.0,0.0),0.0;!(0.0,2000.0),1.0E8}
+		Queue:
+			OutLinkCBS Link "s3 --> s6" connecting s3 to s6 with a capacity of 1.0E8 Bit/s, max. Packet size 672.0
+			InLinkCBS Link "s1 --> s3" connecting s1 to s3 with a capacity of 2.0E8 Bit/s, max. Packet size 2000.0
+			max. PacketSize 672.0 Bit
+			idSlp 3.5E7 Bit/s sdSlp -6.5E7 Bit/s
+			minCredit -436.8 Bit maxCredit 4317.6 Bit
+			ServiceCurve SC{(0.0,0.0),0.0;!(1.2336E-4,0.0),3.5E7}
+			CBS-ShapingCurve AC{(0.0,0.0),0.0;!(0.0,5426.400000000001),3.5E7}
+			Link ShapingCurve AC{(0.0,0.0),0.0;!(0.0,672.0),1.0E8}
+
+CBS_Server.addFlow - Creating the first queue for priority 1 at server s1 for out link s1 --> s3
+Output flow bound AC for flow flow0 at server s1 : AC{(0.0,0.0),0.0;!(0.0,9648.147692307692),1.6E7}
+SG addFlow @ link CBS Link "s3 --> s7" connecting s3 to s7 with a capacity of 1.0E8 Bit/s, max. Packet size 2000.0 with dst. server CBS Rate-Latency server "s7
+
+	CBS queues for priority 0
+		Queue:
+			OutLinkCBS Link "s7 --> Listener2" connecting s7 to Listener2 with a capacity of 1.0E8 Bit/s, max. Packet size 672.0
+			InLinkCBS Link "s3 --> s7" connecting s3 to s7 with a capacity of 1.0E8 Bit/s, max. Packet size 2000.0
+			max. PacketSize 672.0 Bit
+			idSlp 3.5E7 Bit/s sdSlp -6.5E7 Bit/s
+			minCredit -436.8 Bit maxCredit 4317.6 Bit
+			ServiceCurve SC{(0.0,0.0),0.0;!(1.2336E-4,0.0),3.5E7}
+			CBS-ShapingCurve AC{(0.0,0.0),0.0;!(0.0,5426.400000000001),3.5E7}
+			Link ShapingCurve AC{(0.0,0.0),0.0;!(0.0,672.0),1.0E8}
+
+CBS_Server.addFlow - Creating the first queue for priority 1 at server s3 for out link s3 --> s7
+Output flow bound AC for flow flow0 at server s3 : AC{(0.0,0.0),0.0;!(0.0,12792.221538461537),1.6E7}
+SG addFlow @ link CBS Link "s7 --> Listener1" connecting s7 to Listener1 with a capacity of 1.0E8 Bit/s, max. Packet size 2000.0 with dst. server CBS Rate-Latency server "Listener1
+
+CBS_Server.addFlow - Creating the first queue for priority 1 at server s7 for out link s7 --> Listener1
+Output flow bound AC for flow flow0 at server s7 : AC{(0.0,0.0),0.0;!(0.0,14765.981538461538),1.6E7}
+SG addFlow @ link CBS Link "Talker2 --> s4" connecting Talker2 to s4 with a capacity of 1.0E8 Bit/s, max. Packet size 672.0 with dst. server CBS Rate-Latency server "s4
+
+	CBS queues for priority 0
+		Queue:
+			OutLinkCBS Link "s4 --> s2" connecting s4 to s2 with a capacity of 1.0E8 Bit/s, max. Packet size 2000.0
+			InLinkCBS Link "Talker2 --> s4" connecting Talker2 to s4 with a capacity of 1.0E8 Bit/s, max. Packet size 672.0
+			max. PacketSize 672.0 Bit
+			idSlp 3.5E7 Bit/s sdSlp -6.5E7 Bit/s
+			minCredit -436.8 Bit maxCredit 4317.6 Bit
+			ServiceCurve SC{(0.0,0.0),0.0;!(1.2336E-4,0.0),3.5E7}
+			CBS-ShapingCurve AC{(0.0,0.0),0.0;!(0.0,5426.400000000001),3.5E7}
+			Link ShapingCurve AC{(0.0,0.0),0.0;!(0.0,2000.0),1.0E8}
+
+	CBS queues for priority 1
+		Queue:
+			OutLinkCBS Link "s4 --> s2" connecting s4 to s2 with a capacity of 1.0E8 Bit/s, max. Packet size 2000.0
+			InLinkCBS Link "Talker1 --> s4" connecting Talker1 to s4 with a capacity of 1.0E8 Bit/s, max. Packet size 2000.0
+			max. PacketSize 2000.0 Bit
+			idSlp 4.0E7 Bit/s sdSlp -6.0E7 Bit/s
+			minCredit -1200.0 Bit maxCredit 7860.184615384615 Bit
+			ServiceCurve SC{(0.0,0.0),0.0;!(1.9650461538461538E-4,0.0),4.0E7}
+			CBS-ShapingCurve AC{(0.0,0.0),0.0;!(0.0,11060.184615384616),4.0E7}
+			Link ShapingCurve AC{(0.0,0.0),0.0;!(0.0,2000.0),1.0E8}
+
+
+AC of Flow flow1 : AC{(0.0,0.0),0.0;!(0.0,1271.74656),5376000.0}
+SG initial AC AC{(0.0,0.0),0.0;!(0.0,1271.74656),5376000.0}
+SG addFlow @ link CBS Link "s4 --> s2" connecting s4 to s2 with a capacity of 1.0E8 Bit/s, max. Packet size 2000.0 with dst. server CBS Rate-Latency server "s2
+
+	CBS queues for priority 0
+		Queue:
+			OutLinkCBS Link "s2 --> s1" connecting s2 to s1 with a capacity of 2.0E8 Bit/s, max. Packet size 2000.0
+			InLinkCBS Link "s4 --> s2" connecting s4 to s2 with a capacity of 1.0E8 Bit/s, max. Packet size 2000.0
+			max. PacketSize 672.0 Bit
+			idSlp 7.0E7 Bit/s sdSlp -1.3E8 Bit/s
+			minCredit -436.8 Bit maxCredit 4317.6 Bit
+			ServiceCurve SC{(0.0,0.0),0.0;!(6.168E-5,0.0),7.0E7}
+			CBS-ShapingCurve AC{(0.0,0.0),0.0;!(0.0,5426.400000000001),7.0E7}
+			Link ShapingCurve AC{(0.0,0.0),0.0;!(0.0,2000.0),2.0E8}
+
+	CBS queues for priority 1
+		Queue:
+			OutLinkCBS Link "s2 --> s1" connecting s2 to s1 with a capacity of 2.0E8 Bit/s, max. Packet size 2000.0
+			InLinkCBS Link "s4 --> s2" connecting s4 to s2 with a capacity of 1.0E8 Bit/s, max. Packet size 2000.0
+			max. PacketSize 2000.0 Bit
+			idSlp 8.0E7 Bit/s sdSlp -1.2E8 Bit/s
+			minCredit -1200.0 Bit maxCredit 7860.184615384615 Bit
+			ServiceCurve SC{(0.0,0.0),0.0;!(9.825230769230769E-5,0.0),8.0E7}
+			CBS-ShapingCurve AC{(0.0,0.0),0.0;!(0.0,11060.184615384616),8.0E7}
+			Link ShapingCurve AC{(0.0,0.0),0.0;!(0.0,2000.0),2.0E8}
+
+CBS_Server.addFlow - Update queue for priority 1 at server s4
+Output flow bound AC for flow flow1 at server s4 : AC{(0.0,0.0),0.0;!(0.0,2328.1553723076922),5376000.0}
+SG addFlow @ link CBS Link "s2 --> s1" connecting s2 to s1 with a capacity of 2.0E8 Bit/s, max. Packet size 2000.0 with dst. server CBS Rate-Latency server "s1
+
+	CBS queues for priority 0
+		Queue:
+			OutLinkCBS Link "s1 --> s3" connecting s1 to s3 with a capacity of 2.0E8 Bit/s, max. Packet size 2000.0
+			InLinkCBS Link "s2 --> s1" connecting s2 to s1 with a capacity of 2.0E8 Bit/s, max. Packet size 2000.0
+			max. PacketSize 672.0 Bit
+			idSlp 7.0E7 Bit/s sdSlp -1.3E8 Bit/s
+			minCredit -436.8 Bit maxCredit 4317.6 Bit
+			ServiceCurve SC{(0.0,0.0),0.0;!(6.168E-5,0.0),7.0E7}
+			CBS-ShapingCurve AC{(0.0,0.0),0.0;!(0.0,5426.400000000001),7.0E7}
+			Link ShapingCurve AC{(0.0,0.0),0.0;!(0.0,2000.0),2.0E8}
+
+	CBS queues for priority 1
+		Queue:
+			OutLinkCBS Link "s1 --> s3" connecting s1 to s3 with a capacity of 2.0E8 Bit/s, max. Packet size 2000.0
+			InLinkCBS Link "s2 --> s1" connecting s2 to s1 with a capacity of 2.0E8 Bit/s, max. Packet size 2000.0
+			max. PacketSize 2000.0 Bit
+			idSlp 8.0E7 Bit/s sdSlp -1.2E8 Bit/s
+			minCredit -1200.0 Bit maxCredit 7860.184615384615 Bit
+			ServiceCurve SC{(0.0,0.0),0.0;!(9.825230769230769E-5,0.0),8.0E7}
+			CBS-ShapingCurve AC{(0.0,0.0),0.0;!(0.0,11060.184615384616),8.0E7}
+			Link ShapingCurve AC{(0.0,0.0),0.0;!(0.0,2000.0),2.0E8}
+
+CBS_Server.addFlow - Update queue for priority 1 at server s2
+Output flow bound AC for flow flow1 at server s2 : AC{(0.0,0.0),0.0;!(0.0,2856.3597784615386),5376000.0}
+SG addFlow @ link CBS Link "s1 --> s3" connecting s1 to s3 with a capacity of 2.0E8 Bit/s, max. Packet size 2000.0 with dst. server CBS Rate-Latency server "s3
+
+	CBS queues for priority 0
+		Queue:
+			OutLinkCBS Link "s3 --> s7" connecting s3 to s7 with a capacity of 1.0E8 Bit/s, max. Packet size 2000.0
+			InLinkCBS Link "s1 --> s3" connecting s1 to s3 with a capacity of 2.0E8 Bit/s, max. Packet size 2000.0
+			max. PacketSize 672.0 Bit
+			idSlp 3.5E7 Bit/s sdSlp -6.5E7 Bit/s
+			minCredit -436.8 Bit maxCredit 4317.6 Bit
+			ServiceCurve SC{(0.0,0.0),0.0;!(1.2336E-4,0.0),3.5E7}
+			CBS-ShapingCurve AC{(0.0,0.0),0.0;!(0.0,5426.400000000001),3.5E7}
+			Link ShapingCurve AC{(0.0,0.0),0.0;!(0.0,2000.0),1.0E8}
+		Queue:
+			OutLinkCBS Link "s3 --> s6" connecting s3 to s6 with a capacity of 1.0E8 Bit/s, max. Packet size 672.0
+			InLinkCBS Link "s1 --> s3" connecting s1 to s3 with a capacity of 2.0E8 Bit/s, max. Packet size 2000.0
+			max. PacketSize 672.0 Bit
+			idSlp 3.5E7 Bit/s sdSlp -6.5E7 Bit/s
+			minCredit -436.8 Bit maxCredit 4317.6 Bit
+			ServiceCurve SC{(0.0,0.0),0.0;!(1.2336E-4,0.0),3.5E7}
+			CBS-ShapingCurve AC{(0.0,0.0),0.0;!(0.0,5426.400000000001),3.5E7}
+			Link ShapingCurve AC{(0.0,0.0),0.0;!(0.0,672.0),1.0E8}
+
+	CBS queues for priority 1
+		Queue:
+			OutLinkCBS Link "s3 --> s7" connecting s3 to s7 with a capacity of 1.0E8 Bit/s, max. Packet size 2000.0
+			InLinkCBS Link "s1 --> s3" connecting s1 to s3 with a capacity of 2.0E8 Bit/s, max. Packet size 2000.0
+			max. PacketSize 2000.0 Bit
+			idSlp 4.0E7 Bit/s sdSlp -6.0E7 Bit/s
+			minCredit -1200.0 Bit maxCredit 7860.184615384615 Bit
+			ServiceCurve SC{(0.0,0.0),0.0;!(1.9650461538461538E-4,0.0),4.0E7}
+			CBS-ShapingCurve AC{(0.0,0.0),0.0;!(0.0,11060.184615384616),4.0E7}
+			Link ShapingCurve AC{(0.0,0.0),0.0;!(0.0,2000.0),1.0E8}
+
+CBS_Server.addFlow - Update queue for priority 1 at server s1
+Output flow bound AC for flow flow1 at server s1 : AC{(0.0,0.0),0.0;!(0.0,3384.564184615385),5376000.0}
+SG addFlow @ link CBS Link "s3 --> s7" connecting s3 to s7 with a capacity of 1.0E8 Bit/s, max. Packet size 2000.0 with dst. server CBS Rate-Latency server "s7
+
+	CBS queues for priority 0
+		Queue:
+			OutLinkCBS Link "s7 --> Listener2" connecting s7 to Listener2 with a capacity of 1.0E8 Bit/s, max. Packet size 672.0
+			InLinkCBS Link "s3 --> s7" connecting s3 to s7 with a capacity of 1.0E8 Bit/s, max. Packet size 2000.0
+			max. PacketSize 672.0 Bit
+			idSlp 3.5E7 Bit/s sdSlp -6.5E7 Bit/s
+			minCredit -436.8 Bit maxCredit 4317.6 Bit
+			ServiceCurve SC{(0.0,0.0),0.0;!(1.2336E-4,0.0),3.5E7}
+			CBS-ShapingCurve AC{(0.0,0.0),0.0;!(0.0,5426.400000000001),3.5E7}
+			Link ShapingCurve AC{(0.0,0.0),0.0;!(0.0,672.0),1.0E8}
+
+	CBS queues for priority 1
+		Queue:
+			OutLinkCBS Link "s7 --> Listener1" connecting s7 to Listener1 with a capacity of 1.0E8 Bit/s, max. Packet size 2000.0
+			InLinkCBS Link "s3 --> s7" connecting s3 to s7 with a capacity of 1.0E8 Bit/s, max. Packet size 2000.0
+			max. PacketSize 2000.0 Bit
+			idSlp 4.0E7 Bit/s sdSlp -6.0E7 Bit/s
+			minCredit -1200.0 Bit maxCredit 4934.400000000001 Bit
+			ServiceCurve SC{(0.0,0.0),0.0;!(1.2336E-4,0.0),4.0E7}
+			CBS-ShapingCurve AC{(0.0,0.0),0.0;!(0.0,8134.400000000001),4.0E7}
+			Link ShapingCurve AC{(0.0,0.0),0.0;!(0.0,2000.0),1.0E8}
+
+CBS_Server.addFlow - Update queue for priority 1 at server s3
+Output flow bound AC for flow flow1 at server s3 : AC{(0.0,0.0),0.0;!(0.0,4440.9729969230775),5376000.0}
+SG addFlow @ link CBS Link "s7 --> Listener2" connecting s7 to Listener2 with a capacity of 1.0E8 Bit/s, max. Packet size 672.0 with dst. server CBS Rate-Latency server "Listener2
+
+CBS_Server.addFlow - Creating new queue for priority 1 at server s7
+Output flow bound AC for flow flow1 at server s7 : AC{(0.0,0.0),0.0;!(0.0,5497.38180923077),5376000.0}
+SG addFlow @ link CBS Link "Talker3 --> s5" connecting Talker3 to s5 with a capacity of 1.0E8 Bit/s, max. Packet size 672.0 with dst. server CBS Rate-Latency server "s5
+
+	CBS queues for priority 0
+		Queue:
+			OutLinkCBS Link "s5 --> s2" connecting s5 to s2 with a capacity of 1.0E8 Bit/s, max. Packet size 672.0
+			InLinkCBS Link "Talker3 --> s5" connecting Talker3 to s5 with a capacity of 1.0E8 Bit/s, max. Packet size 672.0
+			max. PacketSize 672.0 Bit
+			idSlp 3.5E7 Bit/s sdSlp -6.5E7 Bit/s
+			minCredit -436.8 Bit maxCredit 4317.6 Bit
+			ServiceCurve SC{(0.0,0.0),0.0;!(1.2336E-4,0.0),3.5E7}
+			CBS-ShapingCurve AC{(0.0,0.0),0.0;!(0.0,5426.400000000001),3.5E7}
+			Link ShapingCurve AC{(0.0,0.0),0.0;!(0.0,672.0),1.0E8}
+
+
+AC of Flow flow2 : AC{(0.0,0.0),0.0;!(0.0,1271.74656),5376000.0}
+SG initial AC AC{(0.0,0.0),0.0;!(0.0,1271.74656),5376000.0}
+SG addFlow @ link CBS Link "s5 --> s2" connecting s5 to s2 with a capacity of 1.0E8 Bit/s, max. Packet size 672.0 with dst. server CBS Rate-Latency server "s2
+
+	CBS queues for priority 0
+		Queue:
+			OutLinkCBS Link "s2 --> s1" connecting s2 to s1 with a capacity of 2.0E8 Bit/s, max. Packet size 2000.0
+			InLinkCBS Link "s4 --> s2" connecting s4 to s2 with a capacity of 1.0E8 Bit/s, max. Packet size 2000.0
+			max. PacketSize 672.0 Bit
+			idSlp 7.0E7 Bit/s sdSlp -1.3E8 Bit/s
+			minCredit -436.8 Bit maxCredit 4317.6 Bit
+			ServiceCurve SC{(0.0,0.0),0.0;!(6.168E-5,0.0),7.0E7}
+			CBS-ShapingCurve AC{(0.0,0.0),0.0;!(0.0,5426.400000000001),7.0E7}
+			Link ShapingCurve AC{(0.0,0.0),0.0;!(0.0,2000.0),2.0E8}
+
+	CBS queues for priority 1
+		Queue:
+			OutLinkCBS Link "s2 --> s1" connecting s2 to s1 with a capacity of 2.0E8 Bit/s, max. Packet size 2000.0
+			InLinkCBS Link "s4 --> s2" connecting s4 to s2 with a capacity of 1.0E8 Bit/s, max. Packet size 2000.0
+			max. PacketSize 2000.0 Bit
+			idSlp 8.0E7 Bit/s sdSlp -1.2E8 Bit/s
+			minCredit -1200.0 Bit maxCredit 7860.184615384615 Bit
+			ServiceCurve SC{(0.0,0.0),0.0;!(9.825230769230769E-5,0.0),8.0E7}
+			CBS-ShapingCurve AC{(0.0,0.0),0.0;!(0.0,11060.184615384616),8.0E7}
+			Link ShapingCurve AC{(0.0,0.0),0.0;!(0.0,2000.0),2.0E8}
+
+CBS_Server.addFlow - Creating the first queue for priority 1 at server s5 for out link s5 --> s2
+Output flow bound AC for flow flow2 at server s5 : AC{(0.0,0.0),0.0;!(0.0,2328.1553723076922),5376000.0}
+SG addFlow @ link CBS Link "s2 --> s1" connecting s2 to s1 with a capacity of 2.0E8 Bit/s, max. Packet size 2000.0 with dst. server CBS Rate-Latency server "s1
+
+	CBS queues for priority 0
+		Queue:
+			OutLinkCBS Link "s1 --> s3" connecting s1 to s3 with a capacity of 2.0E8 Bit/s, max. Packet size 2000.0
+			InLinkCBS Link "s2 --> s1" connecting s2 to s1 with a capacity of 2.0E8 Bit/s, max. Packet size 2000.0
+			max. PacketSize 672.0 Bit
+			idSlp 7.0E7 Bit/s sdSlp -1.3E8 Bit/s
+			minCredit -436.8 Bit maxCredit 4317.6 Bit
+			ServiceCurve SC{(0.0,0.0),0.0;!(6.168E-5,0.0),7.0E7}
+			CBS-ShapingCurve AC{(0.0,0.0),0.0;!(0.0,5426.400000000001),7.0E7}
+			Link ShapingCurve AC{(0.0,0.0),0.0;!(0.0,2000.0),2.0E8}
+
+	CBS queues for priority 1
+		Queue:
+			OutLinkCBS Link "s1 --> s3" connecting s1 to s3 with a capacity of 2.0E8 Bit/s, max. Packet size 2000.0
+			InLinkCBS Link "s2 --> s1" connecting s2 to s1 with a capacity of 2.0E8 Bit/s, max. Packet size 2000.0
+			max. PacketSize 2000.0 Bit
+			idSlp 8.0E7 Bit/s sdSlp -1.2E8 Bit/s
+			minCredit -1200.0 Bit maxCredit 7860.184615384615 Bit
+			ServiceCurve SC{(0.0,0.0),0.0;!(9.825230769230769E-5,0.0),8.0E7}
+			CBS-ShapingCurve AC{(0.0,0.0),0.0;!(0.0,11060.184615384616),8.0E7}
+			Link ShapingCurve AC{(0.0,0.0),0.0;!(0.0,2000.0),2.0E8}
+
+CBS_Server.addFlow - Update queue for priority 1 at server s2
+Output flow bound AC for flow flow2 at server s2 : AC{(0.0,0.0),0.0;!(0.0,2856.3597784615386),5376000.0}
+SG addFlow @ link CBS Link "s1 --> s3" connecting s1 to s3 with a capacity of 2.0E8 Bit/s, max. Packet size 2000.0 with dst. server CBS Rate-Latency server "s3
+
+	CBS queues for priority 0
+		Queue:
+			OutLinkCBS Link "s3 --> s7" connecting s3 to s7 with a capacity of 1.0E8 Bit/s, max. Packet size 2000.0
+			InLinkCBS Link "s1 --> s3" connecting s1 to s3 with a capacity of 2.0E8 Bit/s, max. Packet size 2000.0
+			max. PacketSize 672.0 Bit
+			idSlp 3.5E7 Bit/s sdSlp -6.5E7 Bit/s
+			minCredit -436.8 Bit maxCredit 4317.6 Bit
+			ServiceCurve SC{(0.0,0.0),0.0;!(1.2336E-4,0.0),3.5E7}
+			CBS-ShapingCurve AC{(0.0,0.0),0.0;!(0.0,5426.400000000001),3.5E7}
+			Link ShapingCurve AC{(0.0,0.0),0.0;!(0.0,2000.0),1.0E8}
+		Queue:
+			OutLinkCBS Link "s3 --> s6" connecting s3 to s6 with a capacity of 1.0E8 Bit/s, max. Packet size 672.0
+			InLinkCBS Link "s1 --> s3" connecting s1 to s3 with a capacity of 2.0E8 Bit/s, max. Packet size 2000.0
+			max. PacketSize 672.0 Bit
+			idSlp 3.5E7 Bit/s sdSlp -6.5E7 Bit/s
+			minCredit -436.8 Bit maxCredit 4317.6 Bit
+			ServiceCurve SC{(0.0,0.0),0.0;!(1.2336E-4,0.0),3.5E7}
+			CBS-ShapingCurve AC{(0.0,0.0),0.0;!(0.0,5426.400000000001),3.5E7}
+			Link ShapingCurve AC{(0.0,0.0),0.0;!(0.0,672.0),1.0E8}
+
+	CBS queues for priority 1
+		Queue:
+			OutLinkCBS Link "s3 --> s7" connecting s3 to s7 with a capacity of 1.0E8 Bit/s, max. Packet size 2000.0
+			InLinkCBS Link "s1 --> s3" connecting s1 to s3 with a capacity of 2.0E8 Bit/s, max. Packet size 2000.0
+			max. PacketSize 2000.0 Bit
+			idSlp 4.0E7 Bit/s sdSlp -6.0E7 Bit/s
+			minCredit -1200.0 Bit maxCredit 7860.184615384615 Bit
+			ServiceCurve SC{(0.0,0.0),0.0;!(1.9650461538461538E-4,0.0),4.0E7}
+			CBS-ShapingCurve AC{(0.0,0.0),0.0;!(0.0,11060.184615384616),4.0E7}
+			Link ShapingCurve AC{(0.0,0.0),0.0;!(0.0,2000.0),1.0E8}
+
+CBS_Server.addFlow - Update queue for priority 1 at server s1
+Output flow bound AC for flow flow2 at server s1 : AC{(0.0,0.0),0.0;!(0.0,3384.564184615385),5376000.0}
+SG addFlow @ link CBS Link "s3 --> s6" connecting s3 to s6 with a capacity of 1.0E8 Bit/s, max. Packet size 672.0 with dst. server CBS Rate-Latency server "s6
+
+	CBS queues for priority 0
+		Queue:
+			OutLinkCBS Link "s6 --> Listener3" connecting s6 to Listener3 with a capacity of 1.0E8 Bit/s, max. Packet size 672.0
+			InLinkCBS Link "s3 --> s6" connecting s3 to s6 with a capacity of 1.0E8 Bit/s, max. Packet size 672.0
+			max. PacketSize 672.0 Bit
+			idSlp 3.5E7 Bit/s sdSlp -6.5E7 Bit/s
+			minCredit -436.8 Bit maxCredit 4317.6 Bit
+			ServiceCurve SC{(0.0,0.0),0.0;!(1.2336E-4,0.0),3.5E7}
+			CBS-ShapingCurve AC{(0.0,0.0),0.0;!(0.0,5426.400000000001),3.5E7}
+			Link ShapingCurve AC{(0.0,0.0),0.0;!(0.0,672.0),1.0E8}
+		Queue:
+			OutLinkCBS Link "s6 --> Listener4" connecting s6 to Listener4 with a capacity of 1.0E8 Bit/s, max. Packet size 672.0
+			InLinkCBS Link "s3 --> s6" connecting s3 to s6 with a capacity of 1.0E8 Bit/s, max. Packet size 672.0
+			max. PacketSize 672.0 Bit
+			idSlp 3.5E7 Bit/s sdSlp -6.5E7 Bit/s
+			minCredit -436.8 Bit maxCredit 4317.6 Bit
+			ServiceCurve SC{(0.0,0.0),0.0;!(1.2336E-4,0.0),3.5E7}
+			CBS-ShapingCurve AC{(0.0,0.0),0.0;!(0.0,5426.400000000001),3.5E7}
+			Link ShapingCurve AC{(0.0,0.0),0.0;!(0.0,672.0),1.0E8}
+
+CBS_Server.addFlow - Creating new queue for priority 1 at server s3
+Output flow bound AC for flow flow2 at server s3 : AC{(0.0,0.0),0.0;!(0.0,4440.9729969230775),5376000.0}
+SG addFlow @ link CBS Link "s6 --> Listener3" connecting s6 to Listener3 with a capacity of 1.0E8 Bit/s, max. Packet size 672.0 with dst. server CBS Rate-Latency server "Listener3
+
+CBS_Server.addFlow - Creating the first queue for priority 1 at server s6 for out link s6 --> Listener3
+Output flow bound AC for flow flow2 at server s6 : AC{(0.0,0.0),0.0;!(0.0,5497.38180923077),5376000.0}
+SG addFlow @ link CBS Link "Talker4 --> s5" connecting Talker4 to s5 with a capacity of 1.0E8 Bit/s, max. Packet size 672.0 with dst. server CBS Rate-Latency server "s5
+
+	CBS queues for priority 0
+		Queue:
+			OutLinkCBS Link "s5 --> s2" connecting s5 to s2 with a capacity of 1.0E8 Bit/s, max. Packet size 672.0
+			InLinkCBS Link "Talker3 --> s5" connecting Talker3 to s5 with a capacity of 1.0E8 Bit/s, max. Packet size 672.0
+			max. PacketSize 672.0 Bit
+			idSlp 3.5E7 Bit/s sdSlp -6.5E7 Bit/s
+			minCredit -436.8 Bit maxCredit 4317.6 Bit
+			ServiceCurve SC{(0.0,0.0),0.0;!(1.2336E-4,0.0),3.5E7}
+			CBS-ShapingCurve AC{(0.0,0.0),0.0;!(0.0,5426.400000000001),3.5E7}
+			Link ShapingCurve AC{(0.0,0.0),0.0;!(0.0,672.0),1.0E8}
+
+	CBS queues for priority 1
+		Queue:
+			OutLinkCBS Link "s5 --> s2" connecting s5 to s2 with a capacity of 1.0E8 Bit/s, max. Packet size 672.0
+			InLinkCBS Link "Talker3 --> s5" connecting Talker3 to s5 with a capacity of 1.0E8 Bit/s, max. Packet size 672.0
+			max. PacketSize 672.0 Bit
+			idSlp 4.0E7 Bit/s sdSlp -6.0E7 Bit/s
+			minCredit -403.2 Bit maxCredit 7860.184615384615 Bit
+			ServiceCurve SC{(0.0,0.0),0.0;!(1.9650461538461538E-4,0.0),4.0E7}
+			CBS-ShapingCurve AC{(0.0,0.0),0.0;!(0.0,8935.384615384615),4.0E7}
+			Link ShapingCurve AC{(0.0,0.0),0.0;!(0.0,672.0),1.0E8}
+
+
+AC of Flow flow3 : AC{(0.0,0.0),0.0;!(0.0,1271.74656),5376000.0}
+SG initial AC AC{(0.0,0.0),0.0;!(0.0,1271.74656),5376000.0}
+SG addFlow @ link CBS Link "s5 --> s2" connecting s5 to s2 with a capacity of 1.0E8 Bit/s, max. Packet size 672.0 with dst. server CBS Rate-Latency server "s2
+
+	CBS queues for priority 0
+		Queue:
+			OutLinkCBS Link "s2 --> s1" connecting s2 to s1 with a capacity of 2.0E8 Bit/s, max. Packet size 2000.0
+			InLinkCBS Link "s4 --> s2" connecting s4 to s2 with a capacity of 1.0E8 Bit/s, max. Packet size 2000.0
+			max. PacketSize 672.0 Bit
+			idSlp 7.0E7 Bit/s sdSlp -1.3E8 Bit/s
+			minCredit -436.8 Bit maxCredit 4317.6 Bit
+			ServiceCurve SC{(0.0,0.0),0.0;!(6.168E-5,0.0),7.0E7}
+			CBS-ShapingCurve AC{(0.0,0.0),0.0;!(0.0,5426.400000000001),7.0E7}
+			Link ShapingCurve AC{(0.0,0.0),0.0;!(0.0,2000.0),2.0E8}
+
+	CBS queues for priority 1
+		Queue:
+			OutLinkCBS Link "s2 --> s1" connecting s2 to s1 with a capacity of 2.0E8 Bit/s, max. Packet size 2000.0
+			InLinkCBS Link "s4 --> s2" connecting s4 to s2 with a capacity of 1.0E8 Bit/s, max. Packet size 2000.0
+			max. PacketSize 2000.0 Bit
+			idSlp 8.0E7 Bit/s sdSlp -1.2E8 Bit/s
+			minCredit -1200.0 Bit maxCredit 7860.184615384615 Bit
+			ServiceCurve SC{(0.0,0.0),0.0;!(9.825230769230769E-5,0.0),8.0E7}
+			CBS-ShapingCurve AC{(0.0,0.0),0.0;!(0.0,11060.184615384616),8.0E7}
+			Link ShapingCurve AC{(0.0,0.0),0.0;!(0.0,2000.0),2.0E8}
+
+CBS_Server.addFlow - Update queue for priority 1 at server s5
+Output flow bound AC for flow flow3 at server s5 : AC{(0.0,0.0),0.0;!(0.0,2328.1553723076922),5376000.0}
+SG addFlow @ link CBS Link "s2 --> s1" connecting s2 to s1 with a capacity of 2.0E8 Bit/s, max. Packet size 2000.0 with dst. server CBS Rate-Latency server "s1
+
+	CBS queues for priority 0
+		Queue:
+			OutLinkCBS Link "s1 --> s3" connecting s1 to s3 with a capacity of 2.0E8 Bit/s, max. Packet size 2000.0
+			InLinkCBS Link "s2 --> s1" connecting s2 to s1 with a capacity of 2.0E8 Bit/s, max. Packet size 2000.0
+			max. PacketSize 672.0 Bit
+			idSlp 7.0E7 Bit/s sdSlp -1.3E8 Bit/s
+			minCredit -436.8 Bit maxCredit 4317.6 Bit
+			ServiceCurve SC{(0.0,0.0),0.0;!(6.168E-5,0.0),7.0E7}
+			CBS-ShapingCurve AC{(0.0,0.0),0.0;!(0.0,5426.400000000001),7.0E7}
+			Link ShapingCurve AC{(0.0,0.0),0.0;!(0.0,2000.0),2.0E8}
+
+	CBS queues for priority 1
+		Queue:
+			OutLinkCBS Link "s1 --> s3" connecting s1 to s3 with a capacity of 2.0E8 Bit/s, max. Packet size 2000.0
+			InLinkCBS Link "s2 --> s1" connecting s2 to s1 with a capacity of 2.0E8 Bit/s, max. Packet size 2000.0
+			max. PacketSize 2000.0 Bit
+			idSlp 8.0E7 Bit/s sdSlp -1.2E8 Bit/s
+			minCredit -1200.0 Bit maxCredit 7860.184615384615 Bit
+			ServiceCurve SC{(0.0,0.0),0.0;!(9.825230769230769E-5,0.0),8.0E7}
+			CBS-ShapingCurve AC{(0.0,0.0),0.0;!(0.0,11060.184615384616),8.0E7}
+			Link ShapingCurve AC{(0.0,0.0),0.0;!(0.0,2000.0),2.0E8}
+
+CBS_Server.addFlow - Update queue for priority 1 at server s2
+Output flow bound AC for flow flow3 at server s2 : AC{(0.0,0.0),0.0;!(0.0,2856.3597784615386),5376000.0}
+SG addFlow @ link CBS Link "s1 --> s3" connecting s1 to s3 with a capacity of 2.0E8 Bit/s, max. Packet size 2000.0 with dst. server CBS Rate-Latency server "s3
+
+	CBS queues for priority 0
+		Queue:
+			OutLinkCBS Link "s3 --> s7" connecting s3 to s7 with a capacity of 1.0E8 Bit/s, max. Packet size 2000.0
+			InLinkCBS Link "s1 --> s3" connecting s1 to s3 with a capacity of 2.0E8 Bit/s, max. Packet size 2000.0
+			max. PacketSize 672.0 Bit
+			idSlp 3.5E7 Bit/s sdSlp -6.5E7 Bit/s
+			minCredit -436.8 Bit maxCredit 4317.6 Bit
+			ServiceCurve SC{(0.0,0.0),0.0;!(1.2336E-4,0.0),3.5E7}
+			CBS-ShapingCurve AC{(0.0,0.0),0.0;!(0.0,5426.400000000001),3.5E7}
+			Link ShapingCurve AC{(0.0,0.0),0.0;!(0.0,2000.0),1.0E8}
+		Queue:
+			OutLinkCBS Link "s3 --> s6" connecting s3 to s6 with a capacity of 1.0E8 Bit/s, max. Packet size 672.0
+			InLinkCBS Link "s1 --> s3" connecting s1 to s3 with a capacity of 2.0E8 Bit/s, max. Packet size 2000.0
+			max. PacketSize 672.0 Bit
+			idSlp 3.5E7 Bit/s sdSlp -6.5E7 Bit/s
+			minCredit -436.8 Bit maxCredit 4317.6 Bit
+			ServiceCurve SC{(0.0,0.0),0.0;!(1.2336E-4,0.0),3.5E7}
+			CBS-ShapingCurve AC{(0.0,0.0),0.0;!(0.0,5426.400000000001),3.5E7}
+			Link ShapingCurve AC{(0.0,0.0),0.0;!(0.0,672.0),1.0E8}
+
+	CBS queues for priority 1
+		Queue:
+			OutLinkCBS Link "s3 --> s7" connecting s3 to s7 with a capacity of 1.0E8 Bit/s, max. Packet size 2000.0
+			InLinkCBS Link "s1 --> s3" connecting s1 to s3 with a capacity of 2.0E8 Bit/s, max. Packet size 2000.0
+			max. PacketSize 2000.0 Bit
+			idSlp 4.0E7 Bit/s sdSlp -6.0E7 Bit/s
+			minCredit -1200.0 Bit maxCredit 7860.184615384615 Bit
+			ServiceCurve SC{(0.0,0.0),0.0;!(1.9650461538461538E-4,0.0),4.0E7}
+			CBS-ShapingCurve AC{(0.0,0.0),0.0;!(0.0,11060.184615384616),4.0E7}
+			Link ShapingCurve AC{(0.0,0.0),0.0;!(0.0,2000.0),1.0E8}
+		Queue:
+			OutLinkCBS Link "s3 --> s6" connecting s3 to s6 with a capacity of 1.0E8 Bit/s, max. Packet size 672.0
+			InLinkCBS Link "s1 --> s3" connecting s1 to s3 with a capacity of 2.0E8 Bit/s, max. Packet size 2000.0
+			max. PacketSize 672.0 Bit
+			idSlp 4.0E7 Bit/s sdSlp -6.0E7 Bit/s
+			minCredit -403.2 Bit maxCredit 7860.184615384615 Bit
+			ServiceCurve SC{(0.0,0.0),0.0;!(1.9650461538461538E-4,0.0),4.0E7}
+			CBS-ShapingCurve AC{(0.0,0.0),0.0;!(0.0,8935.384615384615),4.0E7}
+			Link ShapingCurve AC{(0.0,0.0),0.0;!(0.0,672.0),1.0E8}
+
+CBS_Server.addFlow - Update queue for priority 1 at server s1
+Output flow bound AC for flow flow3 at server s1 : AC{(0.0,0.0),0.0;!(0.0,3384.564184615385),5376000.0}
+SG addFlow @ link CBS Link "s3 --> s6" connecting s3 to s6 with a capacity of 1.0E8 Bit/s, max. Packet size 672.0 with dst. server CBS Rate-Latency server "s6
+
+	CBS queues for priority 0
+		Queue:
+			OutLinkCBS Link "s6 --> Listener3" connecting s6 to Listener3 with a capacity of 1.0E8 Bit/s, max. Packet size 672.0
+			InLinkCBS Link "s3 --> s6" connecting s3 to s6 with a capacity of 1.0E8 Bit/s, max. Packet size 672.0
+			max. PacketSize 672.0 Bit
+			idSlp 3.5E7 Bit/s sdSlp -6.5E7 Bit/s
+			minCredit -436.8 Bit maxCredit 4317.6 Bit
+			ServiceCurve SC{(0.0,0.0),0.0;!(1.2336E-4,0.0),3.5E7}
+			CBS-ShapingCurve AC{(0.0,0.0),0.0;!(0.0,5426.400000000001),3.5E7}
+			Link ShapingCurve AC{(0.0,0.0),0.0;!(0.0,672.0),1.0E8}
+		Queue:
+			OutLinkCBS Link "s6 --> Listener4" connecting s6 to Listener4 with a capacity of 1.0E8 Bit/s, max. Packet size 672.0
+			InLinkCBS Link "s3 --> s6" connecting s3 to s6 with a capacity of 1.0E8 Bit/s, max. Packet size 672.0
+			max. PacketSize 672.0 Bit
+			idSlp 3.5E7 Bit/s sdSlp -6.5E7 Bit/s
+			minCredit -436.8 Bit maxCredit 4317.6 Bit
+			ServiceCurve SC{(0.0,0.0),0.0;!(1.2336E-4,0.0),3.5E7}
+			CBS-ShapingCurve AC{(0.0,0.0),0.0;!(0.0,5426.400000000001),3.5E7}
+			Link ShapingCurve AC{(0.0,0.0),0.0;!(0.0,672.0),1.0E8}
+
+	CBS queues for priority 1
+		Queue:
+			OutLinkCBS Link "s6 --> Listener3" connecting s6 to Listener3 with a capacity of 1.0E8 Bit/s, max. Packet size 672.0
+			InLinkCBS Link "s3 --> s6" connecting s3 to s6 with a capacity of 1.0E8 Bit/s, max. Packet size 672.0
+			max. PacketSize 672.0 Bit
+			idSlp 4.0E7 Bit/s sdSlp -6.0E7 Bit/s
+			minCredit -403.2 Bit maxCredit 7860.184615384615 Bit
+			ServiceCurve SC{(0.0,0.0),0.0;!(1.9650461538461538E-4,0.0),4.0E7}
+			CBS-ShapingCurve AC{(0.0,0.0),0.0;!(0.0,8935.384615384615),4.0E7}
+			Link ShapingCurve AC{(0.0,0.0),0.0;!(0.0,672.0),1.0E8}
+
+CBS_Server.addFlow - Update queue for priority 1 at server s3
+Output flow bound AC for flow flow3 at server s3 : AC{(0.0,0.0),0.0;!(0.0,4440.9729969230775),5376000.0}
+SG addFlow @ link CBS Link "s6 --> Listener4" connecting s6 to Listener4 with a capacity of 1.0E8 Bit/s, max. Packet size 672.0 with dst. server CBS Rate-Latency server "Listener4
+
+CBS_Server.addFlow - Creating new queue for priority 1 at server s6
+Output flow bound AC for flow flow3 at server s6 : AC{(0.0,0.0),0.0;!(0.0,5497.38180923077),5376000.0}
+
+CBS TFA results for flow flow0:
+Total delay : 9,128738461538461E-4s 
+	Delay @ s4 : 2.465046153846154E-4s 
+	Delay @ s2 : 1.232523076923077E-4s 
+	Delay @ s1 : 1.232523076923077E-4s 
+	Delay @ s3 : 2.465046153846154E-4s 
+	Delay @ s7 : 1.7336E-4s 
+
+
+CBS TFA results for flow flow1:
+Total delay : 9.346121255384614E-4s 
+	Delay @ s4 : 2.2829827938461537E-4s 
+	Delay @ s2 : 1.232523076923077E-4s 
+	Delay @ s1 : 1.232523076923077E-4s 
+	Delay @ s3 : 2.465046153846154E-4s 
+	Delay @ s7 : 2.1330461538461538E-4s 
+
+
+CBS TFA results for flow flow2:
+Total delay : 8.864184615384615E-4s 
+	Delay @ s5 : 2.1330461538461538E-4s 
+	Delay @ s2 : 1.232523076923077E-4s 
+	Delay @ s1 : 1.232523076923077E-4s 
+	Delay @ s3 : 2.1330461538461538E-4s 
+	Delay @ s6 : 2.1330461538461538E-4s 
+
+
+CBS TFA results for flow flow3:
+Total delay : 8.864184615384615E-4s 
+	Delay @ s5 : 2.1330461538461538E-4s 
+	Delay @ s2 : 1.232523076923077E-4s 
+	Delay @ s1 : 1.232523076923077E-4s 
+	Delay @ s3 : 2.1330461538461538E-4s 
+	Delay @ s6 : 2.1330461538461538E-4s 
+
+
+CBS TFA results for flow flow4:
+Total delay : 6.461257142857143E-4s 
+	Delay @ s4 : 1.4256000000000002E-4s 
+	Delay @ s2 : 9.025142857142858E-5s 
+	Delay @ s1 : 9.025142857142858E-5s 
+	Delay @ s3 : 1.8050285714285715E-4s 
+	Delay @ s7 : 1.4256000000000002E-4s 
+
+
+CBS TFA results for flow flow5:
+Total delay : 6.081828571428572E-4s 
+	Delay @ s5 : 1.4256000000000002E-4s 
+	Delay @ s2 : 9.025142857142858E-5s 
+	Delay @ s1 : 9.025142857142858E-5s 
+	Delay @ s3 : 1.4256000000000002E-4s 
+	Delay @ s6 : 1.4256000000000002E-4s 
+
+
+CBS TFA results for flow flow6:
+Total delay : 6.081828571428572E-4s 
+	Delay @ s5 : 1.4256000000000002E-4s 
+	Delay @ s2 : 9.025142857142858E-5s 
+	Delay @ s1 : 9.025142857142858E-5s 
+	Delay @ s3 : 1.4256000000000002E-4s 
+	Delay @ s6 : 1.4256000000000002E-4s 
+
+
+----------------------------------------------------------
+CBS ServerGraph "CBS shaped line network"CBS Rate-Latency server "Talker2
+CBS Rate-Latency server "s3
+
+	CBS queues for priority 0
+		Queue:
+			OutLinkCBS Link "s3 --> s7" connecting s3 to s7 with a capacity of 1.0E8 Bit/s, max. Packet size 2000.0
+			InLinkCBS Link "s1 --> s3" connecting s1 to s3 with a capacity of 2.0E8 Bit/s, max. Packet size 2000.0
+			max. PacketSize 672.0 Bit
+			idSlp 3.5E7 Bit/s sdSlp -6.5E7 Bit/s
+			minCredit -436.8 Bit maxCredit 4317.6 Bit
+			ServiceCurve SC{(0.0,0.0),0.0;!(1.2336E-4,0.0),3.5E7}
+			CBS-ShapingCurve AC{(0.0,0.0),0.0;!(0.0,5426.400000000001),3.5E7}
+			Link ShapingCurve AC{(0.0,0.0),0.0;!(0.0,2000.0),1.0E8}
+		Queue:
+			OutLinkCBS Link "s3 --> s6" connecting s3 to s6 with a capacity of 1.0E8 Bit/s, max. Packet size 672.0
+			InLinkCBS Link "s1 --> s3" connecting s1 to s3 with a capacity of 2.0E8 Bit/s, max. Packet size 2000.0
+			max. PacketSize 672.0 Bit
+			idSlp 3.5E7 Bit/s sdSlp -6.5E7 Bit/s
+			minCredit -436.8 Bit maxCredit 4317.6 Bit
+			ServiceCurve SC{(0.0,0.0),0.0;!(1.2336E-4,0.0),3.5E7}
+			CBS-ShapingCurve AC{(0.0,0.0),0.0;!(0.0,5426.400000000001),3.5E7}
+			Link ShapingCurve AC{(0.0,0.0),0.0;!(0.0,672.0),1.0E8}
+
+	CBS queues for priority 1
+		Queue:
+			OutLinkCBS Link "s3 --> s7" connecting s3 to s7 with a capacity of 1.0E8 Bit/s, max. Packet size 2000.0
+			InLinkCBS Link "s1 --> s3" connecting s1 to s3 with a capacity of 2.0E8 Bit/s, max. Packet size 2000.0
+			max. PacketSize 2000.0 Bit
+			idSlp 4.0E7 Bit/s sdSlp -6.0E7 Bit/s
+			minCredit -1200.0 Bit maxCredit 7860.184615384615 Bit
+			ServiceCurve SC{(0.0,0.0),0.0;!(1.9650461538461538E-4,0.0),4.0E7}
+			CBS-ShapingCurve AC{(0.0,0.0),0.0;!(0.0,11060.184615384616),4.0E7}
+			Link ShapingCurve AC{(0.0,0.0),0.0;!(0.0,2000.0),1.0E8}
+		Queue:
+			OutLinkCBS Link "s3 --> s6" connecting s3 to s6 with a capacity of 1.0E8 Bit/s, max. Packet size 672.0
+			InLinkCBS Link "s1 --> s3" connecting s1 to s3 with a capacity of 2.0E8 Bit/s, max. Packet size 2000.0
+			max. PacketSize 672.0 Bit
+			idSlp 4.0E7 Bit/s sdSlp -6.0E7 Bit/s
+			minCredit -403.2 Bit maxCredit 7860.184615384615 Bit
+			ServiceCurve SC{(0.0,0.0),0.0;!(1.9650461538461538E-4,0.0),4.0E7}
+			CBS-ShapingCurve AC{(0.0,0.0),0.0;!(0.0,8935.384615384615),4.0E7}
+			Link ShapingCurve AC{(0.0,0.0),0.0;!(0.0,672.0),1.0E8}
+CBS Rate-Latency server "Talker1
+CBS Rate-Latency server "s2
+
+	CBS queues for priority 0
+		Queue:
+			OutLinkCBS Link "s2 --> s1" connecting s2 to s1 with a capacity of 2.0E8 Bit/s, max. Packet size 2000.0
+			InLinkCBS Link "s4 --> s2" connecting s4 to s2 with a capacity of 1.0E8 Bit/s, max. Packet size 2000.0
+			max. PacketSize 672.0 Bit
+			idSlp 7.0E7 Bit/s sdSlp -1.3E8 Bit/s
+			minCredit -436.8 Bit maxCredit 4317.6 Bit
+			ServiceCurve SC{(0.0,0.0),0.0;!(6.168E-5,0.0),7.0E7}
+			CBS-ShapingCurve AC{(0.0,0.0),0.0;!(0.0,5426.400000000001),7.0E7}
+			Link ShapingCurve AC{(0.0,0.0),0.0;!(0.0,2000.0),2.0E8}
+
+	CBS queues for priority 1
+		Queue:
+			OutLinkCBS Link "s2 --> s1" connecting s2 to s1 with a capacity of 2.0E8 Bit/s, max. Packet size 2000.0
+			InLinkCBS Link "s4 --> s2" connecting s4 to s2 with a capacity of 1.0E8 Bit/s, max. Packet size 2000.0
+			max. PacketSize 2000.0 Bit
+			idSlp 8.0E7 Bit/s sdSlp -1.2E8 Bit/s
+			minCredit -1200.0 Bit maxCredit 7860.184615384615 Bit
+			ServiceCurve SC{(0.0,0.0),0.0;!(9.825230769230769E-5,0.0),8.0E7}
+			CBS-ShapingCurve AC{(0.0,0.0),0.0;!(0.0,11060.184615384616),8.0E7}
+			Link ShapingCurve AC{(0.0,0.0),0.0;!(0.0,2000.0),2.0E8}
+CBS Rate-Latency server "s7
+
+	CBS queues for priority 0
+		Queue:
+			OutLinkCBS Link "s7 --> Listener2" connecting s7 to Listener2 with a capacity of 1.0E8 Bit/s, max. Packet size 672.0
+			InLinkCBS Link "s3 --> s7" connecting s3 to s7 with a capacity of 1.0E8 Bit/s, max. Packet size 2000.0
+			max. PacketSize 672.0 Bit
+			idSlp 3.5E7 Bit/s sdSlp -6.5E7 Bit/s
+			minCredit -436.8 Bit maxCredit 4317.6 Bit
+			ServiceCurve SC{(0.0,0.0),0.0;!(1.2336E-4,0.0),3.5E7}
+			CBS-ShapingCurve AC{(0.0,0.0),0.0;!(0.0,5426.400000000001),3.5E7}
+			Link ShapingCurve AC{(0.0,0.0),0.0;!(0.0,672.0),1.0E8}
+
+	CBS queues for priority 1
+		Queue:
+			OutLinkCBS Link "s7 --> Listener1" connecting s7 to Listener1 with a capacity of 1.0E8 Bit/s, max. Packet size 2000.0
+			InLinkCBS Link "s3 --> s7" connecting s3 to s7 with a capacity of 1.0E8 Bit/s, max. Packet size 2000.0
+			max. PacketSize 2000.0 Bit
+			idSlp 4.0E7 Bit/s sdSlp -6.0E7 Bit/s
+			minCredit -1200.0 Bit maxCredit 4934.400000000001 Bit
+			ServiceCurve SC{(0.0,0.0),0.0;!(1.2336E-4,0.0),4.0E7}
+			CBS-ShapingCurve AC{(0.0,0.0),0.0;!(0.0,8134.400000000001),4.0E7}
+			Link ShapingCurve AC{(0.0,0.0),0.0;!(0.0,2000.0),1.0E8}
+		Queue:
+			OutLinkCBS Link "s7 --> Listener2" connecting s7 to Listener2 with a capacity of 1.0E8 Bit/s, max. Packet size 672.0
+			InLinkCBS Link "s3 --> s7" connecting s3 to s7 with a capacity of 1.0E8 Bit/s, max. Packet size 2000.0
+			max. PacketSize 672.0 Bit
+			idSlp 4.0E7 Bit/s sdSlp -6.0E7 Bit/s
+			minCredit -403.2 Bit maxCredit 7860.184615384615 Bit
+			ServiceCurve SC{(0.0,0.0),0.0;!(1.9650461538461538E-4,0.0),4.0E7}
+			CBS-ShapingCurve AC{(0.0,0.0),0.0;!(0.0,8935.384615384615),4.0E7}
+			Link ShapingCurve AC{(0.0,0.0),0.0;!(0.0,672.0),1.0E8}
+CBS Rate-Latency server "Listener1
+CBS Rate-Latency server "Talker3
+CBS Rate-Latency server "s1
+
+	CBS queues for priority 0
+		Queue:
+			OutLinkCBS Link "s1 --> s3" connecting s1 to s3 with a capacity of 2.0E8 Bit/s, max. Packet size 2000.0
+			InLinkCBS Link "s2 --> s1" connecting s2 to s1 with a capacity of 2.0E8 Bit/s, max. Packet size 2000.0
+			max. PacketSize 672.0 Bit
+			idSlp 7.0E7 Bit/s sdSlp -1.3E8 Bit/s
+			minCredit -436.8 Bit maxCredit 4317.6 Bit
+			ServiceCurve SC{(0.0,0.0),0.0;!(6.168E-5,0.0),7.0E7}
+			CBS-ShapingCurve AC{(0.0,0.0),0.0;!(0.0,5426.400000000001),7.0E7}
+			Link ShapingCurve AC{(0.0,0.0),0.0;!(0.0,2000.0),2.0E8}
+
+	CBS queues for priority 1
+		Queue:
+			OutLinkCBS Link "s1 --> s3" connecting s1 to s3 with a capacity of 2.0E8 Bit/s, max. Packet size 2000.0
+			InLinkCBS Link "s2 --> s1" connecting s2 to s1 with a capacity of 2.0E8 Bit/s, max. Packet size 2000.0
+			max. PacketSize 2000.0 Bit
+			idSlp 8.0E7 Bit/s sdSlp -1.2E8 Bit/s
+			minCredit -1200.0 Bit maxCredit 7860.184615384615 Bit
+			ServiceCurve SC{(0.0,0.0),0.0;!(9.825230769230769E-5,0.0),8.0E7}
+			CBS-ShapingCurve AC{(0.0,0.0),0.0;!(0.0,11060.184615384616),8.0E7}
+			Link ShapingCurve AC{(0.0,0.0),0.0;!(0.0,2000.0),2.0E8}
+CBS Rate-Latency server "Listener2
+CBS Rate-Latency server "s5
+
+	CBS queues for priority 0
+		Queue:
+			OutLinkCBS Link "s5 --> s2" connecting s5 to s2 with a capacity of 1.0E8 Bit/s, max. Packet size 672.0
+			InLinkCBS Link "Talker3 --> s5" connecting Talker3 to s5 with a capacity of 1.0E8 Bit/s, max. Packet size 672.0
+			max. PacketSize 672.0 Bit
+			idSlp 3.5E7 Bit/s sdSlp -6.5E7 Bit/s
+			minCredit -436.8 Bit maxCredit 4317.6 Bit
+			ServiceCurve SC{(0.0,0.0),0.0;!(1.2336E-4,0.0),3.5E7}
+			CBS-ShapingCurve AC{(0.0,0.0),0.0;!(0.0,5426.400000000001),3.5E7}
+			Link ShapingCurve AC{(0.0,0.0),0.0;!(0.0,672.0),1.0E8}
+
+	CBS queues for priority 1
+		Queue:
+			OutLinkCBS Link "s5 --> s2" connecting s5 to s2 with a capacity of 1.0E8 Bit/s, max. Packet size 672.0
+			InLinkCBS Link "Talker3 --> s5" connecting Talker3 to s5 with a capacity of 1.0E8 Bit/s, max. Packet size 672.0
+			max. PacketSize 672.0 Bit
+			idSlp 4.0E7 Bit/s sdSlp -6.0E7 Bit/s
+			minCredit -403.2 Bit maxCredit 7860.184615384615 Bit
+			ServiceCurve SC{(0.0,0.0),0.0;!(1.9650461538461538E-4,0.0),4.0E7}
+			CBS-ShapingCurve AC{(0.0,0.0),0.0;!(0.0,8935.384615384615),4.0E7}
+			Link ShapingCurve AC{(0.0,0.0),0.0;!(0.0,672.0),1.0E8}
+CBS Rate-Latency server "Listener3
+CBS Rate-Latency server "Listener4
+CBS Rate-Latency server "Talker4
+CBS Rate-Latency server "s4
+
+	CBS queues for priority 0
+		Queue:
+			OutLinkCBS Link "s4 --> s2" connecting s4 to s2 with a capacity of 1.0E8 Bit/s, max. Packet size 2000.0
+			InLinkCBS Link "Talker2 --> s4" connecting Talker2 to s4 with a capacity of 1.0E8 Bit/s, max. Packet size 672.0
+			max. PacketSize 672.0 Bit
+			idSlp 3.5E7 Bit/s sdSlp -6.5E7 Bit/s
+			minCredit -436.8 Bit maxCredit 4317.6 Bit
+			ServiceCurve SC{(0.0,0.0),0.0;!(1.2336E-4,0.0),3.5E7}
+			CBS-ShapingCurve AC{(0.0,0.0),0.0;!(0.0,5426.400000000001),3.5E7}
+			Link ShapingCurve AC{(0.0,0.0),0.0;!(0.0,2000.0),1.0E8}
+
+	CBS queues for priority 1
+		Queue:
+			OutLinkCBS Link "s4 --> s2" connecting s4 to s2 with a capacity of 1.0E8 Bit/s, max. Packet size 2000.0
+			InLinkCBS Link "Talker1 --> s4" connecting Talker1 to s4 with a capacity of 1.0E8 Bit/s, max. Packet size 2000.0
+			max. PacketSize 2000.0 Bit
+			idSlp 4.0E7 Bit/s sdSlp -6.0E7 Bit/s
+			minCredit -1200.0 Bit maxCredit 7860.184615384615 Bit
+			ServiceCurve SC{(0.0,0.0),0.0;!(1.9650461538461538E-4,0.0),4.0E7}
+			CBS-ShapingCurve AC{(0.0,0.0),0.0;!(0.0,11060.184615384616),4.0E7}
+			Link ShapingCurve AC{(0.0,0.0),0.0;!(0.0,2000.0),1.0E8}
+CBS Rate-Latency server "s6
+
+	CBS queues for priority 0
+		Queue:
+			OutLinkCBS Link "s6 --> Listener3" connecting s6 to Listener3 with a capacity of 1.0E8 Bit/s, max. Packet size 672.0
+			InLinkCBS Link "s3 --> s6" connecting s3 to s6 with a capacity of 1.0E8 Bit/s, max. Packet size 672.0
+			max. PacketSize 672.0 Bit
+			idSlp 3.5E7 Bit/s sdSlp -6.5E7 Bit/s
+			minCredit -436.8 Bit maxCredit 4317.6 Bit
+			ServiceCurve SC{(0.0,0.0),0.0;!(1.2336E-4,0.0),3.5E7}
+			CBS-ShapingCurve AC{(0.0,0.0),0.0;!(0.0,5426.400000000001),3.5E7}
+			Link ShapingCurve AC{(0.0,0.0),0.0;!(0.0,672.0),1.0E8}
+		Queue:
+			OutLinkCBS Link "s6 --> Listener4" connecting s6 to Listener4 with a capacity of 1.0E8 Bit/s, max. Packet size 672.0
+			InLinkCBS Link "s3 --> s6" connecting s3 to s6 with a capacity of 1.0E8 Bit/s, max. Packet size 672.0
+			max. PacketSize 672.0 Bit
+			idSlp 3.5E7 Bit/s sdSlp -6.5E7 Bit/s
+			minCredit -436.8 Bit maxCredit 4317.6 Bit
+			ServiceCurve SC{(0.0,0.0),0.0;!(1.2336E-4,0.0),3.5E7}
+			CBS-ShapingCurve AC{(0.0,0.0),0.0;!(0.0,5426.400000000001),3.5E7}
+			Link ShapingCurve AC{(0.0,0.0),0.0;!(0.0,672.0),1.0E8}
+
+	CBS queues for priority 1
+		Queue:
+			OutLinkCBS Link "s6 --> Listener3" connecting s6 to Listener3 with a capacity of 1.0E8 Bit/s, max. Packet size 672.0
+			InLinkCBS Link "s3 --> s6" connecting s3 to s6 with a capacity of 1.0E8 Bit/s, max. Packet size 672.0
+			max. PacketSize 672.0 Bit
+			idSlp 4.0E7 Bit/s sdSlp -6.0E7 Bit/s
+			minCredit -403.2 Bit maxCredit 7860.184615384615 Bit
+			ServiceCurve SC{(0.0,0.0),0.0;!(1.9650461538461538E-4,0.0),4.0E7}
+			CBS-ShapingCurve AC{(0.0,0.0),0.0;!(0.0,8935.384615384615),4.0E7}
+			Link ShapingCurve AC{(0.0,0.0),0.0;!(0.0,672.0),1.0E8}
+		Queue:
+			OutLinkCBS Link "s6 --> Listener4" connecting s6 to Listener4 with a capacity of 1.0E8 Bit/s, max. Packet size 672.0
+			InLinkCBS Link "s3 --> s6" connecting s3 to s6 with a capacity of 1.0E8 Bit/s, max. Packet size 672.0
+			max. PacketSize 672.0 Bit
+			idSlp 4.0E7 Bit/s sdSlp -6.0E7 Bit/s
+			minCredit -403.2 Bit maxCredit 7860.184615384615 Bit
+			ServiceCurve SC{(0.0,0.0),0.0;!(1.9650461538461538E-4,0.0),4.0E7}
+			CBS-ShapingCurve AC{(0.0,0.0),0.0;!(0.0,8935.384615384615),4.0E7}
+			Link ShapingCurve AC{(0.0,0.0),0.0;!(0.0,672.0),1.0E8}
+
+CBS Link "Talker4 --> s5" connecting Talker4 to s5 with a capacity of 1.0E8 Bit/s, max. Packet size 672.0CBS Link "s2 --> s1" connecting s2 to s1 with a capacity of 2.0E8 Bit/s, max. Packet size 2000.0CBS Link "s7 --> Listener2" connecting s7 to Listener2 with a capacity of 1.0E8 Bit/s, max. Packet size 672.0CBS Link "Talker1 --> s4" connecting Talker1 to s4 with a capacity of 1.0E8 Bit/s, max. Packet size 2000.0CBS Link "s3 --> s6" connecting s3 to s6 with a capacity of 1.0E8 Bit/s, max. Packet size 672.0CBS Link "Talker2 --> s4" connecting Talker2 to s4 with a capacity of 1.0E8 Bit/s, max. Packet size 672.0CBS Link "s5 --> s2" connecting s5 to s2 with a capacity of 1.0E8 Bit/s, max. Packet size 672.0CBS Link "Talker3 --> s5" connecting Talker3 to s5 with a capacity of 1.0E8 Bit/s, max. Packet size 672.0CBS Link "s6 --> Listener3" connecting s6 to Listener3 with a capacity of 1.0E8 Bit/s, max. Packet size 672.0CBS Link "s6 --> Listener4" connecting s6 to Listener4 with a capacity of 1.0E8 Bit/s, max. Packet size 672.0CBS Link "s1 --> s3" connecting s1 to s3 with a capacity of 2.0E8 Bit/s, max. Packet size 2000.0CBS Link "s7 --> Listener1" connecting s7 to Listener1 with a capacity of 1.0E8 Bit/s, max. Packet size 2000.0CBS Link "s4 --> s2" connecting s4 to s2 with a capacity of 1.0E8 Bit/s, max. Packet size 2000.0CBS Link "s3 --> s7" connecting s3 to s7 with a capacity of 1.0E8 Bit/s, max. Packet size 2000.0
+Periodic CBS Token-Bucket Flow "flow1" with TSpec: Priority 1, CMI 2.5E-4s, MFS 672 Bit., MIF 2 pkts., Arrival Curve AC{(0.0,0.0),0.0;!(0.0,1271.74656),5376000.0}
+Periodic CBS Token-Bucket Flow "flow0" with TSpec: Priority 1, CMI 2.5E-4s, MFS 2000 Bit., MIF 2 pkts., Arrival Curve AC{(0.0,0.0),0.0;!(0.0,3360.0),1.6E7}
+Periodic CBS Token-Bucket Flow "flow5" with TSpec: Priority 0, CMI 1.25E-4s, MFS 672 Bit., MIF 2 pkts., Arrival Curve AC{(0.0,0.0),0.0;!(0.0,1199.4931199999999),1.0752E7}
+Periodic CBS Token-Bucket Flow "flow6" with TSpec: Priority 0, CMI 1.25E-4s, MFS 672 Bit., MIF 2 pkts., Arrival Curve AC{(0.0,0.0),0.0;!(0.0,1199.4931199999999),1.0752E7}
+Periodic CBS Token-Bucket Flow "flow3" with TSpec: Priority 1, CMI 2.5E-4s, MFS 672 Bit., MIF 2 pkts., Arrival Curve AC{(0.0,0.0),0.0;!(0.0,1271.74656),5376000.0}
+Periodic CBS Token-Bucket Flow "flow2" with TSpec: Priority 1, CMI 2.5E-4s, MFS 672 Bit., MIF 2 pkts., Arrival Curve AC{(0.0,0.0),0.0;!(0.0,1271.74656),5376000.0}
+Periodic CBS Token-Bucket Flow "flow4" with TSpec: Priority 0, CMI 1.25E-4s, MFS 672 Bit., MIF 2 pkts., Arrival Curve AC{(0.0,0.0),0.0;!(0.0,1199.4931199999999),1.0752E7}
+
+----------------------------------------------------------
+
+
+Process finished with exit code 0
